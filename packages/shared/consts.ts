@@ -1,5 +1,4 @@
-export const DOMAIN = "template.com";
+export const DOMAIN = "project.wolfagency.ee";
 export const SITE = `https://${DOMAIN}`;
 
-export const EMAIL = `info@${DOMAIN}`;
-export const EMAIL_SOURCE = `noreply@${DOMAIN}`;
+export const EMAIL_SOURCE = `Wolf Agency <noreply@project.wolfagency.ee>`;

@@ -3,8 +3,6 @@ import type { APIRoute } from "astro";
 import { appRouter } from "../../../trpc/routes";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 
-export const prerender = false;
-
 export const createContext = (_opts: FetchCreateContextFnOptions) => {
   return {};
 };

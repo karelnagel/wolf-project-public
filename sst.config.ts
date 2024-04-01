@@ -1,9 +1,8 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-
 export default $config({
   app: () => ({
-    name: "template",
+    name: "wolf-project",
     home: "aws",
     removal: "remove",
     providers: { aws: { region: "eu-central-1" } },
@@ -18,15 +17,12 @@ export default $config({
     new sst.aws.Astro("Client", {
       path: "packages/client",
       environment,
-      // domain: $dev
+      // domain: !isMain
       //   ? undefined
       //   : {
-      //       domainName: isMain ? DOMAIN : `${$app.stage}.${DOMAIN}`,
+      //       domainName: DOMAIN,
       //       hostedZone: DOMAIN,
-      //       aliases: isMain ? [`www.${DOMAIN}`] : [],
       //     },
     });
-
-   
   },
 });

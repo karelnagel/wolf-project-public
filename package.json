@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "wolf-project",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,8 @@
     "test": "playwright test",
     "testgen": "playwright codegen",
     "build": "cd packages/client && npm run build",
-    "check": "tsc --noEmit && cd packages/client && astro check"
+    "check": "tsc --noEmit && cd packages/client && astro check",
+    "deploy": "sst deploy --stage=main"
   },
   "dependencies": {
     "prettier-plugin-astro": "^0.13.0",

@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { publicProcedure, root } from "../root";
-import { Locale, useTranslations } from "@template/i18n";
-// import { sendEmail } from "@template/shared/email";
-// import { EMAIL } from "@template/shared/consts";
+import { Locale, useTranslations } from "@wolf-project/i18n";
+// import { sendEmail } from "@wolf-project/shared/email";
+// import { EMAIL } from "@wolf-project/shared/consts";
 
 export const contact = root.router({
   contact: publicProcedure

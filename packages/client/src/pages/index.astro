@@ -1,8 +1,11 @@
 ---
-import { getLocaleUrl } from "@template/shared/helpers";
-
-export const prerender = false;
-const url = getLocaleUrl(Astro.locals.locale);
-if (url === "idkwhyastrothinksthaturlisnotused") return;
-return Astro.redirect(url);
+import Layout from "../components/Layout.astro";
+import { ContactForm } from "../components/Contact";
+import { useTranslations } from "@wolf-project/i18n";
+const t = useTranslations("en");
 ---
+
+<Layout title={undefined} description={undefined}>
+  <p>{t.description}</p>
+  <ContactForm locale={"en"} client:load />
+</Layout>

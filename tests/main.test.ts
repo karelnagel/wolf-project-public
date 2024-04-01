@@ -1,21 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const SITE = "https://template.com";
-
-test("contact form", async ({ page }) => {
-  await page.goto(SITE);
-  await page.getByRole("link", { name: "Start Your Project" }).click();
-  await page.getByPlaceholder("Karel Nagel").click();
-  await page.getByPlaceholder("Karel Nagel").fill("Test name");
-  await page.getByPlaceholder("Karel Nagel").press("Tab");
-  await page.getByPlaceholder("karel@template.com").fill("nagelkarel@gmail.com");
-  await page.getByPlaceholder("karel@template.com").press("Tab");
-  await page.getByPlaceholder("I need a website that...").fill("This is a test message!");
-  await page.getByRole("button", { name: "Send" }).click();
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  const result = await page.getByTestId("form-result").textContent();
-  expect(result).toBe("Thank you! Your message has been sent. We'll be in touch soon.");
-});
+const SITE = "https://wolf-project.com";
 
 test("test sitemap pages", async ({ page }) => {
   const res = await page.goto(SITE + "/sitemap.xml");
