@@ -10,8 +10,8 @@ export default $config({
   run: async () => {
     const isMain = $app.stage === "main";
     const environment = {
-      ADMIN_AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
-      ADMIN_AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!,
+      // ADMIN_AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
+      // ADMIN_AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!,
     };
 
     new sst.aws.Astro("Client", {
