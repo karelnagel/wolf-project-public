@@ -20,7 +20,7 @@ export default $config({
     new sst.aws.Astro("Client", {
       path: "packages/client",
       environment,
-      transform: { server: { copyFiles } },
+      transform: { server: { copyFiles } as any },
 
       // domain: !isMain
       //   ? undefined
