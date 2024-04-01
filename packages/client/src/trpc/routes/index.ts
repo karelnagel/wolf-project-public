@@ -1,8 +1,8 @@
-import { contact } from "./contact";
+import { project } from "./project";
 import { router } from "../root";
 
 export const appRouter = router({
-  contact,
+  project,
 });
 
 export type AppRouter = typeof appRouter;

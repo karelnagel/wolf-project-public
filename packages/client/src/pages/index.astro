@@ -1,16 +1,24 @@
 ---
 import Layout from "../components/Layout.astro";
-import { ContactForm } from "../components/Contact";
+import { CreateProject } from "../components/CreateProject";
 import { useTranslations } from "@wolf-project/i18n";
 import { db, Project } from "astro:db";
+
 const t = useTranslations("en");
-const p = await db.select().from(Project);
+const projects = await db.select().from(Project);
 ---
 
 <Layout title={undefined} description={undefined}>
   <p>{t.description}</p>
   <div>
-    {JSON.stringify(p)}
+    <h1>Projects</h1>
+    {
+      projects.map((project) => (
+        <div>
+          {project.id} - {project.title}
+        </div>
+      ))
+    }
   </div>
-  <ContactForm locale={"en"} client:load />
+  <CreateProject client:load />
 </Layout>
