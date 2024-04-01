@@ -25,7 +25,7 @@ jobs:
           node-version: 20
       - uses: jaid/action-npm-install@v1.2.1
       - uses: withastro/action-studio@main
-      - run: npm i @libsql/linux-x64-gnu
+      - run: npm i @libsql/linux-x64-gnu --force
 
       # - name: Typecheck
       #   run: npm run check
