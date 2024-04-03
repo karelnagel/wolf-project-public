@@ -2,11 +2,11 @@ import { useState } from "react";
 import { client, useAPI } from "../trpc/client";
 
 export const CreateProject = () => {
-  const [title, setTitle] = useState("");
-  const { mutate, data, error, isLoading } = useAPI(client.project.create.mutate);
+  const [projectName, setProjectName] = useState("");
+  const { mutate, data, error, isLoading } = useAPI(client.projects.create.mutate);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await mutate({ title });
+    const result = await mutate({ projectName });
     console.log(result);
   };
   return (
@@ -14,13 +14,13 @@ export const CreateProject = () => {
       <input
         placeholder="title"
         type="title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={projectName}
+        onChange={(e) => setProjectName(e.target.value)}
       />
       {error && <div>{error.message}</div>}
       {data && (
         <div>
-          {data.id} {data.title}
+          {data.projectId} {data.projectName}
         </div>
       )}
       <button type="submit" className="button" disabled={isLoading}>
