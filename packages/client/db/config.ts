@@ -65,6 +65,14 @@ const Comments = defineTable({
   }
 })
 
+const Project = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    title: column.text(),
+  },
+  deprecated: true
+});
+
 export default defineDb({
-  tables: { Projects, Admins, AdminProject, Clients, Tasks, Comments },
+  tables: { Projects, Admins, AdminProject, Clients, Tasks, Comments, Project },
 });
