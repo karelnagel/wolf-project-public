@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { client, useAPI } from "../trpc/client";
+import { AddClient } from "./AddClient";
 
 export const CreateProject = () => {
   const [projectName, setProjectName] = useState("");
+  const [clientName, setClientName] = useState("");
+  const [email, setEmail] = useState("");
+  const [language, setLanguage] = useState("");
   const { mutate, data, error, isLoading } = useAPI(client.projects.create.mutate);
+  let result;
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await mutate({ projectName });
+    result = await mutate({ projectName });
     console.log(result);
   };
+  /*AddClient(result!.projectId, clientName, email, language);*/
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
       <input
@@ -16,6 +22,24 @@ export const CreateProject = () => {
         type="title"
         value={projectName}
         onChange={(e) => setProjectName(e.target.value)}
+      />
+      <input
+        placeholder="client"
+        type="client"
+        value={clientName}
+        onChange={(e) => setClientName(e.target.value)}
+      />
+      <input
+        placeholder="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        placeholder="language"
+        type="language"
+        value={language}
+        onChange={(e) => setLanguage(e.target.value)}
       />
       {error && <div>{error.message}</div>}
       {data && (
