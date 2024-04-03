@@ -2,10 +2,10 @@
 import Layout from "../components/Layout.astro";
 import { CreateProject } from "../components/CreateProject";
 import { useTranslations } from "@wolf-project/i18n";
-import { db, Project } from "astro:db";
+import { db, Projects } from "astro:db";
 
 const t = useTranslations("en");
-const projects = await db.select().from(Project);
+const projects = await db.select().from(Projects);
 ---
 
 <Layout title={undefined} description={undefined}>
