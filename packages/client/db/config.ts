@@ -2,14 +2,14 @@ import { defineDb, defineTable, column } from "astro:db";
 
 const Projects = defineTable({
   columns: {
-    projectId: column.text({ primaryKey: true, }),
+    projectId: column.text({ primaryKey: true, unique: true }),
     projectName: column.text(),
   },
 });
 
 const Admins = defineTable({
   columns: {
-    adminId: column.number({ primaryKey: true }),
+    adminId: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
     email: column.text(),
     saltedPassword: column.text(),
@@ -19,8 +19,8 @@ const Admins = defineTable({
 
 const AdminProject = defineTable({
   columns: {
-    adminRef: column.number(),
-    projectRef: column.number()
+    adminRef: column.text(),
+    projectRef: column.text()
   },
   foreignKeys: [
     {
@@ -32,7 +32,7 @@ const AdminProject = defineTable({
 
 const Clients = defineTable({
   columns: {
-    clientId: column.number({ primaryKey: true }),
+    clientId: column.text({ primaryKey: true, unique: true }),
     projectRef: column.text({ references: () => Projects.columns.projectId }),
     name: column.text(),
     email: column.text(),
@@ -43,7 +43,7 @@ const Clients = defineTable({
 
 const Tasks = defineTable({
   columns: {
-    taskId: column.number({ primaryKey: true }),
+    taskId: column.text({ primaryKey: true, unique: true }),
     projectRef: column.text({ references: () => Projects.columns.projectId }),
     title: column.text(),
     description: column.text(),
@@ -56,8 +56,8 @@ const Tasks = defineTable({
 
 const Comments = defineTable({
   columns: {
-    commentId: column.number({ primaryKey: true }),
-    taskRef: column.number({ references: () => Tasks.columns.taskId }),
+    commentId: column.text({ primaryKey: true, unique: true }),
+    taskRef: column.text({ references: () => Tasks.columns.taskId }),
     body: column.text()
   },
   indexes: {
