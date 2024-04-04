@@ -1,0 +1,27 @@
+---
+import { useTranslations } from "@wolf-project/i18n";
+import Layout from "../../components/Layout.astro";
+import { db, like, Projects } from "astro:db";
+import { AddTask } from "../../components/Task";
+
+const t = useTranslations("en");
+
+const { slug } = Astro.params;
+const id = slug?.split("/")[0];
+if (!id) throw new Error("id is required");
+console.log("ID:", id);
+const project = await db.select().from(Projects).where(like(Projects.projectId, id));
+---
+
+<Layout title={undefined} description={undefined}>
+    <p>{t.project.title}</p>
+    {
+        project.map(({ projectId, projectName }) => (
+            <div>
+                <p>Project ID: {projectId}</p>
+                <p>Project Name: {projectName}</p>
+            </div>
+        ))
+    }
+    <AddTask client:load/>
+</Layout>

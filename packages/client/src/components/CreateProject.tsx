@@ -8,12 +8,11 @@ export const CreateProject = () => {
   const [email, setEmail] = useState("");
   const [language, setLanguage] = useState("");
   const { mutate, data, error, isLoading } = useAPI(client.projects.create.mutate);
-  let result;
   const { add } = useAddClient()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log(language)
     e.preventDefault();
-    result = await mutate({ projectName });
+    const result = await mutate({ projectName });
     console.log(result);
     add(result!.projectId, clientName, email, language);
   };
@@ -21,13 +20,11 @@ export const CreateProject = () => {
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
       <input
         placeholder="title"
-        type="title"
         value={projectName}
         onChange={(e) => setProjectName(e.target.value)}
       />
       <input
         placeholder="client"
-        type="client"
         value={clientName}
         onChange={(e) => setClientName(e.target.value)}
       />
@@ -37,7 +34,7 @@ export const CreateProject = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-        <select value={language} onChange={e => setLanguage(e.target.value)}>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
           <option value="" disabled selected>Vali kliendi keel</option>
           <option value="en" >English</option>
           <option value="ee" >Eesti</option>
