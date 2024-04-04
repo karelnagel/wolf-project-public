@@ -15,7 +15,7 @@ const projects = await db.select().from(Projects);
     {
       projects.map((project) => (
         <div>
-          {project.id} - {project.title}
+          {project.projectId} - {project.projectName}
         </div>
       ))
     }
