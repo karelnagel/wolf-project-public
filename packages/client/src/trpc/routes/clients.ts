@@ -13,9 +13,7 @@ const ClientZod = z.object({
 });
 export const clients = root.router({
     create: publicProcedure
-        .input(z.object({
-            projectRef: z.string(), name: z.string(), email: z.string(), saltedKeycode: z.string(), language: z.string().nullable()
-        }))
+        .input(ClientZod.omit({ clientId: true }))
         .output(ClientZod)
         .mutation(async ({ input: { projectRef, name, email, saltedKeycode, language } }) => {
             const clients = await db.insert(Clients).values({ clientId: getRandomId(), projectRef, name, email, saltedKeycode, language }).returning();

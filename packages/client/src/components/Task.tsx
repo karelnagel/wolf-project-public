@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { client, useAPI } from "../trpc/client";
 import Datepicker, { DateType, DateValueType } from "react-tailwindcss-datepicker";
+import { Task } from "../trpc/routes/tasks";
 
 interface addTaskProps {
   projectRef: string;
 }
-
 export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,17 +20,11 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const baseMutationParams: {
-      projectRef: string;
-      status: string;
-      description: string;
-      title: string;
-      deadline: Date | null;
-    } = {
-      projectRef: projectRef,
-      status: status,
-      description: description,
-      title: title,
+    const baseMutationParams: Omit<Task, "taskId"> = {
+      projectRef,
+      status,
+      description,
+      title,
       deadline: null,
     };
     if (deadline instanceof Date) {
