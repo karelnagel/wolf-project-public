@@ -22,19 +22,22 @@ export const CreateProject = () => {
         placeholder="title"
         value={projectName}
         onChange={(e) => setProjectName(e.target.value)}
+        required
       />
       <input
         placeholder="client"
         value={clientName}
         onChange={(e) => setClientName(e.target.value)}
+        required
       />
       <input
         placeholder="email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)} required>
           <option value="" disabled selected>Vali kliendi keel</option>
           <option value="en" >English</option>
           <option value="ee" >Eesti</option>

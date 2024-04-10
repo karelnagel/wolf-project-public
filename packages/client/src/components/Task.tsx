@@ -43,11 +43,17 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
   return (
     <>
       <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
-        <input placeholder="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input
+          placeholder="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
         <input
           placeholder="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          required
         />
         <Datepicker
           placeholder={"Vali tähtaeg!"}
@@ -56,7 +62,7 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
           value={{ startDate: deadline || null, endDate: deadline || null }}
           onChange={handleValueChange}
         />
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <select value={status} onChange={(e) => setStatus(e.target.value)} required>
           <option value="toDo">Tegemata</option>
           <option value="progress">Tegemisel</option>
           <option value="review">Tagasisidestamisel</option>
