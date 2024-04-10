@@ -15,7 +15,7 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
 ---
 
 <Layout title={undefined} description={undefined}>
-  <p>{t.project.title}</p>
+  <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/">{t.project.title}</a>
   {
     project.map(({ projectId, projectName }) => (
       <div>
