@@ -47,9 +47,8 @@ const Tasks = defineTable({
     projectRef: column.text({ references: () => Projects.columns.projectId }),
     title: column.text(),
     description: column.text(),
-    deadline: column.date(),
-    status: column.text(),
-    dependancyIds: column.json({ optional: true })
+    deadline: column.date({ optional: true }),
+    status: column.text()
   }
 })
 
