@@ -62,7 +62,7 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
           value={{ startDate: deadline || null, endDate: deadline || null }}
           onChange={handleValueChange}
         />
-        <select value={status} onChange={(e) => setStatus(e.target.value)} required>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="toDo">Tegemata</option>
           <option value="progress">Tegemisel</option>
           <option value="review">Tagasisidestamisel</option>
