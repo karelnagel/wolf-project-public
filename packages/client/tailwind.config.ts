@@ -14,5 +14,5 @@ export default {
     },
   },
   plugins: [typography],
-  content: ["./src/**/*.{js,ts,jsx,tsx,astro}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx,astro}","../../node_modules/react-tailwindcss-datepicker/dist/index.esm.js"],
 } satisfies Config;
