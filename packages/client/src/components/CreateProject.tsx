@@ -13,8 +13,8 @@ export const CreateProject = () => {
     console.log(language)
     e.preventDefault();
     const result = await mutate({ projectName });
-    console.log(result);
     add(result!.projectId, clientName, email, language);
+    window.location.reload();
   };
   return (
     <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">

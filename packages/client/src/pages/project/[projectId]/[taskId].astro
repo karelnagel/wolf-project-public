@@ -2,30 +2,49 @@
 import Layout from "../../../components/Layout.astro";
 import { useTranslations } from "@wolf-project/i18n";
 import { db, like, Tasks } from "astro:db";
+import { AddComment } from "../../../components/Comment";
+import { Comments } from "astro:db";
 
-const t =  useTranslations('en')
+const t = useTranslations("en");
 
-const {taskId} = Astro.params;
-const id = taskId?.split('/')[0];
+const { taskId } = Astro.params;
+const id = taskId?.split("/")[0];
 if (!id) throw new Error("id is required");
 console.log("ID:", id);
 
 const task = await db.select().from(Tasks).where(like(Tasks.taskId, id));
+const comments = await db
+  .select({ body: Comments.body })
+  .from(Comments)
+  .where(like(Comments.taskRef, id));
 ---
 
-
 <Layout title={undefined} description={undefined}>
-    <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/">{t.project.title}</a>
-    <p>Task subpage</p>
+  <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/"
+    >{t.project.title}</a
+  >
+  <p>Task subpage</p>
+  {
+    task.map(({ taskId, title, description, deadline, status }) => (
+      <div>
+        <p>Task ID: {taskId}</p>
+        <p>Task title: {title}</p>
+        <p>Task descriptio: {description}</p>
+        <p>Deadline: {deadline}</p>
+        <p>Status: {status}</p>
+      </div>
+    ))
+  }
+  <div>
     {
-        task.map(({ taskId, title, description, deadline, status }) => (
-          <div>
-            <p>Task ID: {taskId}</p>
-            <p>Task title: {title}</p>
-            <p>Task descriptio: {description}</p>
-            <p>Deadline: {deadline}</p>
-            <p>Status: {status}</p>
-          </div>
-        ))
-      }
+      comments.map(({ body }) => (
+        <div>
+          <p>Comment</p>
+          <p>{body}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <AddComment taskRef={id} client:load />
 </Layout>
