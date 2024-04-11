@@ -27,7 +27,7 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
       title,
       deadline: null,
     };
-    if (typeof deadline === 'string') {
+    if (typeof deadline === "string") {
       baseMutationParams.deadline = new Date(deadline);
     }
     await mutate(baseMutationParams);

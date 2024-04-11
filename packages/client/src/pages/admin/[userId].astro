@@ -1,0 +1,15 @@
+---
+import { db, like } from "astro:db";
+import Layout from "../../components/Layout.astro";
+import { Users } from "astro:db";
+const { userId } = Astro.params;
+const id = userId?.split("/")[0];
+if (!id) throw new Error("id is required");
+const admin = true;
+if (!admin) return Astro.redirect("/401");
+const user = await db.select().from(Users).where(like(Users.userId, id))
+---
+
+<Layout title={undefined} description={undefined}>
+  <p>UserID: {userId}</p>
+</Layout>

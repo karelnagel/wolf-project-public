@@ -15,7 +15,13 @@ const projects = await db.select().from(Projects);
     {
       projects.map((project) => (
         <div>
-          {project.projectId} - <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href={`./project/${project.projectId}`}>{project.projectName}</a>
+          {project.projectId} -{" "}
+          <a
+            class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+            href={`./project/${project.projectId}`}
+          >
+            {project.projectName}
+          </a>
         </div>
       ))
     }

@@ -12,7 +12,10 @@ export const projects = root.router({
     .input(z.object({ projectName: z.string() }))
     .output(ProjectZod)
     .mutation(async ({ input: { projectName } }) => {
-      const projects = await db.insert(Projects).values({ projectName, projectId: getRandomId() }).returning();
+      const projects = await db
+        .insert(Projects)
+        .values({ projectName, projectId: getRandomId() })
+        .returning();
       return projects[0]!;
     }),
 });

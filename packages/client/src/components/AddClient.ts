@@ -1,11 +1,10 @@
 import { client, useAPI } from "../trpc/client";
 
 export const useAddClient = () => {
-    const saltedKeycode = 'KYU07';
-    const { mutate } = useAPI(client.clients.create.mutate);
-    const add = async (projectRef: string, name: string, email: string, language: string | null) => {
-        const result = await mutate({ projectRef, name, email, language, saltedKeycode })
-        console.log(result)
-    }
-    return { add }
-}
+  const { mutate } = useAPI(client.client.create.mutate);
+  const add = async (name: string, email: string, language: string) => {
+    const result = await mutate({ name, email, role: "client", language });
+    console.log(result);
+  };
+  return { add };
+};

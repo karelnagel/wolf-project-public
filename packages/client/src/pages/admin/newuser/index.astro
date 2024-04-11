@@ -1,0 +1,10 @@
+---
+import Layout from "../../../components/Layout.astro";
+import { NewUser } from "../../../components/NewUser";
+const admin = true;
+if (!admin) return Astro.redirect("/401");
+---
+
+<Layout title={undefined} description={undefined}>
+  <NewUser client:load />
+</Layout>
