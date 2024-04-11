@@ -57,9 +57,6 @@ const Comments = defineTable({
     commentId: column.text({ primaryKey: true, unique: true }),
     taskRef: column.text({ references: () => Tasks.columns.taskId }),
     body: column.text()
-  },
-  indexes: {
-    comment_idx: { on: ["taskRef"], unique: true }
   }
 })
 
