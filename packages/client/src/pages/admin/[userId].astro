@@ -1,15 +1,27 @@
 ---
 import { db, like } from "astro:db";
 import Layout from "../../components/Layout.astro";
+import { ModifyUser } from "../../components/ModifyUser";
 import { Users } from "astro:db";
+import { Employee } from "../../trpc/routes/users";
 const { userId } = Astro.params;
 const id = userId?.split("/")[0];
 if (!id) throw new Error("id is required");
 const admin = true;
 if (!admin) return Astro.redirect("/401");
-const user = await db.select().from(Users).where(like(Users.userId, id))
+const query = await db
+  .select({
+    name: Users.name,
+    email: Users.email,
+    role: Users.role,
+    language: Users.language,
+    job: Users.job,
+  })
+  .from(Users)
+  .where(like(Users.userId, id));
+
+const user = query[0] as Employee;
+if(user === undefined) throw new Error("Invalid ID!")
 ---
 
-<Layout title={undefined} description={undefined}>
-  <p>UserID: {userId}</p>
-</Layout>
+<Layout title={undefined} description={undefined}> <h1>{user.name} kasutaja informatsioon</h1><ModifyUser userId={id} user={user} client:load /></Layout>

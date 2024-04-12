@@ -1,11 +1,13 @@
 ---
-import { db } from "astro:db";
+import { db, Users, not, inArray } from "astro:db";
 import Layout from "../../components/Layout.astro";
-import { Users } from "astro:db";
 const admin = true;
 if (!admin) return Astro.redirect("/401");
 
-const users = await db.select({ userId: Users.userId, name: Users.name }).from(Users);
+const users = await db
+  .select({ userId: Users.userId, name: Users.name })
+  .from(Users)
+  .where(not(inArray(Users.role, ["client"])));
 ---
 
 {
@@ -18,7 +20,7 @@ const users = await db.select({ userId: Users.userId, name: Users.name }).from(U
       <div>
         {users.map((user) => (
           <div>
-            <a class="font-medium text-blue-600 underline dark:text-blue-500 hover: no-underline">
+            <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href={`./${user.userId}`}>
               {user.name}
             </a>
           </div>

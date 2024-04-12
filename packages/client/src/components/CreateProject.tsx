@@ -38,7 +38,7 @@ export const CreateProject = () => {
           required
         />
         <select value={language} onChange={(e) => setLanguage(e.target.value)} required>
-          <option disabled selected>
+          <option value="" disabled hidden>
             Vali kliendi keel
           </option>
           <option value="en">English</option>
