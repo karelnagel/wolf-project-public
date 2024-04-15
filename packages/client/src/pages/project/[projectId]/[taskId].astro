@@ -19,6 +19,7 @@ const comments = await db
     name: Users.name,
     job: Users.job,
     body: Comments.body,
+    commentedAt: Comments.commentedAt
   })
   .from(Comments)
   .where(like(Comments.taskRef, id))
@@ -26,7 +27,7 @@ const comments = await db
 
 
 
-const userId = "1d8c087a-03d8-4ba7-868c-c07606c5e197"; /*Placeholder for testing*/
+const userId = "a36f2648-13d6-4439-a152-444e49cb1e0d"; /*Placeholder for testing. Place any generated user id here*/
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -39,21 +40,22 @@ const userId = "1d8c087a-03d8-4ba7-868c-c07606c5e197"; /*Placeholder for testing
       <div>
         <p>Task ID: {taskId}</p>
         <p>Task title: {title}</p>
-        <p>Task descriptio: {description}</p>
-        <p>Deadline: {deadline}</p>
+        <p>Task description: {description}</p>
+        <p>Deadline: {deadline !== undefined ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
         <p>Status: {status}</p>
       </div>
     ))
   }
   <div>
     {
-      comments.map(({ body, name, job }) => (
+      comments.map(({ body, name, job, commentedAt }) => (
         <div>
           <p>
             {name}
             {job !== undefined ? ` - ${job}` : null}
+            {(`${commentedAt!.getHours()}:${commentedAt.getMinutes()} ${commentedAt!.getDate()}.${commentedAt!.getMonth()+1}.${commentedAt!.getFullYear()}`)}
           </p>
-          <p>{body}</p>
+          <p>{body} </p>
         </div>
       ))
     }

@@ -71,7 +71,8 @@ const Comments = defineTable({
     commentId: column.text({ primaryKey: true, unique: true }),
     taskRef: column.text({ references: () => Tasks.columns.taskId }),
     body: column.text(),
-    commenterId: column.text({ references: () => Users.columns.userId })
+    commenterId: column.text({ references: () => Users.columns.userId }),
+    commentedAt: column.date(),
   },
 });
 

@@ -13,7 +13,7 @@ export const AddComment: React.FC<CommentProps> = ({ taskRef, commenterId }) => 
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const params: Omit<Comment, "commentId"> = {
+    const params: Omit<Comment, "commentId" | "commentedAt"> = {
       taskRef,
       body: comment,
       commenterId,
