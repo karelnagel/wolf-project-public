@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../components/Layout.astro";
 import { useTranslations } from "@wolf-project/i18n";
-import { db, like, Tasks } from "astro:db";
+import { db, eq, like, Tasks, Users } from "astro:db";
 import { AddComment } from "../../../components/Comment";
 import { Comments } from "astro:db";
 
@@ -13,10 +13,20 @@ if (!id) throw new Error("id is required");
 console.log("ID:", id);
 
 const task = await db.select().from(Tasks).where(like(Tasks.taskId, id));
+
 const comments = await db
-  .select({ body: Comments.body })
+  .select({
+    name: Users.name,
+    job: Users.job,
+    body: Comments.body,
+  })
   .from(Comments)
-  .where(like(Comments.taskRef, id));
+  .where(like(Comments.taskRef, id))
+  .innerJoin(Users, eq(Comments.commenterId, Users.userId));
+
+
+
+const userId = "1d8c087a-03d8-4ba7-868c-c07606c5e197"; /*Placeholder for testing*/
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -37,14 +47,17 @@ const comments = await db
   }
   <div>
     {
-      comments.map(({ body }) => (
+      comments.map(({ body, name, job }) => (
         <div>
-          <p>Comment</p>
+          <p>
+            {name}
+            {job !== undefined ? ` - ${job}` : null}
+          </p>
           <p>{body}</p>
         </div>
       ))
     }
   </div>
 
-  <AddComment taskRef={id} client:load />
+  <AddComment taskRef={id} commenterId={userId} client:load />
 </Layout>

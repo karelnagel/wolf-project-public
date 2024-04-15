@@ -7,16 +7,17 @@ const CommentZod = z.object({
   commentId: z.string(),
   taskRef: z.string(),
   body: z.string(),
+  commenterId: z.string()
 });
 export type Comment = z.infer<typeof CommentZod>;
 export const comments = root.router({
   create: publicProcedure
     .input(CommentZod.omit({ commentId: true }))
     .output(CommentZod)
-    .mutation(async ({ input: { taskRef, body } }) => {
+    .mutation(async ({ input: { taskRef, body, commenterId } }) => {
       const comments = await db
         .insert(Comments)
-        .values({ commentId: getRandomId(), taskRef, body })
+        .values({ commentId: getRandomId(), taskRef, body, commenterId })
         .returning();
       return comments[0]!;
     }),
