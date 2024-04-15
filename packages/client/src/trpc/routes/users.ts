@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure, root } from "../root";
-import { Users, db } from "astro:db";
+import { Users, db, like } from "astro:db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 
 const UserZod = z.object({
@@ -29,6 +29,16 @@ export const employee = root.router({
         .returning();
       return result[0]!;
     }),
+  modify: publicProcedure
+    .input(UserZod)
+    .output(UserZod)
+    .mutation(async ({ input: { userId, name, email, role, language, job } }) => {
+      const result = await db.update(Users)
+        .set({ name, email, role, language, job })
+        .where(like(Users.userId, userId))
+        .returning();
+      return result[0]!;
+    })
 });
 
 export const client = root.router({

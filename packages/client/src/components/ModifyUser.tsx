@@ -7,7 +7,7 @@ interface ModifyUserProps {
   user: Employee;
 }
 
-export const ModifyUser: React.FC<ModifyUserProps> = (userId, user) => {
+export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
@@ -16,11 +16,11 @@ export const ModifyUser: React.FC<ModifyUserProps> = (userId, user) => {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [modifying, setModifying] = useState(false);
 
-  const { mutate, error, isLoading } = useAPI(client.employee.create.mutate);
+  const { mutate, error, isLoading } = useAPI(client.employee.modify.mutate);
 
   const onClick = () => {
-    setModifying(!modifying)
-  }
+    setModifying(!modifying);
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,23 +30,22 @@ export const ModifyUser: React.FC<ModifyUserProps> = (userId, user) => {
       setEmailError("Lubatud on ainult firma email!");
       return;
     }
-    await mutate({ name, email, role, job, language });
+    await mutate({ userId, name, email, role, job, language });
     window.location.href = "/admin";
   };
 
   return (
     <>
+    <button className="rounded bg-orange-600 w-20"><a href="/admin">Tagasi</a></button>
       <div className="flex flex-col items-center gap-2">
-        <form className="gap-2 flex flex-col items-center">
+        <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
           <input
-            placeholder="Töötaja dokumendinimi"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
             disabled={!modifying}
           />
           <input
-            placeholder="Töötaja email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -54,7 +53,6 @@ export const ModifyUser: React.FC<ModifyUserProps> = (userId, user) => {
             disabled={!modifying}
           />
           <input
-            placeholder="Töötaja tööroll"
             value={job || undefined}
             onChange={(e) => setJob(e.target.value)}
             required
@@ -80,16 +78,18 @@ export const ModifyUser: React.FC<ModifyUserProps> = (userId, user) => {
           </select>
           {emailError && <div>{emailError}</div>}
           {error && <div>{error.message}</div>}
-          <button
-            type="submit"
-            className="rounded bg-blue-500 py-2 px-2 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isLoading || !modifying}
-          >
-            {isLoading ? "Loading" : "Submit"}
-          </button>
+          {modifying ? (
+            <button
+              type="submit"
+              className="rounded bg-blue-500 px-2 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={isLoading || !modifying}
+            >
+              {isLoading ? "Loading" : "Submit"}
+            </button>
+          ) : null}
         </form>
-        <button onClick={onClick} className="rounded py-2 px-2 bg-red-500">
-          {modifying ? "Luba muutmist" : "Lõpeta muutmine"}
+        <button onClick={onClick} className="rounded bg-red-500 px-2 py-2">
+          {modifying ? "Lõpeta muutmine" : "Luba muutmist"}
         </button>
       </div>
     </>
