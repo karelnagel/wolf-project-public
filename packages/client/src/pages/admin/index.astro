@@ -20,7 +20,10 @@ const users = await db
       <div>
         {users.map((user) => (
           <div>
-            <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href={`./admin/${user.userId}`}>
+            <a
+              class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+              href={`./admin/${user.userId}`}
+            >
               {user.name}
             </a>
           </div>

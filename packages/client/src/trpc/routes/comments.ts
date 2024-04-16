@@ -18,7 +18,7 @@ export const comments = root.router({
     .mutation(async ({ input: { taskRef, body, commenterId } }) => {
       const comments = await db
         .insert(Comments)
-        .values({ commentId: getRandomId(), taskRef, body, commenterId, commentedAt: new Date()})
+        .values({ commentId: getRandomId(), taskRef, body, commenterId, commentedAt: new Date() })
         .returning();
       return comments[0]!;
     }),

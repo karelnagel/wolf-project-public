@@ -9,8 +9,9 @@
   }
 }
 
-input, textarea {
-  @apply focus:outline-primary2 focus:outline bg-primary rounded-2xl py-3 px-2
+input,
+textarea {
+  @apply focus:outline-primary2 bg-primary rounded-2xl px-2 py-3 focus:outline;
 }
 
 .button {

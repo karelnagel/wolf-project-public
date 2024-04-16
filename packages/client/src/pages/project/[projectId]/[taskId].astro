@@ -19,15 +19,14 @@ const comments = await db
     name: Users.name,
     job: Users.job,
     body: Comments.body,
-    commentedAt: Comments.commentedAt
+    commentedAt: Comments.commentedAt,
   })
   .from(Comments)
   .where(like(Comments.taskRef, id))
   .innerJoin(Users, eq(Comments.commenterId, Users.userId));
 
-
-
-const userId = "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
+const userId =
+  "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -41,7 +40,12 @@ const userId = "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing
         <p>Task ID: {taskId}</p>
         <p>Task title: {title}</p>
         <p>Task description: {description}</p>
-        <p>Deadline: {deadline !== null ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
+        <p>
+          Deadline:{" "}
+          {deadline !== null
+            ? `${deadline!.getDate()}.${deadline!.getMonth() + 1}.${deadline!.getFullYear()}`
+            : null}
+        </p>
         <p>Status: {status}</p>
       </div>
     ))
@@ -53,7 +57,7 @@ const userId = "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing
           <p>
             {name}
             {job !== null ? ` - ${job}` : null}
-            {(`${commentedAt!.getHours()}:${commentedAt.getMinutes()} ${commentedAt!.getDate()}.${commentedAt!.getMonth()+1}.${commentedAt!.getFullYear()}`)}
+            {`${commentedAt!.getHours()}:${commentedAt.getMinutes()} ${commentedAt!.getDate()}.${commentedAt!.getMonth() + 1}.${commentedAt!.getFullYear()}`}
           </p>
           <p>{body} </p>
         </div>

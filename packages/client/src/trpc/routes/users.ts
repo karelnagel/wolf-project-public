@@ -33,12 +33,13 @@ export const employee = root.router({
     .input(UserZod)
     .output(UserZod)
     .mutation(async ({ input: { userId, name, email, role, language, job } }) => {
-      const result = await db.update(Users)
+      const result = await db
+        .update(Users)
         .set({ name, email, role, language, job })
         .where(like(Users.userId, userId))
         .returning();
       return result[0]!;
-    })
+    }),
 });
 
 export const client = root.router({
