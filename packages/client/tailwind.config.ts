@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        primary: ["Inter Variable", "sans-serif"],
-        secondary: ["Montserrat Variable", "sans-serif"],
+        primary: ["Urbanist Variable", "sans-serif"],
       },
       colors: {
         primary: "rgb(var(--color-primary) / <alpha-value>)",
+        primary2: "rgb(var(--color-primary2) / <alpha-value>)",
       },
       spacing: {},
     },

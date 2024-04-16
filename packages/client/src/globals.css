@@ -4,15 +4,16 @@
 
 @layer base {
   :root {
-    --color-primary: 8 81 189;
+    --color-primary: 31 31 31;
+    --color-primary2: 50 133 63;
   }
 }
 
 input,
 textarea {
-  @apply border-b border-black/20 bg-transparent p-2;
+  @apply focus:outline-primary2 bg-primary rounded-2xl px-2 py-3 focus:outline;
 }
 
 .button {
-  @apply bg-primary rounded-md px-3 py-1 text-white;
+  @apply bg-primary2 rounded-2xl py-2 text-white;
 }

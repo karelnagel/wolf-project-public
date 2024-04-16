@@ -1,0 +1,9 @@
+---
+import Layout from "../../../components/Layout.astro";
+
+const { projectId } = Astro.params;
+if (!projectId) throw new Error("id is required");
+console.log("ID:", projectId);
+---
+
+<Layout title="uugabuuga" description="uugabuuga" />

@@ -36,7 +36,9 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
 
   return (
     <>
-    <button className="rounded bg-orange-600 w-20"><a href="/admin">Tagasi</a></button>
+      <button className="w-20 rounded bg-orange-600">
+        <a href="/admin">Tagasi</a>
+      </button>
       <div className="flex flex-col items-center gap-2">
         <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
           <input
