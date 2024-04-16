@@ -40,7 +40,7 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
           </a>
         </p>
         <p>Task description: {description}</p>
-        <p>Deadline: {deadline !== undefined ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
+        <p>Deadline: {deadline !== null ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
         <p>Status: {status}</p>
       </div>
     ))

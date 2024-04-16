@@ -27,7 +27,7 @@ const comments = await db
 
 
 
-const userId = "a36f2648-13d6-4439-a152-444e49cb1e0d"; /*Placeholder for testing. Place any generated user id here*/
+const userId = "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -41,7 +41,7 @@ const userId = "a36f2648-13d6-4439-a152-444e49cb1e0d"; /*Placeholder for testing
         <p>Task ID: {taskId}</p>
         <p>Task title: {title}</p>
         <p>Task description: {description}</p>
-        <p>Deadline: {deadline !== undefined ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
+        <p>Deadline: {deadline !== null ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
         <p>Status: {status}</p>
       </div>
     ))
@@ -52,7 +52,7 @@ const userId = "a36f2648-13d6-4439-a152-444e49cb1e0d"; /*Placeholder for testing
         <div>
           <p>
             {name}
-            {job !== undefined ? ` - ${job}` : null}
+            {job !== null ? ` - ${job}` : null}
             {(`${commentedAt!.getHours()}:${commentedAt.getMinutes()} ${commentedAt!.getDate()}.${commentedAt!.getMonth()+1}.${commentedAt!.getFullYear()}`)}
           </p>
           <p>{body} </p>

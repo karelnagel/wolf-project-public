@@ -21,8 +21,13 @@ const query = await db
   .where(like(Users.userId, id));
 
 const user = query[0] as Employee;
-if(user === undefined) throw new Error("Invalid ID!")
-
+if (user === undefined) throw new Error("Invalid ID!");
 ---
 
-<Layout title={undefined} description={undefined}> <h1>{user.name} kasutaja informatsioon</h1><ModifyUser userId={id} user={user} client:load /></Layout>
+<Layout title={undefined} description={undefined}>
+  <h1>{user.name} kasutaja informatsioon</h1><ModifyUser
+    userId={id}
+    user={user}
+    client:load
+  /></Layout
+>
