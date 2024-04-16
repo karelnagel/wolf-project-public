@@ -15,7 +15,9 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
 ---
 
 <Layout title={undefined} description={undefined}>
-  <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/">{t.project.title}</a>
+  <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/"
+    >{t.project.title}</a
+  >
   {
     project.map(({ projectId, projectName }) => (
       <div>
@@ -28,9 +30,17 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
     tasks.map(({ taskId, title, description, deadline, status }) => (
       <div>
         <p>Task ID: {taskId}</p>
-        <p>Task title: <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href={`./${id}/${taskId}`}>{title}</a></p>
-        <p>Task descriptio: {description}</p>
-        <p>Deadline: {deadline}</p>
+        <p>
+          Task title:{" "}
+          <a
+            class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+            href={`./${id}/${taskId}`}
+          >
+            {title}
+          </a>
+        </p>
+        <p>Task description: {description}</p>
+        <p>Deadline: {deadline !== null ? `${deadline!.getDate()}.${deadline!.getMonth()+1}.${deadline!.getFullYear()}` : null}</p>
         <p>Status: {status}</p>
       </div>
     ))
