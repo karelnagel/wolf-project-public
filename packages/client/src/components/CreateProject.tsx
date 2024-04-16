@@ -15,7 +15,11 @@ export const CreateProject = () => {
       <div className="gap-  border-primary2 mt-28 flex w-[643px] max-w-full flex-col  justify-center rounded-2xl border px-8 py-10 max-md:mt-10 max-md:px-5">
         <div className="self-center text-xl font-semibold">Uus projekt</div>
         <div className="mt-12 font-semibold max-md:mt-10 max-md:max-w-full">Projekti nimi</div>
-        <input className=" bg-primary focus:outline-primary2 mt-4  rounded-2xl focus:outline max-md:max-w-full" />
+        <input
+          value={projectName}
+          onChange={(e) => setProjectName(e.currentTarget.value)}
+          className=" bg-primary focus:outline-primary2 mt-4  rounded-2xl focus:outline max-md:max-w-full"
+        />
         <div className="mt-8 font-semibold max-md:max-w-full">Projekti kirjeldus</div>
         <textarea className="bg-primary mt-4 h-[145px] rounded-2xl max-md:max-w-full" />
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
