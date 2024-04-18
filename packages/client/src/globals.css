@@ -13,7 +13,9 @@ input,
 textarea {
   @apply focus:outline-primary2 bg-primary rounded-2xl px-2 py-3 focus:outline;
 }
-
+select {
+  @apply focus:outline-primary focus:outline;
+}
 .button {
   @apply bg-primary2 rounded-2xl py-2 text-white;
 }
