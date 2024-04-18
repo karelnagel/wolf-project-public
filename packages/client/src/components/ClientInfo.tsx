@@ -12,17 +12,13 @@ export const ClientInfo = ({ clients }: { clients: ClientInfoProps[] }) => {
   };
   return (
     <div className="mt-7 flex w-2/3 flex-col justify-center">
-      <div>
-        <div>
-          <div className="flex justify-center">
-            <div className="border-primary2 mt-4 flex w-full flex-col">
-              <div className="flex">
-                <span className="flex-grow">Ettevõtte esindaja</span>
-                <button className=" ml-2 flex-grow-0 items-center text-xl" onClick={toggleForm}>
-                  {showForm ? "-" : "+"}
-                </button>
-              </div>
-            </div>
+      <div className="flex justify-center">
+        <div className="border-primary2 mt-4 flex w-full flex-col">
+          <div className="flex">
+            <span className="flex-grow">Ettevõtte esindaja</span>
+            <button className=" ml-2 flex-grow-0 items-center text-xl" onClick={toggleForm}>
+              {showForm ? "-" : "+"}
+            </button>
           </div>
         </div>
       </div>
