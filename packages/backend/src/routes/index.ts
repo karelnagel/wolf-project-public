@@ -2,7 +2,7 @@ import { projects } from "./projects";
 import { router } from "../root";
 import { tasks } from "./tasks";
 import { comments } from "./comments";
-import { employee, client } from "./users";
+import { employee, client, authenticate } from "./users";
 
 export const appRouter = router({
   projects,
@@ -10,6 +10,7 @@ export const appRouter = router({
   client,
   tasks,
   comments,
+  authenticate
 });
 
 export type AppRouter = typeof appRouter;

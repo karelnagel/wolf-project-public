@@ -8,3 +8,7 @@ export const root = initTRPC.context<CreateContext>().create({
 
 export const router = root.router;
 export const publicProcedure = root.procedure;
+export const privateProcedure =root.middleware(x=>{
+  if (!x.ctx.userId) throw new Error("dfgs")
+  return x.next()
+})
