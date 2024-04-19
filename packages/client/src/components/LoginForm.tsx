@@ -1,12 +1,14 @@
 import { useState } from "react";
 
 
+
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     setLoggingIn(true)
   };
 
@@ -26,7 +28,7 @@ export const LoginForm = () => {
       </form>
     )}
     {loggingIn && (
-        <div>Test</div>
+        <div>Check your email to finish login process</div>
     )}
     </>
   );
