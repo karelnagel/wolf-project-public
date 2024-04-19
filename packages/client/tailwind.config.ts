@@ -9,6 +9,8 @@ export default {
       colors: {
         primary: "rgb(var(--color-primary) / <alpha-value>)",
         primary2: "rgb(var(--color-primary2) / <alpha-value>)",
+        red: "rgb(var(--color-red) / <alpha-value>)",
+        purple: "rgb(var(--color-purple) / <alpha-value>)"
       },
       spacing: {},
     },
