@@ -1,4 +1,4 @@
-import { client, useAPI } from "../trpc/client";
+import { client, useAPI } from "@wolf-project/backend/src/client";
 
 export const useAddClient = () => {
   const { mutate } = useAPI(client.client.create.mutate);

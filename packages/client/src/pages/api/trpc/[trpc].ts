@@ -1,6 +1,6 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import type { APIRoute } from "astro";
-import { appRouter } from "../../../trpc/routes";
+import { appRouter } from "@wolf-project/backend";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 
 export const createContext = (_opts: FetchCreateContextFnOptions) => {

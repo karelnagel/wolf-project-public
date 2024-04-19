@@ -3,7 +3,7 @@ import { db, like } from "astro:db";
 import Layout from "../../components/Layout.astro";
 import { ModifyUser } from "../../components/ModifyUser";
 import { Users } from "astro:db";
-import { Employee } from "../../trpc/routes/users";
+import { Employee } from "@wolf-project/backend/src/routes/users";
 const { userId } = Astro.params;
 const id = userId?.split("/")[0];
 if (!id) throw new Error("id is required");

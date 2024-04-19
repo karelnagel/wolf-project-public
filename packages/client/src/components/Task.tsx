@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { client, useAPI } from "../trpc/client";
+import { client, useAPI } from "@wolf-project/backend/trpc/client";
 import Datepicker, { DateType, DateValueType } from "react-tailwindcss-datepicker";
-import { Task } from "../trpc/routes/tasks";
+import { Task } from "@wolf-project/backend/trpc/routes/tasks";
 
 interface addTaskProps {
   projectRef: string;
