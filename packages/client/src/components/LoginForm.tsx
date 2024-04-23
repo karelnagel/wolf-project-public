@@ -16,7 +16,7 @@ export const LoginForm = () => {
   return (
     <>
       {!loggingIn && (
-        <form className="flex max-w-60 flex-col gap-2" onSubmit={onSubmit}>
+        <form className="flex max-w-60 flex-col gap-2" onSubmit={onSubmit}> 
           <input
             placeholder="name@email.com"
             type="email"

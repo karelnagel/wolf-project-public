@@ -1,23 +1,22 @@
 ---
+import { AstroCookieSetOptions } from "astro";
 import Layout from "../components/Layout.astro";
 import { server } from "@wolf-project/backend/src/server";
-const urlToken = Astro.url.searchParams.get('token');
-console.log('urlToken: ', urlToken)
+const urlToken = Astro.url.searchParams.get("token");
+console.log("urlToken: ", urlToken);
 
-if(urlToken === null) return Astro.redirect('401')
-
+if (urlToken === null) return Astro.redirect("401");
 
 const result = await server({
-userId: ""
-}).authenticate.verify({token: urlToken})
+  userId: null,
+}).authenticate.session({ token: urlToken });
 
-console.log('Result:',result)
-
-
-
-
+if (typeof result === "string") {
+  console.log('Olen siin.')
+  Astro.cookies.set("x-auth-token", result, { path: "/" } as AstroCookieSetOptions);
+}
 ---
-    
+
 <Layout title={undefined} description={undefined}>
   <h1>Token:</h1>
 </Layout>

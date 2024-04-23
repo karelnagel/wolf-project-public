@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, root } from "../root";
+import { privateProcedure, publicProcedure, root } from "../root";
 import { Users, db, like } from "astro:db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import jwt from "jsonwebtoken";
@@ -21,7 +21,7 @@ export type Client = z.infer<typeof Client>;
 export type Employee = z.infer<typeof Employee>;
 
 export const employee = root.router({
-  create: publicProcedure
+  create: privateProcedure
     .input(Employee)
     .output(UserZod)
     .mutation(async ({ input: { name, email, role, language, job } }) => {
@@ -31,7 +31,7 @@ export const employee = root.router({
         .returning();
       return result[0]!;
     }),
-  modify: publicProcedure
+  modify: privateProcedure
     .input(UserZod)
     .output(UserZod)
     .mutation(async ({ input: { userId, name, email, role, language, job } }) => {
@@ -64,9 +64,8 @@ export const authenticate = root.router({
       .select({ userId: Users.userId })
       .from(Users)
       .where(like(Users.email, input.email));
-      console.log(exists)
+    console.log(exists)
     if (exists !== null) {
-      console.log(env.JWT_SECRET)
       try {
         token = jwt.sign({ userId: exists[0]?.userId }, env.JWT_SECRET, {
           expiresIn: "5m",
@@ -81,19 +80,21 @@ export const authenticate = root.router({
   }),
   session: publicProcedure
     .input(z.object({ token: z.string().nullish() }))
-    .query(async ({ input, ctx }) => {
-      return ctx
+    .query(async ({ input }) => {
       if (input.token === null) {
         return "Token is null";
       }
       try {
         const decodedToken = jwt.verify(input.token!, env.JWT_SECRET) as { userId: string };
-        const loggedInTokenContext = {
-
-        }
-        return 'Successfully logged in!'
+        console.log(decodedToken.userId)
+        const token = jwt.sign({ userId: decodedToken.userId }, env.JWT_SECRET, {
+          expiresIn: "7d",
+          issuer: "W-Wolf Agency OÜ"
+        })
+        console.log('Token:', token)
+        return token;
       } catch (e) {
-        return ({"Error": e});
+        return ({ "Error": e });
       }
     }),
 });
