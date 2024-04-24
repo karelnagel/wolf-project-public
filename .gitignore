@@ -27,3 +27,4 @@ playwright-report/
 test-results/
 .devdbrc
 
+packages/client/db/seed.ts

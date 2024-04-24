@@ -9,11 +9,8 @@ const t = useTranslations("en");
 const { projectId } = Astro.params;
 const id = projectId?.split("/")[0];
 if (!id) throw new Error("id is required");
-console.log("ID:", id);
 const project = await db.select().from(Projects).where(like(Projects.projectId, id));
 const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
-
-console.log(Astro.locals)
 ---
 
 <Layout title={undefined} description={undefined}>

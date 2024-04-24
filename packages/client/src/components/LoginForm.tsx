@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
+import { sendEmail } from "@wolf-project/backend/src/lib/email";
+import { hasToken } from "@wolf-project/shared/helpers";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -11,12 +13,20 @@ export const LoginForm = () => {
     e.preventDefault();
     result = await mutate({ email });
     setLoggingIn(true);
+    if (hasToken(result)) {
+      console.log("I am here");
+      await sendEmail({
+        to: [email!],
+        token: result.Token!,
+        locale: "en",
+      });
+    }
   };
 
   return (
     <>
       {!loggingIn && (
-        <form className="flex max-w-60 flex-col gap-2" onSubmit={onSubmit}> 
+        <form className="flex max-w-60 flex-col gap-2" onSubmit={onSubmit}>
           <input
             placeholder="name@email.com"
             type="email"

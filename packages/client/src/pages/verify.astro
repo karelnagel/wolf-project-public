@@ -12,7 +12,6 @@ const result = await server({
 }).authenticate.session({ token: urlToken });
 
 if (typeof result === "string") {
-  console.log('Olen siin.')
   Astro.cookies.set("x-auth-token", result, { path: "/" } as AstroCookieSetOptions);
 }
 ---
