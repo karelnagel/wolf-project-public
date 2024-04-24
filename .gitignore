@@ -13,6 +13,9 @@ node_modules
 .env*.local
 .env
 
+# DB seed
+packages/client/db/seed.ts
+
 # SST
 .sst/*
 .obsidian/*
@@ -23,3 +26,4 @@ node_modules
 playwright-report/
 test-results/
 .devdbrc
+
