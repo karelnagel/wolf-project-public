@@ -14,7 +14,6 @@ export const LoginForm = () => {
     result = await mutate({ email });
     setLoggingIn(true);
     if (hasToken(result)) {
-      console.log("I am here");
       await sendEmail({
         to: [email!],
         token: result.Token!,
