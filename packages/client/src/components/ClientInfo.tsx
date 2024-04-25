@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { CircleUserRound } from "lucide-react";
 interface ClientInfoProps {
   name: string;
   email: string;
@@ -55,11 +55,7 @@ export const ClientInfo = ({ clients }: { clients: ClientInfoProps[] }) => {
 const Info: React.FC<ClientInfoProps> = ({ name, email }) => {
   return (
     <div className="border-primary mt-4 flex justify-start gap-5 rounded-2xl border border-solid p-2.5 text-center">
-      <img
-        loading="lazy"
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/7d52b398000480c12ec2c2f943526d5768dfe93340e227df8f0c82fc7ead23cc?apiKey=cae8022f5fdb46b6994961e7252531bd&"
-        className="aspect-square w-[50px] shrink"
-      />
+      <CircleUserRound className="aspect-square h-10 w-10 shrink self-center align-middle" />
       <div className="flex flex-col items-start">
         <div className="text-base font-normal">{name}</div>
         <div className="mt-1.5 text-base font-normal">{email}</div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { client, useAPI } from "../trpc/client";
+import { Plus } from "lucide-react";
 
 export const CreateProject = () => {
   const [projectName, setProjectName] = useState("");
@@ -31,11 +32,9 @@ export const CreateProject = () => {
             <div className="font-semibold">Seotud inimesed</div>
             <div className="relative mt-4">
               <input className=" bg-primary rounded-2xl pr-10" />
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/86c8286cb6dbc6b10b19642f4c2d296de32352ba06add1cb72648172cba5f90e?"
-                className="absolute right-0 top-0 mr-2 mt-3 h-6 w-6 cursor-pointer"
-              />
+              <button>
+                <Plus className="absolute right-0 top-0 mr-2 mt-3 h-6 w-6 cursor-pointer" />
+              </button>
             </div>
           </div>
         </div>

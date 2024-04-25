@@ -33,6 +33,7 @@
     "dayjs": "^1.11.6",
     "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-tailwindcss-datepicker": "^1.6.6",
     "superjson": "^2.2.1",
