@@ -1,10 +1,13 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import type { APIRoute } from "astro";
-import { appRouter } from "../../../trpc/routes";
+import { appRouter } from "@wolf-project/backend";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import { verifyToken } from "@wolf-project/shared/serverHelper";
 
 export const createContext = (_opts: FetchCreateContextFnOptions) => {
-  return {};
+  const token = _opts.req.headers.get('Cookie')?.split(';').find((x) => (x.includes('x-auth-token=')))?.split('=')[1]?.trim();
+  const userId = verifyToken(token)
+  return { userId };
 };
 export type CreateContext = typeof createContext;
 

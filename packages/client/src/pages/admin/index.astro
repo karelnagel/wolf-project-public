@@ -1,8 +1,13 @@
 ---
-import { db, Users, not, inArray } from "astro:db";
+import { db, Users, not, inArray, eq } from "astro:db";
 import Layout from "../../components/Layout.astro";
-const admin = true;
-if (!admin) return Astro.redirect("/401");
+
+const userId = Astro.locals.userId;
+const role = (
+  await db.select({ role: Users.role }).from(Users).where(eq(Users.userId, userId!))
+)?.[0];
+
+if (role?.role !== "admin") return Astro.redirect("/401");
 
 const users = await db
   .select({ userId: Users.userId, name: Users.name })
@@ -10,25 +15,23 @@ const users = await db
   .where(not(inArray(Users.role, ["client"])));
 ---
 
-{
-  admin && (
-    <Layout title={undefined} description={undefined}>
-      <h1>Admin page</h1>
-      <button>
-        <a href="/admin/newuser">Uus kasutaja</a>
-      </button>
-      <div>
-        {users.map((user) => (
-          <div>
-            <a
-              class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-              href={`./admin/${user.userId}`}
-            >
-              {user.name}
-            </a>
-          </div>
-        ))}
-      </div>
-    </Layout>
-  )
-}
+<Layout title={undefined} description={undefined}>
+  <h1>Admin page</h1>
+  <button>
+    <a href="/admin/newuser">Uus kasutaja</a>
+  </button>
+  <div>
+    {
+      users.map((user) => (
+        <div>
+          <a
+            class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+            href={`./admin/${user.userId}`}
+          >
+            {user.name}
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</Layout>

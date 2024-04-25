@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { client, useAPI } from "../trpc/client";
-import { Comment } from "../trpc/routes/comments";
+import { client, useAPI } from "@wolf-project/backend/src/client";
+import { Comment } from "@wolf-project/backend/src/routes/comments";
 
 interface CommentProps {
   taskRef: string;

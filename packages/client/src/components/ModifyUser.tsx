@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { client, useAPI } from "../trpc/client";
-import { Employee } from "../trpc/routes/users";
+import { client, useAPI } from "@wolf-project/backend/src/client";
+import { Employee } from "@wolf-project/backend/src/routes/users";
 
 interface ModifyUserProps {
   userId: string;

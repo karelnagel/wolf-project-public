@@ -10,7 +10,6 @@ const t = useTranslations("en");
 const { taskId } = Astro.params;
 const id = taskId?.split("/")[0];
 if (!id) throw new Error("id is required");
-console.log("ID:", id);
 
 const task = await db.select().from(Tasks).where(like(Tasks.taskId, id));
 

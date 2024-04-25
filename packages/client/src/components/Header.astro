@@ -1,3 +1,8 @@
 ---
-
+import { LogoutButton } from "./Header/LogoutButton";
+const loggedinCookie = Astro.cookies.get("x-auth-token");
+const loadLogout = typeof loggedinCookie?.value === "string" ? true : false;
 ---
+
+<div>header</div>
+{loadLogout && <LogoutButton client:load />}
