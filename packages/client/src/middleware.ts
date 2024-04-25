@@ -9,6 +9,10 @@ export const onRequest = defineMiddleware(async (Astro, next) => {
 
   const token = Astro.cookies.get('x-auth-token')?.value
   Astro.locals.userId = verifyToken(token)
+  if (Astro.locals.userId === null) {
+    Astro.cookies.delete('x-auth-token')
+  }
+
 
   console.log(Astro.url.toString());
   return next();

@@ -9,7 +9,6 @@ export const verifyToken = (token: string | undefined) => {
         const result = jwt.verify(token, env.JWT_SECRET) as { userId: string };
         return result.userId;
     } catch (error) {
-        console.log(error)
         return null;
     }
 }

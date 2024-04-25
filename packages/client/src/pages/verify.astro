@@ -3,7 +3,6 @@ import { AstroCookieSetOptions } from "astro";
 import Layout from "../components/Layout.astro";
 import { server } from "@wolf-project/backend/src/server";
 const urlToken = Astro.url.searchParams.get("token");
-console.log("urlToken: ", urlToken);
 
 if (urlToken === null) return Astro.redirect("401");
 
@@ -13,9 +12,11 @@ const result = await server({
 
 if (typeof result === "string") {
   Astro.cookies.set("x-auth-token", result, { path: "/" } as AstroCookieSetOptions);
-}
+  return Astro.redirect("/");
+  
+} else return Astro.redirect("401");
+
 ---
 
 <Layout title={undefined} description={undefined}>
-  <h1>Token:</h1>
 </Layout>
