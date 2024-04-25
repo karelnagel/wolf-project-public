@@ -1,91 +1,92 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Datepicker, { DateType, DateValueType } from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { ArrowLeft, Paperclip } from "lucide-react";
 
 export default function PopUp() {
-    const [deadline, setDeadline] = useState<DateType>();
-    const handleValueChange = (newValue: DateValueType) => {
-        setDeadline(newValue?.startDate);
-      };
+  const [deadline, setDeadline] = useState<DateType>();
+  const handleValueChange = (newValue: DateValueType) => {
+    setDeadline(newValue?.startDate);
+  };
+
   return (
-    <div className="flex flex-col justify-center px-12 py-10 rounded-2xl bg-primary max-w-[648px] max-md:px-5">
-      <div className="flex mb-16 items-center gap-5 justify- mt-14 text-2xl font-bold text-center max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/d648f395ba1423609cfb486bec0cf488e1dff49fe972911a868e241924edf9e4?apiKey=cae8022f5fdb46b6994961e7252531bd&"
-          className="shrink-0 aspect-square w-[40px]"
-        />
+    <div className="bg-primary flex max-w-[648px] flex-col justify-center rounded-2xl px-12 py-10 max-md:px-5">
+      <div className="justify- mb-16 mt-14 flex items-center gap-5 text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
+        <button>
+          <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
+        </button>
         <div className="flex-grow">Uue taski loomine</div>
       </div>
-      <div className="flex flex-col mt-17 max-md:mt-10 max-md:max-w-full">
-        <div className="flex flex-col justify-center self-end max-w-full w-[131px]">
-          <div className="flex flex-col">
-            <div className="text-base font-bold text-start">
+      <div className="mt-17 flex flex-col max-md:mt-10 max-md:max-w-full">
+        <div className="flex items-center justify-between">
+          <div className="">
+            <div className="text-start text-base font-bold">
+              Tööetapp
+              <select className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black">
+                <option>Sisend</option>
+                <option>Disain</option>
+                <option>Arendus</option>
+                <option>Tagasiside</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div className="text-start text-base font-bold">
               Staatus
-            <select className="w-full bg-white text-black rounded-2xl mt-4 px-2 py-1.5 font-semibold ">
+              <select className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black">
                 <option>Ootel</option>
                 <option>Töös</option>
                 <option>Tehtud</option>
-            </select>
+              </select>
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center mt-3.5 max-md:max-w-full">
-            <div className="flex flex-col max-md:max-w-full">
-                <div className="text-base font-bold text-start">
-                    Taski nimi
-                </div>
-                <div className="flex text-base flex-col justify-center mt-4 max-md:max-w-full relative">
-                    <textarea className="h-12 bg-white text-black rounded-2xl max-md:max-w-full" />
-                </div>
-            </div>
-          <div className="flex gap-5 mt-8 justify-center">
-            <div className="text-base w-full font-bold text-start">
-                Vastutaja
-                <select className="text-primary w-full h-1/2 bg-white rounded-2xl mt-4 px-2 py-1.5 font-semibold ">
-                    <option>Veebihunt</option>
-                    <option>Klient</option>
-                </select>
-            </div>
-            <div className="flex flex-col w-full ">
-                <div className="text-base font-bold text-start">
-                    Tähtaeg
-                </div>
-                <div >
-                <Datepicker
-                    placeholder={"Vali tähtaeg!"}
-                    useRange={false}
-                    asSingle={true}
-                    value={{ startDate: deadline || null, endDate: deadline || null }}
-                    onChange={handleValueChange}
-                />      
-                </div>
+        <div className="mt-3.5 flex flex-col justify-center max-md:max-w-full">
+          <div className="flex flex-col max-md:max-w-full">
+            <div className="text-start text-base font-bold">Taski nimi</div>
+            <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
+              <textarea className="h-12 rounded-2xl bg-white text-black max-md:max-w-full" />
             </div>
           </div>
-          <div className="flex flex-col mt-8 max-md:max-w-full">
-            <div className="text-base flex-grow flex font-bold text-start text-white max-md:max-w-full">
+          <div className="mt-8 flex justify-center gap-5">
+            <div className="w-full text-start text-base font-bold">
+              Vastutaja
+              <select className="text-primary mt-4 h-1/2 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold ">
+                <option>Veebihunt</option>
+                <option>Klient</option>
+              </select>
+            </div>
+            <div className="flex w-full flex-col ">
+              <div className="mb-4 text-start text-base font-bold">Tähtaeg</div>
+              <div className="">
+              <Datepicker
+                inputClassName={"bg-white h-1/2"}
+                placeholder={"Vali tähtaeg!"}
+                useRange={false}
+                asSingle={true}
+                value={{ startDate: deadline || null, endDate: deadline || null }}
+                onChange={handleValueChange}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 flex flex-col max-md:max-w-full">
+            <div className="flex flex-grow text-start text-base font-bold text-white max-md:max-w-full">
               Taski kirjeldus
-              <img
-                    loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/7dfe909abb9e34b9e69eb30e1a23d6d60a6484af3fb8cd00922b10438f4fce71?apiKey=cae8022f5fdb46b6994961e7252531bd&"
-                    className="w-6 aspect-square max-md:mt-10"
-                    />
+              <Paperclip className="text-primary2 ml-2 aspect-square w-5 max-md:mt-10" />
             </div>
-            <div className="flex text-base flex-col justify-center mt-4 max-md:max-w-full">
-              <textarea className="bg-white text-black rounded-2xl max-md:max-w-full" />
+            <div className="mt-4 flex flex-col justify-center text-base max-md:max-w-full">
+              <textarea className="rounded-2xl bg-white text-black max-md:max-w-full" />
             </div>
+          </div>
+        </div>
+        <div className="mt-16 flex gap-5 self-center text-base font-extrabold max-md:mt-10">
+          <button className="bg-primary justify-center rounded-2xl border-2 border-solid border-black px-9 py-4 max-md:px-5">
+            Kustuta
+          </button>
+          <button className="bg-primary2 rounded-2xl px-9 py-4">Salvesta</button>
         </div>
       </div>
-      <div className="flex gap-5 self-center mt-16 text-base font-extrabold max-md:mt-10">
-        <button className="justify-center px-9 py-4 rounded-2xl border-2 border-black border-solid bg-primary max-md:px-5">
-          Kustuta
-        </button>
-        <button className="bg-primary2 rounded-2xl py-4 px-9">
-            Salvesta
-        </button>
-      </div>
-    </div>
     </div>
   );
 }
-

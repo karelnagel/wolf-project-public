@@ -1,48 +1,89 @@
-import React from 'react';
+import React from "react";
+import { CircleCheck, LucideIcon } from 'lucide-react'
 
 interface TaskinfoProps {
-    Responsible: string;
-    Name: string;
-    Deadline: Date;
-    Completed: Date;
+  Responsible: string;
+  Name: string;
+  Deadline: Date;
+  Status: string;
+  Completed?: Date;
+  Icon: LucideIcon;
 }
 
 export const TaskInfo = ({ tasks }: { tasks: TaskinfoProps[] }) => {
-    return (
-        <>
-            {tasks.map((task, index) => (
-                <div key={index} className="flex gap-5 justify-between items-center mt-14 self-start max-w-full max-md:flex-wrap py-2.5 px-5 rounded-2xl">
-                    <div className="self-stretch my-auto text-xl font-bold text-center">
-                        {task.Responsible}
-                    </div>
-                    <div className="flex gap-5 justify-between self-stretch max-md:flex-wrap max-md:max-w-full">
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f8851abe4597b9d07f3d7a96e4b497c9c661a82f447c02eed8407712d8a87434?apiKey=cae8022f5fdb46b6994961e7252531bd&"
-                            alt="placeholder"
-                            className="shrink-0 my-auto aspect-square w-[60px]"
-                        />
-                        <div className="flex flex-col ">
-                            <div className="text-xl font-semibold">
-                            {index + 1}. {task.Name}
-                            </div>
-                            <div className="flex gap-5 mt-4 text-base max-md:mx-2.5">
-                                <div className="font-semibold flex flex-col items-start">
-                                    <span className="font-bold">Tähtaeg:</span>
-                                    <span className="font-medium">{task.Deadline.toLocaleDateString()}</span>
-                                </div>
-                                <div className=" flex flex-col items-start">
-                                    <span className="font-bold">Tehtud:</span>
-                                    <span className="text-primary2">{task.Completed.toLocaleDateString()}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button className="justify-center self-stretch px-5 py-2.5 my-auto text-xl font-semibold text-center whitespace-nowrap bg-primary2 rounded-2xl">
-                        Muuda
-                    </button>
+  return (
+    <>
+      {tasks.map((task, index) => (
+        <React.Fragment key={index}>
+          {/* Conditionally apply border based on task status */}
+          <div
+            key={index}
+            className={`w-full grid grid-cols-7 max-w-full items-center justify-between gap-5 self-start rounded-2xl px-5 py-2.5 max-md:flex-wrap ${
+              task.Status === "InProgress" ? " my-5 py-5 border-[1px] border-primary2" : ""
+            }`}
+          >
+            <div className="my-auto col-span-2 self-stretch text-center text-xl font-bold">
+              {task.Responsible}
+            </div>
+            <Icons Completed={task.Completed} task={task} />
+            <div className="flex col-span-3 justify-between gap-5 self-stretch max-md:max-w-full max-md:flex-wrap">
+              <div className="flex flex-col">
+                <div className="text-xl text-left font-semibold">
+                  {index + 1}. {task.Name}
                 </div>
-            ))}
-        </>
-    );
+                <div className="mt-4 flex gap-5 text-base max-md:mx-2.5">
+                  <div className="flex flex-col items-start font-semibold">
+                    <span className="font-bold">Tähtaeg:</span>
+                    <span className="font-medium">
+                      {task.Deadline.toLocaleDateString()}
+                    </span>
+                  </div>
+                  {task.Completed && (
+                    <div className="flex flex-col items-start">
+                      <span className="font-bold">Tehtud:</span>
+                      <span className="text-primary2">
+                        {task.Completed.toLocaleDateString()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <button className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold">
+              Muuda
+            </button>
+          </div>
+          <Line Completed={task.Completed} />
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
+
+const Icons = ({ Completed, task }: { Completed?: Date; task: TaskinfoProps }) => {
+  const Icon = Completed ? CircleCheck : task.Icon;
+  return (
+    <div className="flex items-center justify-center w-full h-full">
+      <Icon
+        className={`h-10 w-10 ${
+          Completed ? "text-primary2" : "text-white"
+        }`}
+      />
+    </div>
+  );
+};
+
+const Line = ({ Completed }: { Completed?: Date }) => {
+  return (
+    <div className={`gap-5 h-10 px-5 w-full grid grid-cols-7`}>
+      <div className="col-span-2"></div>
+      <div className="flex justify-center">
+        <div
+          className={`h-10 w-[1px] ${
+            Completed ? "bg-primary2" : "bg-white"
+          }`}
+        ></div>
+      </div>
+    </div>
+  );
 };
