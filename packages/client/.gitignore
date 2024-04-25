@@ -21,3 +21,7 @@ pnpm-debug.log*
 .DS_Store
 
 .vercel/
+
+# db seed
+
+db/seed.ts
