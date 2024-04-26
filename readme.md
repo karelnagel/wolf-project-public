@@ -30,3 +30,13 @@ You can test if the project builds with npm run build and test if the types are 
 
 
 You can test if the project builds with `npm run build` and test if the types are correct with `npm run typecheck`.
+
+### seed.ts
+
+```ts
+import { db, Users } from "astro:db";
+
+export default async function () {
+    await db.insert(Users).values({userId:"321", email: "youremail@gmail.com", language:"en", name:"name", role:"admin", job:"tekst"})
+}
+```
