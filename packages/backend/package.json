@@ -1,0 +1,19 @@
+{
+  "name": "@wolf-project/backend",
+  "version": "1.0.0",
+  "description": "Wolf-project backend",
+  "main": "./src/routes/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.556.0",
+    "@react-email/components": "0.0.16",
+    "@react-email/tailwind": "^0.0.16-canary.1",
+    "@wolf-project/i18n": "*",
+    "@wolf-project/shared": "*",
+    "react-email": "2.1.1"
+  }
+}

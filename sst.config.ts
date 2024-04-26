@@ -15,7 +15,11 @@ export default $config({
       ADMIN_AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
       ADMIN_AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!,
       ASTRO_STUDIO_APP_TOKEN: process.env.ASTRO_STUDIO_APP_TOKEN!,
+      JWT_SECRET : process.env.JWT_SECRET!,
+      PUBLIC_API_URL: process.env.PUBLIC_API_URL || "https://project.wolfagency.ee",
+      EMAIL: process.env.EMAIL!
     };
+
 
     new sst.aws.Astro("Client", {
       path: "packages/client",
@@ -29,5 +33,7 @@ export default $config({
       //       hostedZone: DOMAIN,
       //     },
     });
+
+    
   },
 });

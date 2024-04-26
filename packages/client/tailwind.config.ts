@@ -19,5 +19,6 @@ export default {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,astro}",
     "../../node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
+    '../backend/src/**/*.{js,ts,jsx,tsx,astro}',
   ],
 } satisfies Config;

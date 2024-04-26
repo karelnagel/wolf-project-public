@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { client, useAPI } from "../trpc/client";
+import { client, useAPI } from "@wolf-project/backend/src/client";
 
 export const NewUser = () => {
   const [name, setName] = useState("");

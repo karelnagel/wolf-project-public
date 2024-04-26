@@ -3,7 +3,6 @@ import { ClientInfo } from "../../../components/ClientInfo";
 import Layout from "../../../components/Layout.astro";
 const { projectId } = Astro.params;
 if (!projectId) throw new Error("id is required");
-console.log("ID:", projectId);
 const clients = [
   { name: "Maru1", email: "maru1@veebihunt.ee" },
   //   { name: "Maru2", email: "maru2@veebihunt.ee" },
