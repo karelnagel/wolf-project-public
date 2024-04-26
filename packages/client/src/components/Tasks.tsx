@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PopUp from "../components/PopUp";
+import TaskPopUp from "../components/TaskPopUp"
 import {
   ChevronUpCircle,
   ChevronDownCircle,
@@ -78,15 +79,19 @@ const ProjectPage = () => {
             </button>
           </div>
         </div>
-        <div
-          className={`fixed right-0 top-0 w-2/5 transform shadow-lg transition-transform ${
+        
+
+        {/* <TaskPopUp></TaskPopUp> */}
+      </div>
+      <div
+          className={`fixed flex right-0 h-full top-0 w-2/5 transform shadow-lg transition-transform ${
             showPopUp ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {showPopUp && <PopUp />}
+        {showPopUp && <PopUp />}
         </div>
-      </div>
     </div>
+    
   );
 };
 
