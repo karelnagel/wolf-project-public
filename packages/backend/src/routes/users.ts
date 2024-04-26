@@ -4,6 +4,8 @@ import { Users, db, like } from "astro:db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import jwt from "jsonwebtoken";
 import { env } from "@wolf-project/shared/env";
+import { sendEmail } from "../lib/email";
+import { Locale } from "@wolf-project/i18n";
 
 const UserZod = z.object({
   userId: z.string(),
@@ -61,22 +63,25 @@ export const authenticate = root.router({
   login: publicProcedure.input(z.object({ email: z.string() })).query(async ({ input }) => {
     let token;
     const exists = await db
-      .select({ userId: Users.userId })
+      .select({ userId: Users.userId, locale: Users.language })
       .from(Users)
       .where(like(Users.email, input.email));
-    console.log(exists)
-    if (exists !== null) {
+    if (exists.length !== 0) {
       try {
         token = jwt.sign({ userId: exists[0]?.userId }, env.JWT_SECRET, {
           expiresIn: "5m",
         });
-        console.log(token)
+        await sendEmail({
+          to: [input.email!],
+          token: token,
+          locale: exists[0]!.locale as Locale
+        });
       } catch (e) {
-        console.error(e)
-        return "Error logging in. Please try again";
+        console.error(e);
       }
     }
-    return { Token: token };
+
+    return {};
   }),
   session: publicProcedure
     .input(z.object({ token: z.string().nullish() }))

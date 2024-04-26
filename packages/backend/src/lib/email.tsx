@@ -6,8 +6,8 @@ import { render } from "@react-email/components";
 import { MagiclinkEmail, MagiclinkEmailProps } from "./email-template";
 
 const credentials = {
-  accessKeyId:'',
-  secretAccessKey: '',
+  accessKeyId: process.env.ADMIN_AWS_ACCESS_KEY_ID!,
+  secretAccessKey: process.env.ADMIN_AWS_SECRET_ACCESS_KEY!,
 };
 const ses = new SES({ credentials , region: 'eu-central-1',});
 

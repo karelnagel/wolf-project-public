@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "format": "prettier --write .",
-    "dev": "cd packages/client && npm run dev",
+    "dev": "sst dev",
+    "dev-fe": "cd packages/client && sst dev astro dev",
     "test": "playwright test",
     "testgen": "playwright codegen",
     "build": "cd packages/client && npm run build",

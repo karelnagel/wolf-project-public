@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
-import { sendEmail } from "@wolf-project/backend/src/lib/email";
-import { hasToken } from "@wolf-project/shared/helpers";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -11,15 +9,8 @@ export const LoginForm = () => {
   let result;
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    result = await mutate({ email });
+    await mutate({ email });
     setLoggingIn(true);
-    if (hasToken(result)) {
-      await sendEmail({
-        to: [email!],
-        token: result.Token!,
-        locale: "en",
-      });
-    }
   };
 
   return (

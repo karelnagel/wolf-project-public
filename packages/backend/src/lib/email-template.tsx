@@ -10,7 +10,8 @@ export interface MagiclinkEmailProps {
 
 export const MagiclinkEmail: React.FC<MagiclinkEmailProps> = ({ token, locale }) => {
   const t = useTranslations(locale || undefined);
-  const url = `https://localhost:4321/verify?token=${token}`;
+  const url = `${process.env.PUBLIC_API_URL}/verify?token=${token}`;
+  console.log(url)
   return (
     <Html>
       <Tailwind config={config}>
