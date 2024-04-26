@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import PopUp from "../components/PopUp";
+import PopUp from "../PopUp";
 import {
   ChevronUpCircle,
   ChevronDownCircle,
   ArrowLeft,
   Pencil,
   MessageSquare,
-  Code
+  Code,
 } from "lucide-react";
-import { TaskInfo } from "../components/TaskInfo";
+import { TaskInfo } from "../TaskInfo";
 
-const ProjectPage = () => {
+export interface TasksProps {
+  returnClientTab: () => void;
+  leaveTasksTab: () => void;
+}
+
+export const Tasks: React.FC<TasksProps> = ({ returnClientTab, leaveTasksTab }) => {
   const allTasks = [
     {
       Responsible: "Veebihunt",
@@ -25,8 +30,8 @@ const ProjectPage = () => {
       Name: "Avakuva disainile tagasiside andmine",
       Deadline: new Date("2024-03-03"),
       Status: "InProgress",
-    //   Completed: new Date("2023-06-06"),
-      Icon: MessageSquare
+      //   Completed: new Date("2023-06-06"),
+      Icon: MessageSquare,
     },
     {
       Responsible: "Veebihunt",
@@ -34,7 +39,7 @@ const ProjectPage = () => {
       Deadline: new Date("2024-03-03"),
       Status: "Waiting",
       Completed: undefined,
-      Icon: Code 
+      Icon: Code,
     },
   ];
 
@@ -48,7 +53,7 @@ const ProjectPage = () => {
     <div className="flex justify-center px-16 py-20 max-md:px-5">
       <div className="flex w-full flex-col max-md:max-w-full">
         <div className="flex w-full items-start justify-center gap-5 text-center font-semibold max-md:max-w-full max-md:flex-wrap">
-          <button className="text-primary2">
+          <button className="text-primary2" onClick={returnClientTab}>
             <ArrowLeft className="aspect-square h-11 w-11 shrink-0" />
           </button>
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
@@ -68,7 +73,10 @@ const ProjectPage = () => {
                 >
                   Lisa task
                 </button>
-                <button className="bg-primary2 justify-center whitespace-nowrap rounded-2xl px-5 py-2.5">
+                <button
+                  className="bg-primary2 justify-center whitespace-nowrap rounded-2xl px-5 py-2.5"
+                  onClick={leaveTasksTab}
+                >
                   Edasi
                 </button>
               </div>
@@ -89,5 +97,3 @@ const ProjectPage = () => {
     </div>
   );
 };
-
-export default ProjectPage;

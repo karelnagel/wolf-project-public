@@ -1,6 +1,5 @@
 ---
 import Layout from "../components/Layout.astro";
-import { CreateProject } from "../components/CreateProject";
 import { useTranslations } from "@wolf-project/i18n";
 import { db, Projects } from "astro:db";
 
@@ -26,5 +25,4 @@ const projects = await db.select().from(Projects);
       ))
     }
   </div>
-  <CreateProject client:load />
 </Layout>
