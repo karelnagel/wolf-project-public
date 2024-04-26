@@ -15,7 +15,7 @@ export const TaskInfo = ({ tasks }: { tasks: TaskinfoProps[] }) => {
     <>
       {tasks.map((task, index) => (
         <React.Fragment key={index}>
-          {/* Conditionally apply border based on task status */}
+          {index ===0 && <Line Completed={task.Completed} />}
           <div
             key={index}
             className={`w-full grid grid-cols-7 max-w-full items-center justify-between gap-5 self-start rounded-2xl px-5 py-2.5 max-md:flex-wrap ${
