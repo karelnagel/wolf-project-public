@@ -5,12 +5,11 @@ import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
 
 interface NewProjectProps {
-  employees: Employees[];
-  creatorId: string;
-  creatorRole: string;
+  employees: Employee[];
+  mandatoryMember: Employee | undefined;
 }
 
-export interface Employees {
+export interface Employee {
   value: string;
   label: string;
 }
@@ -21,11 +20,14 @@ export interface Client {
   language: string;
 }
 
-export const NewProject: React.FC<NewProjectProps> = ({ employees, creatorId, creatorRole }) => {
+export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
   const [projectName, setProjectName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
-  const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const initialSelectedEmployees: Employee[] = mandatoryMember
+    ? employees.filter((employee) => employee === mandatoryMember)
+    : [];
+  const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
 
   const [projectTab, setProjectTab] = useState(true);
   const [clientTab, setClientTab] = useState(false);
@@ -47,12 +49,14 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, creatorId, cr
     setClients(clients.filter((client) => client.email !== x.email));
   };
 
-  const addEmployees = (x: string) => {
-    setSelectedEmployees([...selectedEmployees, x])
-  }
-  const removeEmployees = (x: string) => {
-    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x))
-  }
+  const addEmployees = (x: Employee) => {
+    setSelectedEmployees([...selectedEmployees, x]);
+    console.log(selectedEmployees);
+  };
+  const removeEmployees = (x: Employee) => {
+    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x));
+    console.log(selectedEmployees);
+  };
 
   const projectToClient = () => {
     setProjectTab(!projectTab);
@@ -95,9 +99,9 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, creatorId, cr
           updateProjectName={updateProjectName}
           leaveProjectTab={projectToClient}
           employees={employees}
-          creatorId={creatorId}
-          creatorRole={creatorRole}
-          selectedEmployees={selectedEmployees}
+          fixedOptions={initialSelectedEmployees}
+          addEmployees={addEmployees}
+          removeEmployees={removeEmployees}
         />
       )}
       {clientTab && (

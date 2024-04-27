@@ -2,13 +2,20 @@
 import { db, Users, eq, or } from "astro:db";
 import Layout from "../components/Layout.astro";
 import { NewProject } from "../components/NewProject/NewProject";
+import { Employee } from "../components/NewProject/NewProject";
 
 const userId = Astro.locals.userId;
-const role = (
-  await db.select({ role: Users.role }).from(Users).where(eq(Users.userId, userId!))
+const data = (
+  await db
+    .select({ role: Users.role, name: Users.name })
+    .from(Users)
+    .where(eq(Users.userId, userId!))
 )?.[0];
-if (role?.role !== "admin" && role?.role !== "limited") return Astro.redirect("/401");
-
+if (data?.role !== "admin" && data?.role !== "limited") return Astro.redirect("/401");
+let mandatoryUser: Employee | undefined;
+if (data!.role === "limited") {
+  mandatoryUser = { value: userId!, label: data!.name };
+}
 const employees = await db
   .select({ value: Users.userId, label: Users.name })
   .from(Users)
@@ -16,5 +23,5 @@ const employees = await db
 ---
 
 <Layout title={undefined} description={undefined}>
-  <NewProject creatorId={userId!} creatorRole={role!.role} employees={employees} client:load />
+  <NewProject mandatoryMember={mandatoryUser} employees={employees} client:load />
 </Layout>

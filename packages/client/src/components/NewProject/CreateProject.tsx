@@ -1,24 +1,24 @@
-import { Employees } from "./NewProject";
-import { Selector } from "../Selector";
+import { Employee } from "./NewProject";
+import { EmployeeSelector } from "./EmployeeSelector";
 
 interface CreateProjectProps {
   projectName: string;
   updateProjectName: (x: string) => void;
   leaveProjectTab: () => void;
-  creatorId: string;
-  creatorRole: string;
-  employees: Employees[];
-  selectedEmployees: string[];
+  employees: Employee[];
+  fixedOptions: Employee[];
+  addEmployees: (x: Employee) => void;
+  removeEmployees: (x: Employee) => void;
 }
 
 export const CreateProject: React.FC<CreateProjectProps> = ({
   projectName,
   updateProjectName,
   leaveProjectTab,
-  creatorId,
-  creatorRole,
   employees,
-  selectedEmployees,
+  fixedOptions,
+  addEmployees,
+  removeEmployees,
 }) => {
   return (
     <form className="flex flex-col items-center rounded-2xl max-md:px-5 ">
@@ -36,12 +36,16 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           {/*<div className="flex w-full flex-col text-base">
             <div className="font-semibold">Vali projekti põhi</div>
             <input className=" bg-primary mt-4 rounded-2xl" />
-          </div>*/}
+            </div>*/
+          /*needs development*/}
           <div className="flex w-full flex-col text-base">
             <div className="font-semibold">Seotud inimesed</div>
-            <Selector options={employees} value={selectedEmployees} onChange={function (x: string[]): void {
-              throw new Error("Function not implemented.");
-            } } />
+            <EmployeeSelector
+              employeesList={employees}
+              fixedOptions={fixedOptions}
+              addEmployees={addEmployees}
+              removeEmployees={removeEmployees}
+            />
           </div>
         </div>
         <button
