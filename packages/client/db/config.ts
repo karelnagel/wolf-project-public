@@ -4,8 +4,18 @@ const Projects = defineTable({
   columns: {
     projectId: column.text({ primaryKey: true, unique: true }),
     projectName: column.text(),
+    projectDescription: column.text(),
+    projectCreator: column.text({ references: () => Users.columns.userId })
   },
 });
+
+const ProjectUser = defineTable({
+  columns: {
+    projectId: column.text({ references: () => Projects.columns.projectId }),
+    userId: column.text({ references: () => Users.columns.userId }),
+    priviledgeLevel: column.text(),
+  }
+})
 
 const Users = defineTable({
   columns: {
@@ -18,43 +28,6 @@ const Users = defineTable({
   },
 });
 
-const Admins = defineTable({
-  columns: {
-    adminId: column.text({ primaryKey: true, unique: true }),
-    name: column.text(),
-    email: column.text(),
-    saltedPassword: column.text(),
-    language: column.text({ optional: true }),
-  },
-  deprecated: true,
-});
-
-const AdminProject = defineTable({
-  columns: {
-    adminRef: column.text(),
-    projectRef: column.text(),
-  },
-  foreignKeys: [
-    {
-      columns: ["adminRef", "projectRef"],
-      references: () => [Admins.columns.adminId, Projects.columns.projectId],
-    },
-  ],
-  deprecated: true,
-});
-
-const Clients = defineTable({
-  columns: {
-    clientId: column.text({ primaryKey: true, unique: true }),
-    projectRef: column.text({ references: () => Projects.columns.projectId }),
-    name: column.text(),
-    email: column.text(),
-    saltedKeycode: column.text(),
-    language: column.text({ optional: true }),
-  },
-  deprecated: true,
-});
-
 const Tasks = defineTable({
   columns: {
     taskId: column.text({ primaryKey: true, unique: true }),
@@ -62,7 +35,9 @@ const Tasks = defineTable({
     title: column.text(),
     description: column.text(),
     deadline: column.date({ optional: true }),
+    completed: column.date({ optional: true }),
     status: column.text(),
+    responsible: column.text({ references: () => Users.columns.userId })
   },
 });
 
@@ -77,5 +52,5 @@ const Comments = defineTable({
 });
 
 export default defineDb({
-  tables: { Projects, Users, Admins, AdminProject, Clients, Tasks, Comments },
+  tables: { Projects, Users, Tasks, Comments, ProjectUser },
 });

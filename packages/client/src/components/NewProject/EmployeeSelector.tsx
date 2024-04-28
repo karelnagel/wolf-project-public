@@ -40,7 +40,6 @@ const usedComponents = { DropdownIndicator, ClearIndicator, MultiValueRemove };
 const controlStyles = {
   base: "border rounded-2xl mt-4 border-primary bg-primary hover:cursor-pointer",
   focus: "border-primary2 ring-1 ring-primary-500",
-  nonFocus: "border-gray-300 hover:border-gray-400",
 };
 
 const optionsStyle = {
@@ -110,8 +109,7 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         }),
       }}
       classNames={{
-        control: ({ isFocused }) =>
-          clsx(isFocused ? controlStyles.focus : controlStyles.nonFocus, controlStyles.base),
+        control: ({ isFocused }) => clsx(isFocused && controlStyles.focus, controlStyles.base),
         placeholder: () => "px-2 py-0.5",
         input: () => "pl-2 py-2.5",
         valueContainer: () => "gap-1",
@@ -122,8 +120,7 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         dropdownIndicator: () => "pr-2 hover:cursor-pointer",
         menu: () => "p-2 mt-2 mb-1 bg-primary border border-primary2 rounded-2xl",
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
-        noOptionsMessage: () =>
-          "p-2 bg-primary border border-dashed rounded-sm",
+        noOptionsMessage: () => "p-2 bg-primary border border-dashed rounded-sm",
       }}
       options={employeesList}
       placeholder={"Vali töötaja(d)"}

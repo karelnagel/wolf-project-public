@@ -10,6 +10,8 @@ const TaskZod = z.object({
   description: z.string(),
   deadline: z.date().nullable(),
   status: z.string(),
+  responsible: z.string(),
+  completed: z.date().nullable(),
 });
 export type Task = z.infer<typeof TaskZod>;
 
@@ -17,10 +19,10 @@ export const tasks = root.router({
   create: publicProcedure
     .input(TaskZod.omit({ taskId: true }))
     .output(TaskZod)
-    .mutation(async ({ input: { projectRef, title, description, deadline, status } }) => {
+    .mutation(async ({ input: { projectRef, title, description, deadline, status, responsible, completed } }) => {
       const tasks = await db
         .insert(Tasks)
-        .values({ taskId: getRandomId(), projectRef, title, description, deadline, status })
+        .values({ taskId: getRandomId(), projectRef, title, description, deadline, status, responsible, completed })
         .returning();
       return tasks[0]!;
     }),
