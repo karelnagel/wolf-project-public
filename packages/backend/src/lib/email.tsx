@@ -9,7 +9,7 @@ const credentials = {
   accessKeyId: process.env.ADMIN_AWS_ACCESS_KEY_ID!,
   secretAccessKey: process.env.ADMIN_AWS_SECRET_ACCESS_KEY!,
 };
-const ses = new SES({ credentials , region: 'eu-central-1',});
+const ses = new SES({ credentials, region: "eu-central-1" });
 
 export const sendEmail = async (props: { to: string[] } & MagiclinkEmailProps) => {
   const t = useTranslations(props.locale || undefined);

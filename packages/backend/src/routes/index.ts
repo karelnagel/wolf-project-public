@@ -10,7 +10,7 @@ export const appRouter = router({
   client,
   tasks,
   comments,
-  authenticate
+  authenticate,
 });
 
 export type AppRouter = typeof appRouter;

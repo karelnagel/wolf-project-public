@@ -10,24 +10,27 @@ export default function PopUp() {
   };
 
   return (
-    <div className="bg-primary flex w-full flex-col justify-center rounded-2xl px-12 py-10 max-md:px-5" style={{ overflowY: 'auto', maxHeight: '100%' }}>
+    <div
+      className="bg-primary flex w-full flex-col justify-center rounded-2xl px-12 py-10 max-md:px-5"
+      style={{ overflowY: "auto", maxHeight: "100%" }}
+    >
       <div className="justify- mb-16 mt-14 flex items-center gap-5 text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
         <button>
           <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
         </button>
         <div className="flex-grow">Uue taski loomine</div>
       </div>
-        <div className="mt-17 flex flex-col  max-md:mt-10 max-md:max-w-full">
+      <div className="mt-17 flex flex-col  max-md:mt-10 max-md:max-w-full">
         <div className="flex items-center justify-between">
-            <div className="text-start text-base font-bold">
-              Tööetapp
-              <select className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black">
-                <option>Sisend</option>
-                <option>Disain</option>
-                <option>Arendus</option>
-                <option>Tagasiside</option>
-              </select>
-            </div>
+          <div className="text-start text-base font-bold">
+            Tööetapp
+            <select className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black">
+              <option>Sisend</option>
+              <option>Disain</option>
+              <option>Arendus</option>
+              <option>Tagasiside</option>
+            </select>
+          </div>
           <div>
             <div className="text-start text-base font-bold">
               Staatus
@@ -57,13 +60,13 @@ export default function PopUp() {
             <div className="flex w-full flex-col ">
               <div className="mb-4 text-start text-base font-bold">Tähtaeg</div>
               <div className="">
-              <Datepicker
-                inputClassName={"bg-white h-1/2 w-full "}
-                placeholder={"Vali tähtaeg!"}
-                useRange={false}
-                asSingle={true}
-                value={{ startDate: deadline || null, endDate: deadline || null }}
-                onChange={handleValueChange}
+                <Datepicker
+                  inputClassName={"bg-white h-1/2 w-full "}
+                  placeholder={"Vali tähtaeg!"}
+                  useRange={false}
+                  asSingle={true}
+                  value={{ startDate: deadline || null, endDate: deadline || null }}
+                  onChange={handleValueChange}
                 />
               </div>
             </div>

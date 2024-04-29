@@ -21,13 +21,13 @@ It is using astro:db for database, which should automatically create a local db 
 9. Copy the `Access key ID` and `Secret access key` values into the .env file under `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, respectively.
 
 # Running the Project
+
 1. Copy the .env.example file and rename it to .env.
 2. Fill in the .env file with the correct values. AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from the AWS configuration steps above.
 3. Run `npm i` to install dependencies.
 4. Start the backend with `npm run dev` in the root directory. You will be prompted for your STAGE_NAME. Deployment of your stack will take some time.
-6. To start the frontend, open another terminal run `npm run dev-fe`.
-You can test if the project builds with npm run build and test if the types are correct with npm run typecheck.
-
+5. To start the frontend, open another terminal run `npm run dev-fe`.
+   You can test if the project builds with npm run build and test if the types are correct with npm run typecheck.
 
 You can test if the project builds with `npm run build` and test if the types are correct with `npm run typecheck`.
 
@@ -37,6 +37,15 @@ You can test if the project builds with `npm run build` and test if the types ar
 import { db, Users } from "astro:db";
 
 export default async function () {
-    await db.insert(Users).values({userId:"321", email: "youremail@gmail.com", language:"en", name:"name", role:"admin", job:"tekst"})
+  await db
+    .insert(Users)
+    .values({
+      userId: "321",
+      email: "youremail@gmail.com",
+      language: "en",
+      name: "name",
+      role: "admin",
+      job: "tekst",
+    });
 }
 ```
