@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { CircleUserRound, Trash } from "lucide-react";
 import { Client } from "./NewProject";
+import { Locale, useTranslations } from "@wolf-project/i18n";
+import { SingleSelect } from "../SingleSelect";
 
 interface ClientInfoProps {
   companyName: string;
@@ -10,6 +12,7 @@ interface ClientInfoProps {
   updateCompanyName: (x: React.ChangeEvent<HTMLTextAreaElement>) => void;
   addClient: (x: Client) => void;
   removeClient: (x: Client) => void;
+  locale: Locale;
 }
 export const ClientInfo: React.FC<ClientInfoProps> = ({
   companyName,
@@ -19,11 +22,20 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
   updateCompanyName,
   addClient,
   removeClient,
+  locale,
 }) => {
+  const t = useTranslations(locale);
+
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [language, setLanguage] = useState("ee");
+  const [language, setLanguage] = useState("et");
+
+  const languageOptions = [
+    { value: "et", label: t.language.et },
+    { value: "en", label: t.language.en },
+  ];
+
   const toggleForm = () => {
     setShowForm(!showForm);
   };
@@ -36,8 +48,8 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
     setEmail(e.target.value);
   };
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value);
+  const handleLanguageChange = (x: string) => {
+    setLanguage(x);
   };
 
   const handleAddClient = (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,7 +58,7 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
     addClient(newClient);
     setName("");
     setEmail("");
-    setLanguage("ee");
+    setLanguage("et");
   };
 
   return (
@@ -96,14 +108,16 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
                   Vali keel
                 </div>
-                <select
-                  className=" bg-primary w-2/3 rounded-2xl px-2 py-2.5 font-normal "
-                  value={language}
-                  onChange={handleLanguageChange}
-                >
-                  <option value="ee">Eesti keel</option>
+                { <SingleSelect
+                  selectOptions={languageOptions}
+                  selectedOption={language}
+                  parentSetMethod={handleLanguageChange}
+                  dark={true}
+                />}
+                {/*<select className=" bg-primary w-2/3 rounded-2xl px-2 py-2.5 font-normal ">
+                  <option value="et">Eesti keel</option>
                   <option value="en">English</option>
-                </select>
+                </select>*/}
               </div>
               <button
                 type="submit"

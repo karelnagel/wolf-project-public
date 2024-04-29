@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CreateProject } from "./CreateProject";
-import { Tasks } from "./Tasks";
+import { Tasks, Task } from "./Tasks";
 import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
 
@@ -22,12 +22,15 @@ export interface Client {
 
 export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
   const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+  const initialSelectedEmployee: Employee | undefined = mandatoryMember;
+  const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
+  const [projectManager, setProjectManager] = useState<Employee>();
+
   const [companyName, setCompanyName] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
-  const initialSelectedEmployees: Employee[] = mandatoryMember
-    ? employees.filter((employee) => employee === mandatoryMember)
-    : [];
-  const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
+
+  const [projectTasks, setProjectTasks] = useState<Task[]>([]);
 
   const [projectTab, setProjectTab] = useState(true);
   const [clientTab, setClientTab] = useState(false);
@@ -37,6 +40,11 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   const updateProjectName = (x: string) => {
     setProjectName(x);
   };
+
+  const updateProjectDescription = (x: string) => {
+    setProjectDescription(x);
+  };
+
   const updateCompanyName = (x: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCompanyName(x.target.value);
   };
@@ -51,11 +59,51 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
 
   const addEmployees = (x: Employee) => {
     setSelectedEmployees([...selectedEmployees, x]);
-    console.log(selectedEmployees);
   };
   const removeEmployees = (x: Employee) => {
     setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x));
-    console.log(selectedEmployees);
+  };
+
+  const updateProjectManager = (x: Employee | undefined) => {
+    setProjectManager(x);
+  };
+
+  const sortProject = (x: Task[]) => {
+    return x.slice().sort((a, b) => {
+      const deadlineA = a.deadline ? new Date(a.deadline) : null;
+      const deadlineB = b.deadline ? new Date(b.deadline) : null;
+      if (!deadlineA && !deadlineB) {
+        return 0;
+      } else if (!deadlineA) {
+        return 1;
+      } else if (!deadlineB) {
+        return -1;
+      }
+      if (deadlineA < deadlineB) {
+        return -1;
+      } else if (deadlineA > deadlineB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+
+  const addTask = (x: Task) => {
+    setProjectTasks(sortProject([...projectTasks, x]));
+  };
+
+  const modifyTask = (x: Task, y: Task) => {
+    const i = projectTasks.findIndex((task) => task === x);
+    if (i !== -1) {
+      const updatedTasks = [...projectTasks];
+      updatedTasks[i] = y;
+      setProjectTasks(sortProject(updatedTasks));
+    }
+  };
+
+  const removeTask = (x: Task) => {
+    setProjectTasks(sortProject(projectTasks.filter((task) => task !== x)));
   };
 
   const projectToClient = () => {
@@ -88,7 +136,22 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   };
 
   const handleSubmit = () => {
-    console.log("test123");
+    console.log(
+      "projectName: ",
+      projectName,
+      " projectDescription: ",
+      projectDescription,
+      " selectedEmployees: ",
+      selectedEmployees,
+      " clients: ",
+      clients,
+      " companyName: ",
+      companyName,
+      " projectsTasks ",
+      projectTasks,
+      " projectManager: ",
+      projectManager,
+    );
   };
 
   return (
@@ -96,12 +159,15 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
       {projectTab && (
         <CreateProject
           projectName={projectName}
+          projectDescription={projectDescription}
           updateProjectName={updateProjectName}
+          updateProjectDescription={updateProjectDescription}
           leaveProjectTab={projectToClient}
           employees={employees}
-          fixedOptions={initialSelectedEmployees}
+          fixedOption={initialSelectedEmployee}
           addEmployees={addEmployees}
           removeEmployees={removeEmployees}
+          updateProjectManager={updateProjectManager}
         />
       )}
       {clientTab && (
@@ -113,9 +179,20 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
           updateCompanyName={updateCompanyName}
           addClient={addClient}
           removeClient={removeClient}
+          locale={"et"}
         />
       )}
-      {tasksTab && <Tasks returnClientTab={tasksToClient} leaveTasksTab={tasksToConfirm} />}
+      {tasksTab && (
+        <Tasks
+          projectTasks={projectTasks}
+          addTask={addTask}
+          modifyTask={modifyTask}
+          removeTask={removeTask}
+          returnClientTab={tasksToClient}
+          leaveTasksTab={tasksToConfirm}
+          responsible={[companyName, "Wolf-Agency OÜ"]}
+        />
+      )}
       {confirmTab && <Confirm returnTasks={confirmToTasks} confirmCreation={handleSubmit} />}
     </>
   );

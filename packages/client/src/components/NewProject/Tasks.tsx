@@ -1,51 +1,47 @@
 import React, { useState } from "react";
-import PopUp from "../PopUp";
-import {
-  ChevronUpCircle,
-  ChevronDownCircle,
-  ArrowLeft,
-  Pencil,
-  MessageSquare,
-  Code,
-} from "lucide-react";
+import { PopUp } from "../PopUp";
+import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
 
-export interface TasksProps {
-  returnClientTab: () => void;
-  leaveTasksTab: () => void;
+export interface Task {
+  responsible: string;
+  title: string;
+  deadline: Date | undefined;
+  completed: Date | undefined;
+  status: string;
+  type: string;
+  description: string | undefined;
 }
 
-export const Tasks: React.FC<TasksProps> = ({ returnClientTab, leaveTasksTab }) => {
-  const allTasks = [
-    {
-      Responsible: "Veebihunt",
-      Name: "Avakuva disaini loomine",
-      Deadline: new Date("2024-03-03"),
-      Status: "Done",
-      Completed: new Date("2024-03-05"),
-      Icon: Pencil,
-    },
-    {
-      Responsible: "Maarjamõisa Venitehas OÜ",
-      Name: "Avakuva disainile tagasiside andmine",
-      Deadline: new Date("2024-03-03"),
-      Status: "InProgress",
-      //   Completed: new Date("2023-06-06"),
-      Icon: MessageSquare,
-    },
-    {
-      Responsible: "Veebihunt",
-      Name: "Kinnitatud disaini põhjal alamlehtede loomine",
-      Deadline: new Date("2024-03-03"),
-      Status: "Waiting",
-      Completed: undefined,
-      Icon: Code,
-    },
-  ];
+export interface TasksProps {
+  projectTasks: Task[];
+  returnClientTab: () => void;
+  leaveTasksTab: () => void;
+  addTask: (x: Task) => void;
+  removeTask: (x: Task) => void;
+  modifyTask: (x: Task, y: Task) => void;
+  responsible: string[];
+}
 
+export const Tasks: React.FC<TasksProps> = ({
+  projectTasks,
+  returnClientTab,
+  leaveTasksTab,
+  addTask,
+  modifyTask,
+  removeTask,
+  responsible,
+}) => {
   const [showPopUp, setShowPopUp] = useState(false);
+  const [task, setTask] = useState<Task>();
 
   const handlePopUpToggle = () => {
+    setShowPopUp(!showPopUp);
+    setTask(undefined);
+  };
+
+  const handleChangePopUpToggle = (x: Task) => {
+    setTask(x);
     setShowPopUp(!showPopUp);
   };
 
@@ -59,17 +55,25 @@ export const Tasks: React.FC<TasksProps> = ({ returnClientTab, leaveTasksTab }) 
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
             <div className="flex grow flex-col self-center">
               <div>Veebiarenduse projekt</div>
-              <button className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10">
-                <ChevronUpCircle className="h-9 w-9 " />
-              </button>
-              <TaskInfo tasks={allTasks} />
-              <button className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10">
-                <ChevronDownCircle className="h-9 w-9" />
-              </button>
+              {projectTasks.length > 3 && (
+                <button className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10">
+                  <ChevronUpCircle className="h-9 w-9 " />
+                </button>
+              )}
+              <TaskInfo
+                projectTasks={projectTasks}
+                handlePopUpClose={handlePopUpToggle}
+                handlePopUpOpen={handleChangePopUpToggle}
+              />
+              {projectTasks.length > 3 && (
+                <button className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10">
+                  <ChevronDownCircle className="h-9 w-9" />
+                </button>
+              )}
               <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
                 <button
                   className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
-                  onClick={handlePopUpToggle}
+                  onClick={!showPopUp ? handlePopUpToggle : undefined}
                 >
                   Lisa task
                 </button>
@@ -81,9 +85,6 @@ export const Tasks: React.FC<TasksProps> = ({ returnClientTab, leaveTasksTab }) 
                 </button>
               </div>
             </div>
-            <button className="text-normal bg-primary -mt-3 justify-center rounded-2xl p-4 text-base">
-              Logi välja
-            </button>
           </div>
         </div>
         <div
@@ -91,7 +92,17 @@ export const Tasks: React.FC<TasksProps> = ({ returnClientTab, leaveTasksTab }) 
             showPopUp ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {showPopUp && <PopUp />}
+          {showPopUp && (
+            <PopUp
+              addTask={addTask}
+              removeTask={removeTask}
+              modifyTask={modifyTask}
+              responsible={responsible}
+              task={task}
+              closePopUp={handlePopUpToggle}
+              locale={"et"}
+            />
+          )}
         </div>
       </div>
     </div>

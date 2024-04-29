@@ -25,6 +25,7 @@ const Users = defineTable({
     role: column.text(),
     language: column.text(),
     job: column.text({ optional: true }),
+    company: column.text(),
   },
 });
 

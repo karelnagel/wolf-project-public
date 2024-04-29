@@ -1,24 +1,31 @@
 import { Employee } from "./NewProject";
 import { EmployeeSelector } from "./EmployeeSelector";
+import { ProjectManagerSelector } from "./ProjectManagerSelector";
 
 interface CreateProjectProps {
   projectName: string;
+  projectDescription: string;
   updateProjectName: (x: string) => void;
+  updateProjectDescription: (x: string) => void;
   leaveProjectTab: () => void;
   employees: Employee[];
-  fixedOptions: Employee[];
+  fixedOption: Employee | undefined;
   addEmployees: (x: Employee) => void;
   removeEmployees: (x: Employee) => void;
+  updateProjectManager: (x: Employee | undefined) => void;
 }
 
 export const CreateProject: React.FC<CreateProjectProps> = ({
   projectName,
+  projectDescription,
   updateProjectName,
+  updateProjectDescription,
   leaveProjectTab,
   employees,
-  fixedOptions,
+  fixedOption,
   addEmployees,
   removeEmployees,
+  updateProjectManager,
 }) => {
   return (
     <form className="flex flex-col items-center rounded-2xl max-md:px-5 ">
@@ -31,22 +38,37 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           className=" bg-primary focus:outline-primary2 mt-4  rounded-2xl focus:outline max-md:max-w-full"
         />
         <div className="mt-8 font-semibold max-md:max-w-full">Projekti kirjeldus</div>
-        <textarea className="bg-primary mt-4 h-[145px] rounded-2xl max-md:max-w-full" />
+        <textarea
+          value={projectDescription}
+          onChange={(e) => updateProjectDescription(e.currentTarget.value)}
+          className="bg-primary mt-4 h-[145px] rounded-2xl max-md:max-w-full"
+        />
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
-          {/*<div className="flex w-full flex-col text-base">
-            <div className="font-semibold">Vali projekti põhi</div>
-            <input className=" bg-primary mt-4 rounded-2xl" />
-            </div>*/
-          /*needs development*/}
+          <div className="font-semibold">
+            {"Projectijuht"}
+            <ProjectManagerSelector
+              employeesList={employees}
+              fixedOption={fixedOption}
+              setProjectManager={updateProjectManager}
+            />
+          </div>
           <div className="flex w-full flex-col text-base">
             <div className="font-semibold">Seotud inimesed</div>
             <EmployeeSelector
               employeesList={employees}
-              fixedOptions={fixedOptions}
+              fixedOption={fixedOption}
               addEmployees={addEmployees}
               removeEmployees={removeEmployees}
             />
           </div>
+        </div>
+        <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
+          {/*
+            <div className="flex w-full flex-col text-base">
+              <div className="font-semibold">Vali projekti põhi</div>
+              <input className=" bg-primary mt-4 rounded-2xl" />
+            </div>
+            /*needs development*/}
         </div>
         <button
           onClick={leaveProjectTab}

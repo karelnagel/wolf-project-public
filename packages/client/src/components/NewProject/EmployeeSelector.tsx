@@ -38,8 +38,8 @@ const MultiValueRemove = (props: MultiValueRemoveProps<Employee>) => {
 const usedComponents = { DropdownIndicator, ClearIndicator, MultiValueRemove };
 
 const controlStyles = {
-  base: "border rounded-2xl mt-4 border-primary bg-primary hover:cursor-pointer",
-  focus: "border-primary2 ring-1 ring-primary-500",
+  base: "border rounded-2xl min-w-48 mt-4 py-[1px] border-primary bg-primary font-normal hover:cursor-pointer",
+  focus: "border border-primary2",
 };
 
 const optionsStyle = {
@@ -48,44 +48,41 @@ const optionsStyle = {
 };
 
 interface EmployeeSelectorProps {
-  employeesList: any[];
-  fixedOptions: Employee[];
+  employeesList: Employee[];
+  fixedOption: Employee | undefined;
   addEmployees: (x: Employee) => void;
   removeEmployees: (x: Employee) => void;
 }
 
 export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
   employeesList: employeesList,
-  fixedOptions,
+  fixedOption,
   addEmployees,
   removeEmployees,
 }) => {
-  fixedOptions.forEach((x) => {
-    addEmployees(x);
-  });
   const [value, setValue] = useState<readonly Employee[]>(
-    employeesList.filter((x) => fixedOptions.includes(x)),
+    employeesList.filter((x) => x.value === fixedOption?.value),
   );
   const onChange = (newValue: OnChangeValue<Employee, true>, actionMeta: ActionMeta<Employee>) => {
     switch (actionMeta.action) {
       case "pop-value":
       case "remove-value":
-        if (!fixedOptions.includes(actionMeta.removedValue)) {
-          removeEmployees(actionMeta.removedValue);
+        if (actionMeta.removedValue.value === fixedOption?.value) {
+          return;
         }
+        removeEmployees(actionMeta.removedValue);
         break;
       case "clear":
-        newValue = employeesList.filter((x) => fixedOptions.includes(x));
+        newValue = employeesList.filter((x) => x.value === fixedOption?.value);
         const removedEmployees = value.filter((employee) => !newValue.includes(employee));
         removedEmployees.forEach(removeEmployees);
         break;
       case "select-option":
-        if (!fixedOptions.includes(actionMeta.option!)) {
+        if (actionMeta.option! !== fixedOption) {
           addEmployees(actionMeta.option!);
         }
         break;
     }
-
     setValue(newValue);
   };
   return (
@@ -113,8 +110,7 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         placeholder: () => "px-2 py-0.5",
         input: () => "pl-2 py-2.5",
         valueContainer: () => "gap-1",
-        multiValue: () => "pl-1 px-1 border ml-2 border-black bg-black rounded-2xl",
-        multiValueLabel: () => "leading-6 p-1",
+        multiValue: () => "px-2 py-1 border mx-2 border-black bg-black rounded-2xl",
         multiValueRemove: () => "rounded-md hover:cursor-pointer hover:text-red",
         clearIndicator: () => "rounded-md hover:cursor-pointer hover:text-red",
         dropdownIndicator: () => "pr-2 hover:cursor-pointer",
@@ -128,6 +124,7 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         return <div>{"Rohkem töötajaid pole"}</div>;
       }}
       value={value}
+      isClearable={value.some((v)=> v !== fixedOption)}
       onChange={onChange}
       isMulti
       closeMenuOnSelect
