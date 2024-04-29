@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
@@ -34,6 +34,21 @@ export const Tasks: React.FC<TasksProps> = ({
 }) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [task, setTask] = useState<Task>();
+  const firstInprogress = projectTasks.findIndex((x) => x.status === "inprogress");
+  const lastDone = projectTasks.findLastIndex((x) => x.status === "completed");
+  const [startIndex, setStartIndex] = useState<number>();
+
+  useEffect(() => {
+    if (firstInprogress !== -1 && lastDone < firstInprogress) {
+      setStartIndex(firstInprogress > 0 ? firstInprogress - 1 : 0);
+      return;
+    }
+    if (lastDone > firstInprogress) {
+      setStartIndex(lastDone);
+      return;
+    }
+    setStartIndex(0);
+  }, [firstInprogress, lastDone]);
 
   const handlePopUpToggle = () => {
     setShowPopUp(!showPopUp);
@@ -43,6 +58,13 @@ export const Tasks: React.FC<TasksProps> = ({
   const handleChangePopUpToggle = (x: Task) => {
     setTask(x);
     setShowPopUp(!showPopUp);
+  };
+  const increaseStartIndex = () => {
+    if (startIndex! < projectTasks.length - 1) setStartIndex(startIndex! + 1);
+  };
+
+  const decreaseStartIndex = () => {
+    if (startIndex! > 0) setStartIndex(startIndex! - 1);
   };
 
   return (
@@ -56,17 +78,23 @@ export const Tasks: React.FC<TasksProps> = ({
             <div className="flex grow flex-col self-center">
               <div>Veebiarenduse projekt</div>
               {projectTasks.length > 3 && (
-                <button className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10">
+                <button
+                  onClick={decreaseStartIndex}
+                  className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10"
+                >
                   <ChevronUpCircle className="h-9 w-9 " />
                 </button>
               )}
               <TaskInfo
                 projectTasks={projectTasks}
-                handlePopUpClose={handlePopUpToggle}
+                startIndex={startIndex!}
                 handlePopUpOpen={handleChangePopUpToggle}
               />
               {projectTasks.length > 3 && (
-                <button className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10">
+                <button
+                  onClick={increaseStartIndex}
+                  className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10"
+                >
                   <ChevronDownCircle className="h-9 w-9" />
                 </button>
               )}
