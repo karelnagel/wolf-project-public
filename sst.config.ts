@@ -1,4 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+import { DOMAIN } from "./packages/shared/consts";
 
 const copyFiles = [{ from: "node_modules/@libsql", to: "node_modules/@libsql" }];
 
@@ -15,16 +16,16 @@ export default $config({
       ADMIN_AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
       ADMIN_AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!,
       ASTRO_STUDIO_APP_TOKEN: process.env.ASTRO_STUDIO_APP_TOKEN!,
-      JWT_SECRET : process.env.JWT_SECRET!,
+      JWT_SECRET: process.env.JWT_SECRET!,
       PUBLIC_API_URL: process.env.PUBLIC_API_URL || "https://project.wolfagency.ee",
-      EMAIL: process.env.EMAIL!
+      EMAIL: process.env.EMAIL!,
     };
-
 
     new sst.aws.Astro("Client", {
       path: "packages/client",
       environment,
       transform: { server: { copyFiles } as any },
+      domain: isMain ? DOMAIN : undefined,
 
       // domain: !isMain
       //   ? undefined
@@ -33,7 +34,5 @@ export default $config({
       //       hostedZone: DOMAIN,
       //     },
     });
-
-    
   },
 });

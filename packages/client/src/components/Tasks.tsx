@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import PopUp from "../components/PopUp";
-import TaskPopUp from "../components/TaskPopUp"
 import {
   ChevronUpCircle,
   ChevronDownCircle,
   ArrowLeft,
   Pencil,
   MessageSquare,
-  Code
+  Code,
 } from "lucide-react";
 import { TaskInfo } from "../components/TaskInfo";
 
@@ -26,8 +25,8 @@ const ProjectPage = () => {
       Name: "Avakuva disainile tagasiside andmine",
       Deadline: new Date("2024-03-03"),
       Status: "InProgress",
-    //   Completed: new Date("2023-06-06"),
-      Icon: MessageSquare
+      //   Completed: new Date("2023-06-06"),
+      Icon: MessageSquare,
     },
     {
       Responsible: "Veebihunt",
@@ -35,7 +34,7 @@ const ProjectPage = () => {
       Deadline: new Date("2024-03-03"),
       Status: "Waiting",
       Completed: undefined,
-      Icon: Code 
+      Icon: Code,
     },
   ];
 
@@ -79,19 +78,17 @@ const ProjectPage = () => {
             </button>
           </div>
         </div>
-        
 
         {/* <TaskPopUp></TaskPopUp> */}
       </div>
       <div
-          className={`fixed flex right-0 h-full top-0 w-2/5 transform shadow-lg transition-transform ${
-            showPopUp ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
+        className={`fixed right-0 top-0 flex h-full w-2/5 transform shadow-lg transition-transform ${
+          showPopUp ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
         {showPopUp && <PopUp />}
-        </div>
+      </div>
     </div>
-    
   );
 };
 
