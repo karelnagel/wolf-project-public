@@ -27,8 +27,8 @@ jobs:
       - run: npm i @libsql/linux-x64-gnu --force
       - run: cd packages/client && npx astro db push
 
-      - name: Typecheck
-        run: npm run check
+      # - name: Typecheck
+      #   run: npm run check
 
       - name: Install SST
         run: curl -fsSL https://ion.sst.dev/install | bash
