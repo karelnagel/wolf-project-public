@@ -3,10 +3,10 @@ import { client, useAPI } from "@wolf-project/backend/src/client";
 import Datepicker, { DateType, DateValueType } from "react-tailwindcss-datepicker";
 import { Task } from "@wolf-project/backend/src/routes/tasks";
 
-interface addTaskProps {
+interface AddTaskProps {
   projectRef: string;
 }
-export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
+export const AddTask: React.FC<AddTaskProps> = ({ projectRef }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState<DateType>();
@@ -35,39 +35,37 @@ export const AddTask: React.FC<addTaskProps> = ({ projectRef }) => {
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
-        <input
-          placeholder="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <input
-          placeholder="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <Datepicker
-          placeholder={"Vali tähtaeg!"}
-          useRange={false}
-          asSingle={true}
-          value={{ startDate: deadline || null, endDate: deadline || null }}
-          onChange={handleValueChange}
-        />
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="toDo">Tegemata</option>
-          <option value="progress">Tegemisel</option>
-          <option value="review">Tagasisidestamisel</option>
-          <option value="done">Tehtud</option>
-        </select>
-        {error && <div>{error.message}</div>}
+    <form onSubmit={onSubmit} className="flex flex-col items-center gap-2">
+      <input
+        placeholder="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
+      <input
+        placeholder="description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+      <Datepicker
+        placeholder={"Vali tähtaeg!"}
+        useRange={false}
+        asSingle={true}
+        value={{ startDate: deadline || null, endDate: deadline || null }}
+        onChange={handleValueChange}
+      />
+      <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <option value="toDo">Tegemata</option>
+        <option value="progress">Tegemisel</option>
+        <option value="review">Tagasisidestamisel</option>
+        <option value="done">Tehtud</option>
+      </select>
+      {error && <div>{error.message}</div>}
 
-        <button type="submit" className="button" disabled={isLoading}>
-          {isLoading ? "Loading" : "Submit"}
-        </button>
-      </form>
-    </>
+      <button type="submit" className="button" disabled={isLoading}>
+        {isLoading ? "Loading" : "Submit"}
+      </button>
+    </form>
   );
 };

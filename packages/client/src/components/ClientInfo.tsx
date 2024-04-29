@@ -22,8 +22,8 @@ export const ClientInfo = ({ clients }: { clients: ClientInfoProps[] }) => {
           </div>
         </div>
       </div>
-      {clients.map((client) => (
-        <Info name={client.name} email={client.email} />
+      {clients.map((client, i) => (
+        <Info key={i} name={client.name} email={client.email} />
       ))}
       {showForm && (
         <form className="text-center">
