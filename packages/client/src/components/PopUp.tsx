@@ -35,6 +35,7 @@ export const PopUp: React.FC<PopUpProps> = ({
   const [taskDescription, setTaskDescription] = useState("");
 
   const convertedResponsible = responsible.map((value) => ({ value, label: value }));
+
   const typeOptions = [
     { value: "input", label: t.type.input },
     { value: "development", label: t.type.development },
@@ -71,8 +72,8 @@ export const PopUp: React.FC<PopUpProps> = ({
           ? new Date(deadline)
           : typeof deadline === "object" && deadline instanceof Date
             ? deadline
-            : undefined,
-      completed: status === "completed" ? new Date() : undefined,
+            : null,
+      completed: status === "completed" ? new Date() : null,
       type: taskType,
       description: taskDescription,
     };

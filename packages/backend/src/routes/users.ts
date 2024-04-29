@@ -17,8 +17,8 @@ const UserZod = z.object({
   company: z.string(),
 });
 
-const Client = UserZod.omit({ userId: true, job: true });
-const Employee = UserZod.omit({ userId: true, company: true });
+export const Client = UserZod.omit({ userId: true, job: true, role: true });
+export const Employee = UserZod.omit({ userId: true, company: true });
 
 export type Client = z.infer<typeof Client>;
 export type Employee = z.infer<typeof Employee>;
@@ -48,13 +48,13 @@ export const employee = root.router({
 });
 
 export const client = root.router({
-  create: publicProcedure
+  create: privateProcedure
     .input(Client)
     .output(UserZod)
-    .mutation(async ({ input: { name, email, role, language, company } }) => {
+    .mutation(async ({ input: { name, email, language, company } }) => {
       const result = await db
         .insert(Users)
-        .values({ userId: getRandomId(), name, email, role, language, company })
+        .values({ userId: getRandomId(), name, email, role: "client", language, company })
         .returning();
       return result[0]!;
     }),
@@ -77,7 +77,7 @@ export const authenticate = root.router({
           to: [input.email!],
           token: token,
           locale: exists[0]!.locale as Locale
-        }); 
+        });
       } catch (e) {
         console.error(e);
       }

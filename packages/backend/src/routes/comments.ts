@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, root } from "../root";
+import { privateProcedure, root } from "../root";
 import { Comments, db } from "astro:db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 
@@ -12,7 +12,7 @@ const CommentZod = z.object({
 });
 export type Comment = z.infer<typeof CommentZod>;
 export const comments = root.router({
-  create: publicProcedure
+  create: privateProcedure
     .input(CommentZod.omit({ commentId: true, commentedAt: true }))
     .output(CommentZod)
     .mutation(async ({ input: { taskRef, body, commenterId } }) => {

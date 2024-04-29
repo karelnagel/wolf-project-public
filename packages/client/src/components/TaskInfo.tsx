@@ -34,6 +34,7 @@ export const TaskInfo: React.FC<TaskInfoProps> = ({
           i <= index &&
           index < i + 3 && (
             <React.Fragment key={index}>
+              {index === i && <Line Completed={task.completed} />}
               {/* Conditionally apply border based on task status */}
               <div
                 key={index}
@@ -60,7 +61,14 @@ export const TaskInfo: React.FC<TaskInfoProps> = ({
                       {task.completed && (
                         <div className="flex flex-col items-start">
                           <span className="font-bold">Tehtud:</span>
-                          <span className="text-primary2">
+                          <span
+                            className={
+                              task.completed &&
+                              (task.deadline ? task.completed > task.deadline : true)
+                                ? "text-red"
+                                : "text-primary"
+                            }
+                          >
                             {task.completed?.toLocaleDateString("et")}
                           </span>
                         </div>
@@ -110,7 +118,7 @@ const Icons = ({ status, task }: { status: string; task: Task }) => {
   );
 };
 
-const Line = ({ Completed }: { Completed?: Date }) => {
+const Line = ({ Completed }: { Completed: Date | null }) => {
   return (
     <div className={`grid h-10 w-full grid-cols-7 gap-5 px-5`}>
       <div className="col-span-2"></div>

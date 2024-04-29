@@ -23,5 +23,10 @@ const employees = await db
 ---
 
 <Layout title={undefined} description={undefined}>
-  <NewProject mandatoryMember={mandatoryUser} employees={employees} client:load />
+  <NewProject
+    mandatoryMember={mandatoryUser}
+    employees={employees}
+    creatorId={userId!}
+    client:load
+  />
 </Layout>

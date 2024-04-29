@@ -3,29 +3,33 @@ import { CreateProject } from "./CreateProject";
 import { Tasks, Task } from "./Tasks";
 import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
+import { useAPI, client } from "@wolf-project/backend/src/client";
 
 interface NewProjectProps {
   employees: Employee[];
   mandatoryMember: Employee | undefined;
+  creatorId: string;
 }
-
 export interface Employee {
   value: string;
   label: string;
 }
-
 export interface Client {
   name: string;
   email: string;
   language: string;
 }
 
-export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
+export const NewProject: React.FC<NewProjectProps> = ({
+  employees,
+  mandatoryMember,
+  creatorId,
+}) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const initialSelectedEmployee: Employee | undefined = mandatoryMember;
-  const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
-  const [projectManager, setProjectManager] = useState<Employee>();
+  const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [projectManager, setProjectManager] = useState<string>();
 
   const [companyName, setCompanyName] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
@@ -36,6 +40,8 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   const [clientTab, setClientTab] = useState(false);
   const [tasksTab, setTasksTab] = useState(false);
   const [confirmTab, setConfirmTab] = useState(false);
+
+  const { mutate, isLoading, error } = useAPI(client.projects.create.mutate);
 
   const updateProjectName = (x: string) => {
     setProjectName(x);
@@ -58,14 +64,14 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   };
 
   const addEmployees = (x: Employee) => {
-    setSelectedEmployees([...selectedEmployees, x]);
+    setSelectedEmployees([...selectedEmployees, x.value]);
   };
   const removeEmployees = (x: Employee) => {
-    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x));
+    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x.value));
   };
 
   const updateProjectManager = (x: Employee | undefined) => {
-    setProjectManager(x);
+    setProjectManager(x!.value);
   };
 
   const sortProject = (x: Task[]) => {
@@ -136,6 +142,21 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   };
 
   const handleSubmit = () => {
+    mutate({
+      projectName,
+      projectDescription,
+      projectCreator: creatorId,
+      projectManager: projectManager!,
+      clients: clients.map((c) => ({
+        name: c.name,
+        company: companyName,
+        email: c.email,
+        language: c.language,
+      })),
+      tasks: projectTasks,
+      selectedEmployees,
+    });
+
     console.log(
       "projectName: ",
       projectName,
@@ -152,6 +173,8 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
       " projectManager: ",
       projectManager,
     );
+
+    if (error) console.log(error);
   };
 
   return (
@@ -193,7 +216,13 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
           responsible={[companyName, "Wolf-Agency OÜ"]}
         />
       )}
-      {confirmTab && <Confirm returnTasks={confirmToTasks} confirmCreation={handleSubmit} />}
+      {confirmTab && (
+        <Confirm
+          returnTasks={confirmToTasks}
+          confirmCreation={handleSubmit}
+          isLoading={isLoading}
+        />
+      )}
     </>
   );
 };

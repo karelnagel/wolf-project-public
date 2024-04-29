@@ -6,11 +6,11 @@ import { TaskInfo } from "../TaskInfo";
 export interface Task {
   responsible: string;
   title: string;
-  deadline: Date | undefined;
-  completed: Date | undefined;
+  deadline: Date | null;
+  completed: Date | null;
   status: string;
   type: string;
-  description: string | undefined;
+  description: string | null;
 }
 
 export interface TasksProps {
