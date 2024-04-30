@@ -76,7 +76,7 @@ export const authenticate = root.router({
         await sendEmail({
           to: [input.email!],
           token: token,
-          locale: exists[0]!.locale as Locale
+          locale: exists[0]!.locale as Locale,
         });
       } catch (e) {
         console.error(e);
@@ -93,15 +93,15 @@ export const authenticate = root.router({
       }
       try {
         const decodedToken = jwt.verify(input.token!, env.JWT_SECRET) as { userId: string };
-        console.log(decodedToken.userId)
+        console.log(decodedToken.userId);
         const token = jwt.sign({ userId: decodedToken.userId }, env.JWT_SECRET, {
           expiresIn: "7d",
-          issuer: "W-Wolf Agency OÜ"
-        })
-        console.log('Token:', token)
+          issuer: "W-Wolf Agency OÜ",
+        });
+        console.log("Token:", token);
         return token;
       } catch (e) {
-        return ({ "Error": e });
+        return { Error: e };
       }
     }),
 });

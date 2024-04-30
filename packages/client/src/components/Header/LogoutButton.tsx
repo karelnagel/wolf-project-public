@@ -3,7 +3,7 @@ import { LogOutIcon } from "lucide-react";
 
 export const LogoutButton = () => {
   const onClick = () => {
-    navigate('/logout')
+    navigate("/logout");
   };
   return (
     <>

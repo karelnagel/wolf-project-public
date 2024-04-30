@@ -2,7 +2,7 @@
 import Layout from "../../../components/Layout.astro";
 import { useTranslations } from "@wolf-project/i18n";
 import { db, eq, like, Tasks, Users } from "astro:db";
-// Todo there is no AccComment in this project
+// Todo where is this?
 // import { AddComment } from "../../../components/Comment";
 import { Comments } from "astro:db";
 
@@ -25,6 +25,8 @@ const comments = await db
   .where(like(Comments.taskRef, id))
   .innerJoin(Users, eq(Comments.commenterId, Users.userId));
 
+// const userId =
+//   "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
 // const userId =
 //   "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
 ---
@@ -64,5 +66,6 @@ const comments = await db
       ))
     }
   </div>
+
   <!-- <AddComment taskRef={id} commenterId={userId} client:load /> -->
 </Layout>

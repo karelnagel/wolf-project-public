@@ -9,9 +9,9 @@ export const root = initTRPC.context<CreateContext>().create({
 export const router = root.router;
 export const publicProcedure = root.procedure;
 
-const privateMiddleware = root.middleware(x => {
-  if (!x.ctx.userId) throw new Error("No userId found")
-  return x.next({ ctx: { userId: x.ctx.userId } })
-})
+const privateMiddleware = root.middleware((x) => {
+  if (!x.ctx.userId) throw new Error("No userId found");
+  return x.next({ ctx: { userId: x.ctx.userId } });
+});
 
 export const privateProcedure = root.procedure.use(privateMiddleware);
