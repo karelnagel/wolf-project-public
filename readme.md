@@ -37,15 +37,13 @@ You can test if the project builds with `npm run build` and test if the types ar
 import { db, Users } from "astro:db";
 
 export default async function () {
-  await db
-    .insert(Users)
-    .values({
-      userId: "321",
-      email: "youremail@gmail.com",
-      language: "en",
-      name: "name",
-      role: "admin",
-      job: "tekst",
-    });
+  await db.insert(Users).values({
+    userId: "321",
+    email: "youremail@gmail.com",
+    language: "en",
+    name: "name",
+    role: "admin",
+    job: "tekst",
+  });
 }
 ```

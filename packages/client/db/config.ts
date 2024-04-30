@@ -5,7 +5,7 @@ const Projects = defineTable({
     projectId: column.text({ primaryKey: true, unique: true }),
     projectName: column.text(),
     projectDescription: column.text(),
-    projectCreator: column.text({ references: () => Users.columns.userId })
+    projectCreator: column.text({ references: () => Users.columns.userId }),
   },
 });
 
@@ -15,8 +15,7 @@ const ProjectUser = defineTable({
     userId: column.text({ references: () => Users.columns.userId }),
     priviledgeLevel: column.text(),
   },
-
-})
+});
 
 const Users = defineTable({
   columns: {
@@ -39,7 +38,7 @@ const Tasks = defineTable({
     deadline: column.date({ optional: true }),
     completed: column.date({ optional: true }),
     status: column.text(),
-    responsible: column.text({ references: () => Users.columns.company })
+    responsible: column.text({ references: () => Users.columns.company }),
   },
 });
 

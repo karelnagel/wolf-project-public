@@ -1,13 +1,6 @@
 ---
-import { db, Users, not, inArray, eq } from "astro:db";
+import { db, Users, not, inArray } from "astro:db";
 import Layout from "../../components/Layout.astro";
-
-const userId = Astro.locals.userId;
-const role = (
-  await db.select({ role: Users.role }).from(Users).where(eq(Users.userId, userId!))
-)?.[0];
-
-if (role?.role !== "admin") return Astro.redirect("/401");
 
 const users = await db
   .select({ userId: Users.userId, name: Users.name })

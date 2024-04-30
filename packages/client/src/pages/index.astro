@@ -1,9 +1,8 @@
 ---
 import Layout from "../components/Layout.astro";
-import { useTranslations } from "@wolf-project/i18n";
 import { db, Projects } from "astro:db";
 
-const t = useTranslations("en");
+const t = Astro.locals.t;
 const projects = await db.select().from(Projects);
 ---
 

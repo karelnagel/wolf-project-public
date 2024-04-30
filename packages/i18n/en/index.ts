@@ -6,23 +6,24 @@ export const en = {
     title: "Project subpage",
   },
   login: {
-    body: (url: string) =>  `To login to your account, please click this [link](${url}). Link lasts for 5 minutes.`,
-    title: `Wolf Project login email`
+    body: (url: string) =>
+      `To login to your account, please click this [link](${url}). Link lasts for 5 minutes.`,
+    title: `Wolf Project login email`,
   },
   type: {
     input: "Input",
     design: "Design",
     development: "Development",
-    feedback: "Feedback"
+    feedback: "Feedback",
   },
   status: {
     pending: "Pending",
     inprogress: "In Progress",
-    completed: "Completed"
+    completed: "Completed",
   },
-  language:{
+  language: {
     et: "Estonian",
-    en: "English"
-  }
+    en: "English",
+  },
 };
 export type I18nLocale = typeof en;

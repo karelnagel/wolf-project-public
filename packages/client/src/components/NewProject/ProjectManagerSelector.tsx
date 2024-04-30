@@ -12,8 +12,6 @@ const DropdownIndicator = (props: DropdownIndicatorProps<Employee, false>) => {
   );
 };
 
-const usedComponents = { DropdownIndicator };
-
 const controlStyles = {
   base: "border rounded-2xl min-w-56 mt-4 py-[1px] border-primary font-normal bg-primary hover:cursor-pointer",
   focus: "border-primary2 ring-1 ring-primary-500",
@@ -74,7 +72,7 @@ export const ProjectManagerSelector: React.FC<EmployeeSelectorProps> = ({
       onChange={onChange}
       closeMenuOnSelect
       isDisabled={fixedOption === undefined ? false : true}
-      components={fixedOption === undefined ? usedComponents : { DropdownIndicator: null }}
+      components={{ DropdownIndicator: fixedOption === undefined ? DropdownIndicator : null }}
     />
   );
 };

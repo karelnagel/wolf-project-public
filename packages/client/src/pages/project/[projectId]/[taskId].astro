@@ -1,18 +1,16 @@
 ---
 import Layout from "../../../components/Layout.astro";
-import { useTranslations } from "@wolf-project/i18n";
 import { db, eq, like, Tasks, Users } from "astro:db";
 // Todo where is this?
 // import { AddComment } from "../../../components/Comment";
 import { Comments } from "astro:db";
 
-const t = useTranslations("en");
+const t = Astro.locals.t;
 
 const { taskId } = Astro.params;
-const id = taskId?.split("/")[0];
-if (!id) throw new Error("id is required");
+if (!taskId) throw new Error("id is required");
 
-const task = await db.select().from(Tasks).where(like(Tasks.taskId, id));
+const task = await db.select().from(Tasks).where(like(Tasks.taskId, taskId));
 
 const comments = await db
   .select({
@@ -22,13 +20,9 @@ const comments = await db
     commentedAt: Comments.commentedAt,
   })
   .from(Comments)
-  .where(like(Comments.taskRef, id))
+  .where(like(Comments.taskRef, taskId))
   .innerJoin(Users, eq(Comments.commenterId, Users.userId));
 
-// const userId =
-//   "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
-// const userId =
-//   "9f5b50e1-8aa2-432d-b6df-df78e9315c4e"; /*Placeholder for testing. Place any generated user id here*/
 ---
 
 <Layout title={undefined} description={undefined}>

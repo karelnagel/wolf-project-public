@@ -26,13 +26,6 @@ export default $config({
       environment,
       transform: { server: { copyFiles } as any },
       domain: isMain ? DOMAIN : undefined,
-
-      // domain: !isMain
-      //   ? undefined
-      //   : {
-      //       domainName: DOMAIN,
-      //       hostedZone: DOMAIN,
-      //     },
     });
   },
 });

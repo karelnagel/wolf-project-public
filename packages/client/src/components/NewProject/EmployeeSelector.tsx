@@ -124,7 +124,7 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         return <div>{"Rohkem töötajaid pole"}</div>;
       }}
       value={value}
-      isClearable={value.some((v)=> v !== fixedOption)}
+      isClearable={value.some((v) => v !== fixedOption)}
       onChange={onChange}
       isMulti
       closeMenuOnSelect

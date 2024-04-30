@@ -14,18 +14,31 @@ export const TaskZod = z.object({
   completed: z.date().nullable(),
 });
 
-export const Task = TaskZod.omit({ taskId: true })
+export const Task = TaskZod.omit({ taskId: true });
 export type Task = z.infer<typeof Task>;
 
 export const tasks = root.router({
   create: privateProcedure
     .input(TaskZod.omit({ taskId: true }))
     .output(TaskZod)
-    .mutation(async ({ input: { projectRef, title, description, deadline, status, responsible, completed } }) => {
-      const tasks = await db
-        .insert(Tasks)
-        .values({ taskId: getRandomId(), projectRef, title, description, deadline, status, responsible, completed })
-        .returning();
-      return tasks[0]!;
-    }),
+    .mutation(
+      async ({
+        input: { projectRef, title, description, deadline, status, responsible, completed },
+      }) => {
+        const tasks = await db
+          .insert(Tasks)
+          .values({
+            taskId: getRandomId(),
+            projectRef,
+            title,
+            description,
+            deadline,
+            status,
+            responsible,
+            completed,
+          })
+          .returning();
+        return tasks[0]!;
+      },
+    ),
 });

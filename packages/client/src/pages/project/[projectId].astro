@@ -1,17 +1,14 @@
 ---
-import { useTranslations } from "@wolf-project/i18n";
 import Layout from "../../components/Layout.astro";
 import { db, like, Projects, Tasks } from "astro:db";
 // Todo idk kust see import peaks tulema
 // import { AddTask } from "../../components/Task";
 
-const t = useTranslations("en");
-
+const t = Astro.locals.t;
 const { projectId } = Astro.params;
-const id = projectId?.split("/")[0];
-if (!id) throw new Error("id is required");
-const project = await db.select().from(Projects).where(like(Projects.projectId, id));
-const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
+if (!projectId) throw new Error("id is required");
+const project = await db.select().from(Projects).where(like(Projects.projectId, projectId));
+const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, projectId));
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -34,7 +31,7 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
           Task title:{" "}
           <a
             class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            href={`./${id}/${taskId}`}
+            href={`/project/${projectId}/${taskId}`}
           >
             {title}
           </a>
