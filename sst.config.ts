@@ -18,6 +18,8 @@ export default $config({
       JWT_SECRET: process.env.JWT_SECRET!,
       PUBLIC_API_URL: process.env.PUBLIC_API_URL || "https://project.wolfagency.ee",
       EMAIL: process.env.EMAIL!,
+      DATABASE_URL: process.env.DATABASE_URL!,
+      DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN!,
     };
 
     new sst.aws.Astro("Client", {
