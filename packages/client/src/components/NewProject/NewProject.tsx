@@ -41,9 +41,7 @@ const Tabs = ({ employees }: { employees: Employee[] }) => {
   }, [tab]);
   return (
     <>
-      <div style={{ display: tab === "project" ? "block" : "none" }}>
-        <CreateProject employees={employees} />
-      </div>
+      {tab === "project" && <CreateProject employees={employees} />}
       {tab === "clients" && <ClientInfo />}
       {tab === "tasks" && <Tasks />}
       {tab === "confirm" && <Confirm />}
