@@ -18,12 +18,13 @@ export const onRequest = defineMiddleware(async (Astro, next) => {
   }
   Astro.locals.t = useTranslations(Astro.locals.user?.language);
 
-  if (PUBLIC_PAGES.some((s) => Astro.url.pathname.includes(s))) return next();
+  if (PUBLIC_PAGES.some((s) => Astro.url.pathname.startsWith(s))) return next();
 
   // If user isn't logged in, redirect to login
   if (!Astro.locals.user && !Astro.url.pathname.startsWith("/login")) {
     return Astro.redirect("/login");
   }
+
   // If user isn't adming they can't access admin pages
   if (Astro.locals.user?.role !== "admin" && Astro.url.pathname.startsWith("/admin")) {
     return Astro.redirect("/");
