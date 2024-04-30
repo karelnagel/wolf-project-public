@@ -50,7 +50,7 @@ export const NewUser = () => {
             Vali töötaja keel
           </option>
           <option value="en">English</option>
-          <option value="ee">Eesti</option>
+          <option value="et">Eesti</option>
         </select>
         <select value={role} onChange={(e) => setRole(e.target.value)} required>
           <option value="" disabled hidden>

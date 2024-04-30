@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-
-import { client, useAPI } from "@wolf-project/backend/src/client";
-import type { Comment as CommentType } from "@wolf-project/backend/src/routes/comments";
+import { type Comment as CommentType } from "@wolf-project/backend/src/routes/comments";
 import { Paperclip } from "lucide-react";
+import { client, useAPI } from "@wolf-project/backend/src/client";
 
 interface CommentProps {
   taskRef: string;

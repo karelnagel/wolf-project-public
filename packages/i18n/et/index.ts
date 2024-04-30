@@ -4,12 +4,26 @@ export const et: I18nLocale = {
   name: "Wolf Project",
   title: "Wolf Project Eesti",
   description: "Wolf Project kirjeldus",
-  login: {
-    title: "Sisselogimiseks vajutage järgmisele lingile. Link eluiga on 5 minutit:",
-    body: (url: string) => `<a href="${url}">${url}</a>`,
-  },
   project: {
-    title: "Projekti nimi",
+    title: "Project alaleht",
   },
-  // login: 'Sisselogimiseks vajutage järgmisele lingile. Link eluiga on 5 minutit:'
+  login: {
+    body: (url: string) => `Sisselogimiseks vajutage järgmisele [lingile](${url}). Link eluiga on 5 minutit.`,
+    title: `Wolf Project login email`
+  },
+  type: {
+    input: "Sisend",
+    design: "Disain",
+    development: "Arendustöö",
+    feedback: "Tagasiside"
+  },
+  status: {
+    pending: "Ootel",
+    inprogress: "Töös",
+    completed: "Tehtud"
+  },
+  language: {
+    et: "Eesti keel",
+    en: "Inglise keel"
+  }
 };

@@ -4,55 +4,30 @@ const Projects = defineTable({
   columns: {
     projectId: column.text({ primaryKey: true, unique: true }),
     projectName: column.text(),
+    projectDescription: column.text(),
+    projectCreator: column.text({ references: () => Users.columns.userId })
   },
 });
+
+const ProjectUser = defineTable({
+  columns: {
+    projectId: column.text({ references: () => Projects.columns.projectId }),
+    userId: column.text({ references: () => Users.columns.userId }),
+    priviledgeLevel: column.text(),
+  },
+
+})
 
 const Users = defineTable({
   columns: {
     userId: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
-    email: column.text(),
+    email: column.text({ unique: true }),
     role: column.text(),
     language: column.text(),
     job: column.text({ optional: true }),
+    company: column.text(),
   },
-});
-
-const Admins = defineTable({
-  columns: {
-    adminId: column.text({ primaryKey: true, unique: true }),
-    name: column.text(),
-    email: column.text(),
-    saltedPassword: column.text(),
-    language: column.text({ optional: true }),
-  },
-  deprecated: true,
-});
-
-const AdminProject = defineTable({
-  columns: {
-    adminRef: column.text(),
-    projectRef: column.text(),
-  },
-  foreignKeys: [
-    {
-      columns: ["adminRef", "projectRef"],
-      references: () => [Admins.columns.adminId, Projects.columns.projectId],
-    },
-  ],
-  deprecated: true,
-});
-
-const Clients = defineTable({
-  columns: {
-    clientId: column.text({ primaryKey: true, unique: true }),
-    projectRef: column.text({ references: () => Projects.columns.projectId }),
-    name: column.text(),
-    email: column.text(),
-    saltedKeycode: column.text(),
-    language: column.text({ optional: true }),
-  },
-  deprecated: true,
 });
 
 const Tasks = defineTable({
@@ -60,9 +35,11 @@ const Tasks = defineTable({
     taskId: column.text({ primaryKey: true, unique: true }),
     projectRef: column.text({ references: () => Projects.columns.projectId }),
     title: column.text(),
-    description: column.text(),
+    description: column.text({ optional: true }),
     deadline: column.date({ optional: true }),
+    completed: column.date({ optional: true }),
     status: column.text(),
+    responsible: column.text({ references: () => Users.columns.company })
   },
 });
 
@@ -77,5 +54,5 @@ const Comments = defineTable({
 });
 
 export default defineDb({
-  tables: { Projects, Users, Admins, AdminProject, Clients, Tasks, Comments },
+  tables: { Projects, Users, Tasks, Comments, ProjectUser },
 });
