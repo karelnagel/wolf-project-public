@@ -6,9 +6,7 @@ const urlToken = Astro.url.searchParams.get("token");
 
 if (urlToken === null) return Astro.redirect("401");
 
-const result = await server({
-  userId: null,
-}).authenticate.session({ token: urlToken });
+const result = await server({ user: null }).authenticate.session({ token: urlToken });
 
 if (typeof result === "string") {
   Astro.cookies.set("x-auth-token", result, { path: "/" } as AstroCookieSetOptions);
