@@ -1,11 +1,12 @@
 import { z } from "zod";
 import { privateProcedure, root } from "../root";
-import { ProjectUser, db } from "astro:db";
+import { projectUsersTable, PriviledgeLevel } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 
 const ProjectUserZod = z.object({
   projectId: z.string(),
   userId: z.string(),
-  priviledgeLevel: z.string(),
+  priviledgeLevel: PriviledgeLevel,
 });
 
 export const projectUser = root.router({
@@ -14,7 +15,7 @@ export const projectUser = root.router({
     .output(ProjectUserZod)
     .mutation(async ({ input: { projectId, userId, priviledgeLevel } }) => {
       const projectUser = await db
-        .insert(ProjectUser)
+        .insert(projectUsersTable)
         .values({ projectId, userId, priviledgeLevel })
         .returning();
       return projectUser[0]!;

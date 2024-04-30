@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
-
-export interface Task {
-  responsible: string;
-  title: string;
-  deadline: Date | null;
-  completed: Date | null;
-  status: string;
-  type: string;
-  description: string | null;
-}
+import { Task } from "@wolf-project/db/schema";
 
 export interface TasksProps {
   projectTasks: Task[];

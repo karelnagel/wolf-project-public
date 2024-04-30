@@ -1,10 +1,12 @@
 name: Deploy
 
 env:
-  ASTRO_STUDIO_APP_TOKEN: ${{secrets.ASTRO_STUDIO_APP_TOKEN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DATABASE_AUTH_TOKEN: ${{ secrets.DATABASE_AUTH_TOKEN }}
+
 on:
   push:
     branches:
@@ -24,10 +26,11 @@ jobs:
           node-version: 20
       - uses: jaid/action-npm-install@v1.2.1
       - run: npm i @libsql/linux-x64-gnu --force
-      - run: cd packages/client && npx astro db push
+      - run: npm run migrate
+      - run: npm run add-user "nagelkarel@gmail.com" "Karel Nagel"
 
-      # - name: Typecheck
-      #   run: npm run check
+      - name: Typecheck
+        run: npm run check
 
       - name: Install SST
         run: curl -fsSL https://ion.sst.dev/install | bash

@@ -29,28 +29,12 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [language, setLanguage] = useState("et");
+  const [language, setLanguage] = useState<Locale>("et");
 
   const languageOptions = [
     { value: "et", label: t.language.et },
     { value: "en", label: t.language.en },
   ];
-
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handleLanguageChange = (x: string) => {
-    setLanguage(x);
-  };
 
   const handleAddClient = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +60,10 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
             <div className="border-primary2 mt-4 flex w-full flex-col">
               <div className="flex">
                 <span className="flex-grow">Ettevõtte esindaja</span>
-                <button className=" ml-2 flex-grow-0 items-center text-xl" onClick={toggleForm}>
+                <button
+                  className=" ml-2 flex-grow-0 items-center text-xl"
+                  onClick={() => setShowForm(!showForm)}
+                >
                   {showForm ? "-" : "+"}
                 </button>
               </div>
@@ -97,13 +84,13 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
                 placeholder="Nimi"
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
                 value={name}
-                onChange={handleNameChange}
+                onChange={(e) => setName(e.target.value)}
               />
               <textarea
                 placeholder="E-mail"
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center  whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
                 value={email}
-                onChange={handleEmailChange}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <div className="mt-4 flex gap-3 text-base text-opacity-50">
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
@@ -112,7 +99,7 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
                 <SingleSelect
                   selectOptions={languageOptions}
                   selectedOption={language}
-                  parentSetMethod={handleLanguageChange}
+                  parentSetMethod={(x) => setLanguage(x as Locale)}
                   dark={true}
                 />
               </div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
 import { Employee } from "@wolf-project/backend/src/routes/users";
+import { Locale } from "@wolf-project/i18n";
+import { UserRole } from "@wolf-project/db/schema";
 
 interface ModifyUserProps {
   userId: string;
@@ -30,7 +32,7 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
       setEmailError("Lubatud on ainult firma email!");
       return;
     }
-    await mutate({ userId, name, email, role, job, language, company: "Veebihunt" });
+    await mutate({ id: userId, name, email, role, job, language });
     window.location.href = "/admin";
   };
 
@@ -62,7 +64,7 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
           />
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => setLanguage(e.target.value as Locale)}
             required
             disabled={!modifying}
           >
@@ -71,7 +73,7 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
           </select>
           <select
             value={role}
-            onChange={(e) => setRole(e.target.value)}
+            onChange={(e) => setRole(e.target.value as UserRole)}
             required
             disabled={!modifying}
           >

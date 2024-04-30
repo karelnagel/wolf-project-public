@@ -1,11 +1,10 @@
 ---
-import { db, Users, not, inArray } from "astro:db";
+import { db } from "@wolf-project/db";
 import Layout from "../../components/Layout.astro";
 
-const users = await db
-  .select({ userId: Users.userId, name: Users.name })
-  .from(Users)
-  .where(not(inArray(Users.role, ["client"])));
+const users = await db.query.usersTable.findMany({
+  where: (x, { not, inArray }) => not(inArray(x.role, ["client"])),
+});
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -18,8 +17,8 @@ const users = await db
       users.map((user) => (
         <div>
           <a
-            class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            href={`./admin/${user.userId}`}
+            class="font-medium text-blue-6000 underline dark:text-blue-500 hover:no-underline"
+            href={`./admin/${user.id}`}
           >
             {user.name}
           </a>

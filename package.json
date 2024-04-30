@@ -8,13 +8,16 @@
   ],
   "scripts": {
     "format": "prettier --write .",
-    "dev": "sst dev",
+    "dev": "npm run migrate && sst dev",
     "dev-fe": "cd packages/client && sst dev astro dev",
     "test": "playwright test",
     "testgen": "playwright codegen",
     "build": "cd packages/client && npm run build",
     "check": "tsc --noEmit && cd packages/client && astro check",
-    "deploy": "sst deploy --stage=main"
+    "deploy": "sst deploy --stage=main",
+    "migrate": "cd packages/db && npm run migrate",
+    "add-user": "cd packages/db && npm run add-user",
+    "studio":"cd packages/db && npm run studio"
   },
   "dependencies": {
     "@aws-sdk/middleware-retry": "^3.374.0",

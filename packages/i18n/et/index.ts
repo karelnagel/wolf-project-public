@@ -8,8 +8,8 @@ export const et: I18nLocale = {
     title: "Project alaleht",
   },
   login: {
-    body: (url: string) =>
-      `Sisselogimiseks vajutage järgmisele [lingile](${url}). Link eluiga on 5 minutit.`,
+    body: (url) =>
+      `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
     title: `Wolf Project login email`,
   },
   type: {
@@ -17,6 +17,7 @@ export const et: I18nLocale = {
     design: "Disain",
     development: "Arendustöö",
     feedback: "Tagasiside",
+    other: "Muud",
   },
   status: {
     pending: "Ootel",

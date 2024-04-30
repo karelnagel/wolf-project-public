@@ -33,6 +33,7 @@
     "astro-seo": "^0.8.3",
     "astro-sst": "2.41.4",
     "dayjs": "^1.11.6",
+    "drizzle-orm": "^0.30.9",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.372.0",
     "path-to-regexp": "^6.2.1",

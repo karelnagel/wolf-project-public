@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CreateProject } from "./CreateProject";
-import { Tasks, Task } from "./Tasks";
+import { Tasks } from "./Tasks";
 import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
 import { useAPI, client } from "@wolf-project/backend/src/client";
+import { Locale } from "@wolf-project/i18n";
+import { Task } from "@wolf-project/db/schema";
 
 interface NewProjectProps {
   employees: Employee[];
@@ -11,13 +13,13 @@ interface NewProjectProps {
   creatorId: string;
 }
 export interface Employee {
-  value: string;
-  label: string;
+  id: string;
+  name: string;
 }
 export interface Client {
   name: string;
   email: string;
-  language: string;
+  language: Locale;
 }
 
 const useIsClientSide = () => {
@@ -28,11 +30,7 @@ const useIsClientSide = () => {
   return isClientSide;
 };
 
-export const NewProject: React.FC<NewProjectProps> = ({
-  employees,
-  mandatoryMember,
-  creatorId,
-}) => {
+export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const initialSelectedEmployee: Employee | undefined = mandatoryMember;
@@ -72,14 +70,14 @@ export const NewProject: React.FC<NewProjectProps> = ({
   };
 
   const addEmployees = (x: Employee) => {
-    setSelectedEmployees([...selectedEmployees, x.value]);
+    setSelectedEmployees([...selectedEmployees, x.id]);
   };
   const removeEmployees = (x: Employee) => {
-    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x.value));
+    setSelectedEmployees(selectedEmployees.filter((employee) => employee !== x.id));
   };
 
   const updateProjectManager = (x: Employee | undefined) => {
-    setProjectManager(x!.value);
+    setProjectManager(x!.id);
   };
 
   const sortProject = (x: Task[]) => {
@@ -151,18 +149,18 @@ export const NewProject: React.FC<NewProjectProps> = ({
 
   const handleSubmit = () => {
     mutate({
-      projectName,
-      projectDescription,
-      projectCreator: creatorId,
+      name: projectName,
+      description: projectDescription,
       projectManager: projectManager!,
       clients: clients.map((c) => ({
         name: c.name,
-        company: companyName,
         email: c.email,
         language: c.language,
       })),
       tasks: projectTasks,
       selectedEmployees,
+      // Todo also input company name
+      companyName: "Todo company name",
     });
 
     if (error) console.log(error);

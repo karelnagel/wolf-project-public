@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 import { verifyToken } from "@wolf-project/shared/serverHelper";
-import { Users, db, eq } from "astro:db";
-import { Locale, useTranslations } from "@wolf-project/i18n";
+import { db } from "@wolf-project/db";
+import { useTranslations } from "@wolf-project/i18n";
 
 const PUBLIC_PAGES = ["/_astro", "/_image", "/api", "/verify", "/login", "/401", "/404"];
 
@@ -13,8 +13,8 @@ export const onRequest = defineMiddleware(async (Astro, next) => {
   if (userId === null) {
     Astro.cookies.delete("x-auth-token");
   } else {
-    const user = await db.select().from(Users).where(eq(Users.userId, userId));
-    Astro.locals.user = user[0] ? { ...user[0], language: user[0].language as Locale } : null;
+    const user = await db.query.usersTable.findFirst({ where: (x, { eq }) => eq(x.id, userId) });
+    Astro.locals.user = user || null;
   }
   Astro.locals.t = useTranslations(Astro.locals.user?.language);
 

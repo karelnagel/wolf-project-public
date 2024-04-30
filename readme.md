@@ -6,7 +6,7 @@
 
 Uses sst ion, install here: https://ion.sst.dev/
 
-It is using astro:db for database, which should automatically create a local db file, with no setup required.
+It is using drizzle + libsql and in develpment it saves the the data to `/tmp/wolf-project.db` file, should create the file and push migrations when you run `npm run dev` or `npm run migrate`. To add users to the database you can use `npm run add-user "YOUR_EMAIL" "YOUR NAME"`.
 
 ## Obtaining API Keys from [AWS](https://console.aws.amazon.com)
 
@@ -30,20 +30,3 @@ It is using astro:db for database, which should automatically create a local db 
    You can test if the project builds with npm run build and test if the types are correct with npm run typecheck.
 
 You can test if the project builds with `npm run build` and test if the types are correct with `npm run typecheck`.
-
-### seed.ts
-
-```ts
-import { db, Users } from "astro:db";
-
-export default async function () {
-  await db.insert(Users).values({
-    userId: "321",
-    email: "youremail@gmail.com",
-    language: "en",
-    name: "name",
-    role: "admin",
-    job: "tekst",
-  });
-}
-```

@@ -1,31 +1,29 @@
 import React, { useState } from "react";
-import { type Comment as CommentType } from "@wolf-project/backend/src/routes/comments";
 import { Paperclip } from "lucide-react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
 
-interface CommentProps {
-  taskRef: string;
-  commenterId: string;
-  comments: {
-    commenter: string;
-    date: string;
-    time: string;
-    text: string;
-  }[];
-}
+const comments = [
+  {
+    commenter: "Veini-Albert",
+    date: "Monday, April 1",
+    time: "15:06:12",
+    body: "Jep, nice. Kas saaks muidu logo veits paremale liigutada?",
+  },
+  {
+    commenter: "Hundi-Pets",
+    date: "Monday, April 1",
+    time: "15:11:09",
+    body: "Jaa, ikka",
+  },
+];
 
-export const Comment: React.FC<CommentProps> = ({ taskRef, commenterId, comments }) => {
+export const Comments = ({ taskId }: { taskId: string }) => {
   const [comment, setComment] = useState("");
   const { mutate, error, isLoading } = useAPI(client.comments.create.mutate);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const params: Omit<CommentType, "commentId" | "commentedAt"> = {
-      taskRef,
-      body: comment,
-      commenterId,
-    };
-    await mutate(params);
+    await mutate({ body: comment, taskId });
     window.location.reload();
   };
 
@@ -42,7 +40,7 @@ export const Comment: React.FC<CommentProps> = ({ taskRef, commenterId, comments
               <div>{comment.date}</div>
               <div>{comment.time}</div>
             </div>
-            <div className="flextext-base mt-4 font-bold">{comment.text}</div>
+            <div className="flextext-base mt-4 font-bold">{comment.body}</div>
           </div>
         ))}
       </div>

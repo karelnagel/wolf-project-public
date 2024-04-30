@@ -34,7 +34,7 @@ export const ProjectManagerSelector: React.FC<EmployeeSelectorProps> = ({
   setProjectManager,
 }) => {
   const [value, setValue] = useState<Employee | null>(
-    employeesList.find((x) => x.value === fixedOption?.value) ?? null,
+    employeesList.find((x) => x.id === fixedOption?.id) ?? null,
   );
   const onChange = (x: Employee | null) => {
     setValue(x);

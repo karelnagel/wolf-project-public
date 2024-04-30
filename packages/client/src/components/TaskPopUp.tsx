@@ -1,20 +1,7 @@
 import * as React from "react";
-import { Comment } from "./Comment";
 import { ArrowLeft, TrendingUp, CalendarCheck, User, Plus } from "lucide-react";
-const comments = [
-  {
-    commenter: "Veini-Albert",
-    date: "Monday, April 1",
-    time: "15:06:12",
-    text: "Jep, nice. Kas saaks muidu logo veits paremale liigutada?",
-  },
-  {
-    commenter: "Hundi-Pets",
-    date: "Monday, April 1",
-    time: "15:11:09",
-    text: "Jaa, ikka",
-  },
-];
+import { Comments } from "./Comment";
+
 function TaskPopUp() {
   return (
     <div className="flex items-center justify-center rounded-2xl px-16 py-20 max-md:px-5">
@@ -57,8 +44,7 @@ function TaskPopUp() {
             </div>
           </div>
         </div>
-        <Comment taskRef="task-reference" commenterId="commenter-id" comments={comments} />
-
+        <Comments taskId="task-reference" />
         <div className="border-primary2 mt-16 flex justify-between gap-5 rounded-2xl border border-solid p-6 text-xl font-semibold text-white max-md:mt-10 max-md:max-w-full max-md:flex-wrap max-md:px-5">
           <div className="my-auto">Tulemus</div>
           <Plus className="text-primary2  my-auto h-8 w-8" />
