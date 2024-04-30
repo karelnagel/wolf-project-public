@@ -4,6 +4,7 @@
 
 declare namespace App {
   interface Locals {
-    userId: string | null;
+    user: import("@wolf-project/shared/types").User | null;
+    t: import("@wolf-project/i18n").I18nLocale;
   }
 }

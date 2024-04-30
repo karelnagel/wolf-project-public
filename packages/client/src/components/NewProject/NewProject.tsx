@@ -157,7 +157,6 @@ export const NewProject: React.FC<NewProjectProps> = ({
       selectedEmployees,
     });
 
-
     if (error) console.log(error);
   };
 

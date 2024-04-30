@@ -30,7 +30,15 @@ export const employee = root.router({
     .mutation(async ({ input: { name, email, role, language, job } }) => {
       const result = await db
         .insert(Users)
-        .values({ userId: getRandomId(), name, email, role, language, job, company: "Wolf-Agency OÜ" })
+        .values({
+          userId: getRandomId(),
+          name,
+          email,
+          role,
+          language,
+          job,
+          company: "Wolf-Agency OÜ",
+        })
         .returning();
       return result[0]!;
     }),
@@ -72,7 +80,7 @@ export const authenticate = root.router({
         token = jwt.sign({ userId: exists[0]?.userId }, env.JWT_SECRET, {
           expiresIn: "5m",
         });
-        console.log('exists', exists[0]?.locale)
+        console.log("exists", exists[0]?.locale);
         await sendEmail({
           to: [input.email!],
           token: token,
