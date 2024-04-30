@@ -154,12 +154,13 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
       projectManager: projectManager!,
       clients: clients.map((c) => ({
         name: c.name,
-        company: companyName,
         email: c.email,
         language: c.language,
       })),
       tasks: projectTasks,
       selectedEmployees,
+      // Todo also input company name
+      companyName: "Todo company name",
     });
 
     if (error) console.log(error);

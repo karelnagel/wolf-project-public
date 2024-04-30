@@ -23,7 +23,7 @@ export const NewUser = () => {
     }
     if (!role || !language) return;
 
-    await mutate({ name, email, role, job, language, company: "Veebihunt" });
+    await mutate({ name, email, role, job, language });
     window.location.href = "/admin";
   };
 

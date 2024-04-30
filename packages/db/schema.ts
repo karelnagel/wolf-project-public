@@ -13,7 +13,6 @@ export const User = z.object({
   role: UserRole,
   language: Locale,
   job: z.string().nullable(),
-  company: z.string(),
 });
 export type User = z.infer<typeof User>;
 
@@ -24,7 +23,6 @@ export const usersTable = sqliteTable("users", {
   role: text("role").$type<UserRole>().notNull(),
   language: text("language").$type<Locale>().notNull(),
   job: text("job"),
-  company: text("company").notNull(),
 });
 export const userRelations = relations(usersTable, ({ many }) => ({
   projects: many(projectUsersTable),
@@ -66,6 +64,7 @@ export const Projects = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
+  companyName: z.string(),
   creatorId: z.string(),
 });
 export type Projects = z.infer<typeof Projects>;
@@ -74,6 +73,7 @@ export const projectsTable = sqliteTable("projects", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
+  companyName: text("company_name").notNull(),
   creatorId: text("creator_id").notNull(),
 });
 export const projectsRelations = relations(projectsTable, ({ one, many }) => ({
@@ -100,6 +100,7 @@ export const Task = z.object({
   completed: z.date().nullable(),
   type: TaskType,
   status: TaskStatus,
+  clientTask: z.boolean(),
   responsible: z.string(),
 });
 export type Task = z.infer<typeof Task>;
@@ -113,6 +114,7 @@ export const tasksTable = sqliteTable("tasks", {
   completed: integer("completed", { mode: "timestamp" }),
   type: text("type").$type<TaskType>().notNull(),
   status: text("status").$type<TaskStatus>().notNull(),
+  clientTask: integer("client_task", { mode: "boolean" }).notNull(),
   responsible: text("responsible").notNull(),
 });
 export const tasksRelations = relations(tasksTable, ({ one, many }) => ({

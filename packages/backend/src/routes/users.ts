@@ -21,7 +21,7 @@ export const employee = root.router({
     .mutation(async ({ input }) => {
       const result = await db
         .insert(usersTable)
-        .values({ ...input, id: getRandomId(), company: "Wolf-Agency OÜ" })
+        .values({ ...input, id: getRandomId() })
         .returning();
       return result[0]!;
     }),
@@ -42,10 +42,10 @@ export const client = root.router({
   create: privateProcedure
     .input(Client)
     .output(User)
-    .mutation(async ({ input: { name, email, language, company } }) => {
+    .mutation(async ({ input: { name, email, language } }) => {
       const result = await db
         .insert(usersTable)
-        .values({ id: getRandomId(), name, email, role: "client", language, company })
+        .values({ id: getRandomId(), name, email, role: "client", language })
         .returning();
       return result[0]!;
     }),

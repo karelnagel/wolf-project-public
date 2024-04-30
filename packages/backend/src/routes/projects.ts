@@ -14,6 +14,7 @@ import { Client } from "./users";
 const CreateProjectZod = z.object({
   name: z.string(),
   description: z.string(),
+  companyName: z.string(),
   clients: Client.array(),
   tasks: Task.omit({ projectId: true, id: true }).array(),
   selectedEmployees: z.string().array(),
@@ -25,12 +26,20 @@ export const projects = root.router({
     .input(CreateProjectZod)
     .mutation(
       async ({
-        input: { name, description, clients, tasks, projectManager, selectedEmployees },
+        input: {
+          name,
+          description,
+          clients,
+          tasks,
+          projectManager,
+          selectedEmployees,
+          companyName,
+        },
         ctx: { user },
       }) => {
         const pInsert = await db
           .insert(projectsTable)
-          .values({ name, id: getRandomId(), creatorId: user.id, description })
+          .values({ name, id: getRandomId(), creatorId: user.id, description, companyName })
           .returning({ id: projectsTable.id });
         const pId = pInsert[0]!.id;
         for (const client of clients) {
@@ -41,12 +50,11 @@ export const projects = root.router({
               name: client.name,
               email: client.email,
               language: client.language,
-              company: client.company,
               role: "client",
             })
             .onConflictDoUpdate({
               target: [usersTable.email],
-              set: { name: client.name, company: client.company, language: client.language },
+              set: { name: client.name, language: client.language },
             })
             .returning({ id: usersTable.id });
           await db
@@ -77,6 +85,7 @@ export const projects = root.router({
             deadline: t.deadline!,
             projectId: pId,
             type: t.type,
+            clientTask: t.clientTask,
           })),
         );
       },

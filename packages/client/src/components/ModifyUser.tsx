@@ -32,7 +32,7 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
       setEmailError("Lubatud on ainult firma email!");
       return;
     }
-    await mutate({ id: userId, name, email, role, job, language, company: "Veebihunt" });
+    await mutate({ id: userId, name, email, role, job, language });
     window.location.href = "/admin";
   };
 

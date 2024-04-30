@@ -7,7 +7,6 @@ const addUser = async (email: string, name: string) => {
     .insert(usersTable)
     .values({
       id: getRandomId(),
-      company: "Veebihunt",
       email,
       name,
       language: "et",
