@@ -5,7 +5,14 @@ export const et: I18nLocale = {
   title: "Wolf Project Eesti",
   description: "Wolf Project kirjeldus",
   project: {
-    title: "Project alaleht",
+    login: "Login Page",
+    dashboard: "Dashboard",
+    newproject: "New Project Page",
+    admin: "Admin page"
+  },
+  header: {
+    logout: "Logi välja",
+    newproject: "Uus projekt",
   },
   login: {
     body: (url) =>

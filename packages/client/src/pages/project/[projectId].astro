@@ -1,8 +1,6 @@
 ---
 import Layout from "../../components/Layout.astro";
 import { db } from "@wolf-project/db";
-// Todo idk kust see import peaks tulema
-// import { AddTask } from "../../components/Task";
 
 const { projectId } = Astro.params;
 if (!projectId) throw new Error("id is required");
@@ -14,39 +12,15 @@ const project = await db.query.projectsTable.findFirst({
   with: { tasks: true },
 });
 if (!project) throw new Error("project not found");
+
+
+
+/* ToDo */
+
 ---
 
 <Layout title={undefined} description={undefined}>
   <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/"
-    >{t.project.title}</a
+    >{"Tagasi avalehel"}</a
   >
-  <div>
-    <p>Project ID: {project.id}</p>
-    <p>Project Name: {project.name}</p>
-  </div>
-  {
-    project.tasks.map(({ id, title, description, deadline, status }) => (
-      <div>
-        <p>Task ID: {id}</p>
-        <p>
-          Task title:{" "}
-          <a
-            class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            href={`/project/${projectId}/${id}`}
-          >
-            {title}
-          </a>
-        </p>
-        <p>Task description: {description}</p>
-        <p>
-          Deadline:{" "}
-          {deadline !== null
-            ? `${deadline!.getDate()}.${deadline!.getMonth() + 1}.${deadline!.getFullYear()}`
-            : null}
-        </p>
-        <p>Status: {status}</p>
-      </div>
-    ))
-  }
-  <!-- <AddTask projectId={id} client:load /> -->
 </Layout>

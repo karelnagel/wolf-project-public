@@ -1,8 +1,18 @@
 ---
 import { LogoutButton } from "./Header/LogoutButton";
-const loggedinCookie = Astro.cookies.get("x-auth-token");
-const loadLogout = typeof loggedinCookie?.value === "string" ? true : false;
+import { NewProjectButton } from "./Header/NewProjectButton";
+const user = Astro.locals.user;
+const t = Astro.locals.t;
+const logout = t.header.logout;
+const newproject = t.header.newproject;
 ---
 
-<div>header</div>
-{loadLogout && <LogoutButton client:load />}
+<div class="flex items-center justify-between p-4">
+  {
+    !Astro.url.pathname.startsWith("/login") && user && user?.role !== "client" && (
+      <NewProjectButton newproject={newproject} client:load />
+    )
+  }
+  {(<div class="flex flex-grow items-center justify-center font-semibold text-3xl mt-4">Login Page</div>)}
+  {user && !Astro.url.pathname.startsWith("/login") && <LogoutButton logout={logout} client:load />}
+</div>
