@@ -1,44 +1,25 @@
 import React, { useState } from "react";
 import { CircleUserRound, Trash } from "lucide-react";
-import { $tab, Client } from "./NewProject";
+import { $projectInput, $tab } from "./NewProject";
 import { Locale, useTranslations } from "@wolf-project/i18n";
 import { SingleSelect } from "../SingleSelect";
+import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
+import { useStore } from "@nanostores/react";
 
-interface ClientInfoProps {
-  companyName: string;
-  clients: Client[];
-  updateCompanyName: (x: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  addClient: (x: Client) => void;
-  removeClient: (x: Client) => void;
-  locale: Locale;
-}
-export const ClientInfo: React.FC<ClientInfoProps> = ({
-  companyName,
-  clients,
-  updateCompanyName,
-  addClient,
-  removeClient,
-  locale,
-}) => {
-  const t = useTranslations(locale);
+type Client = CreateProjectInput["clients"][0];
+const defaultClient: Client = { name: "", email: "", language: "et" };
+
+export const ClientInfo = () => {
+  const input = useStore($projectInput);
+  const t = useTranslations("et");
 
   const [showForm, setShowForm] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [language, setLanguage] = useState<Locale>("et");
-
-  const languageOptions = [
-    { value: "et", label: t.language.et },
-    { value: "en", label: t.language.en },
-  ];
+  const [client, setClient] = useState(defaultClient);
 
   const handleAddClient = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newClient: Client = { name, email, language };
-    addClient(newClient);
-    setName("");
-    setEmail("");
-    setLanguage("et");
+    $projectInput.setKey("clients", [...input.clients, client]);
+    setClient(defaultClient);
   };
 
   return (
@@ -46,9 +27,9 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
       <div className="border-primary2 flex w-1/3 max-w-md flex-col items-center rounded-2xl border border-solid px-0 py-10 max-md:mt-10 max-md:px-5">
         <div className="text-center text-xl">Kliendi info:</div>
         <textarea
-          value={companyName}
-          onChange={updateCompanyName}
-          placeholder="Ettevõtte nimi"
+          value={input.companyName}
+          onChange={(e) => $projectInput.setKey("companyName", e.target.value)}
+          placeholder="Ettevtte nimi"
           className="bg-primary mt-8 h-12 w-2/3 resize-none justify-center rounded-2xl px-2.5 py-3 text-base text-opacity-50"
         ></textarea>
         <div className="mt-7 flex w-2/3 flex-col justify-center">
@@ -65,13 +46,18 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
               </div>
             </div>
           </div>
-          {clients.map((client, i) => (
+          {input.clients.map((client, i) => (
             <Info
               key={i}
               name={client.name}
               email={client.email}
               language={client.language}
-              removeClient={removeClient}
+              removeClient={() =>
+                $projectInput.setKey(
+                  "clients",
+                  input.clients.filter((c) => c !== client),
+                )
+              }
             />
           ))}
           {showForm && (
@@ -79,23 +65,26 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
               <textarea
                 placeholder="Nimi"
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={client.name}
+                onChange={(e) => setClient({ ...client, name: e.target.value })}
               />
               <textarea
                 placeholder="E-mail"
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center  whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={client.email}
+                onChange={(e) => setClient({ ...client, email: e.target.value })}
               />
               <div className="mt-4 flex gap-3 text-base text-opacity-50">
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
                   Vali keel
                 </div>
                 <SingleSelect
-                  selectOptions={languageOptions}
-                  selectedOption={language}
-                  parentSetMethod={(x) => setLanguage(x as Locale)}
+                  selectOptions={Locale.options.map((value) => ({
+                    value,
+                    label: t.language[value],
+                  }))}
+                  selectedOption={client.language}
+                  parentSetMethod={(x) => setClient({ ...client, language: x as Locale })}
                   dark={true}
                 />
               </div>

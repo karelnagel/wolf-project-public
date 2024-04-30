@@ -1,15 +1,14 @@
 import Select, {
-  ActionMeta,
   ClearIndicatorProps,
   components,
   DropdownIndicatorProps,
   MultiValueRemoveProps,
-  OnChangeValue,
 } from "react-select";
 import { Plus, X } from "lucide-react";
-import React, { useState } from "react";
-import { Employee } from "./NewProject";
+import React from "react";
+import { $projectInput, Employee } from "./NewProject";
 import clsx from "clsx";
+import { useStore } from "@nanostores/react";
 
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee>) => {
   return (
@@ -48,43 +47,12 @@ const optionsStyle = {
 };
 
 interface EmployeeSelectorProps {
-  employeesList: Employee[];
-  fixedOption: Employee | undefined;
-  addEmployees: (x: Employee) => void;
-  removeEmployees: (x: Employee) => void;
+  employees: Employee[];
 }
 
-export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
-  employeesList: employeesList,
-  fixedOption,
-  addEmployees,
-  removeEmployees,
-}) => {
-  const [value, setValue] = useState<readonly Employee[]>(
-    employeesList.filter((x) => x.id === fixedOption?.id),
-  );
-  const onChange = (newValue: OnChangeValue<Employee, true>, actionMeta: ActionMeta<Employee>) => {
-    switch (actionMeta.action) {
-      case "pop-value":
-      case "remove-value":
-        if (actionMeta.removedValue.id === fixedOption?.id) {
-          return;
-        }
-        removeEmployees(actionMeta.removedValue);
-        break;
-      case "clear":
-        newValue = employeesList.filter((x) => x.id === fixedOption?.id);
-        const removedEmployees = value.filter((employee) => !newValue.includes(employee));
-        removedEmployees.forEach(removeEmployees);
-        break;
-      case "select-option":
-        if (actionMeta.option! !== fixedOption) {
-          addEmployees(actionMeta.option!);
-        }
-        break;
-    }
-    setValue(newValue);
-  };
+export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({ employees }) => {
+  const input = useStore($projectInput);
+
   return (
     <Select
       unstyled
@@ -118,14 +86,18 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
         noOptionsMessage: () => "p-2 bg-primary border border-dashed rounded-sm",
       }}
-      options={employeesList}
+      options={employees}
       placeholder={"Vali töötaja(d)"}
       noOptionsMessage={() => {
         return <div>{"Rohkem töötajaid pole"}</div>;
       }}
-      value={value}
-      isClearable={value.some((v) => v !== fixedOption)}
-      onChange={onChange}
+      value={input.employees.map((id) => employees.find((x) => x.value === id)!)}
+      onChange={(newValue) => {
+        $projectInput.setKey(
+          "employees",
+          newValue.map((x) => x.value),
+        );
+      }}
       isMulti
       closeMenuOnSelect
       components={usedComponents}

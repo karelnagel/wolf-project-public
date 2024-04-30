@@ -1,64 +1,42 @@
 import React, { useState } from "react";
-import Datepicker, { DateType } from "react-tailwindcss-datepicker";
+import Datepicker from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
-import { Locale, useTranslations } from "@wolf-project/i18n";
-import { Task, TaskStatus, TaskType } from "@wolf-project/db/schema";
+import { useTranslations } from "@wolf-project/i18n";
+import { TaskStatus, TaskType } from "@wolf-project/db/schema";
+import { $projectInput } from "./NewProject/NewProject";
+import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
+import { useStore } from "@nanostores/react";
+import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
+import { $popUpOpen } from "./NewProject/Tasks";
 
-interface PopUpProps {
-  task: Task | undefined;
-  addTask: (x: Task) => void;
-  modifyTask: (x: Task, y: Task) => void;
-  removeTask: (x: Task) => void;
-  responsible: string[];
-  closePopUp: () => void;
-  locale: Locale;
-}
+type Task = CreateProjectInput["tasks"][0];
+const defaultTask: Task = {
+  title: "",
+  status: "pending",
+  deadline: new Date(),
+  completed: null,
+  type: "input",
+  description: "",
+  clientTask: false,
+};
 
-export const PopUp: React.FC<PopUpProps> = ({
-  task,
-  addTask,
-  modifyTask,
-  removeTask,
-  responsible,
-  closePopUp,
-  locale,
-}) => {
-  const t = useTranslations(locale);
-
-  const [status, setStatus] = useState<TaskStatus>(task?.status || "pending");
-  const [taskType, setTaskType] = useState<TaskType>(task?.type || "input");
-  const [title, setTitle] = useState(task?.title || "");
-  const [taskResponible, setTaskResponsible] = useState(task?.responsible || "");
-  const [deadline, setDeadline] = useState<DateType>(task?.deadline || null);
-  const [taskDescription, setTaskDescription] = useState(task?.description || "");
-
-  const convertedResponsible = responsible.map((value) => ({ value, label: value }));
+export const PopUp = () => {
+  const t = useTranslations("et");
+  const input = useStore($projectInput);
+  const [task, setTask] = useState<Omit<Task, "id" | "projectId">>(defaultTask);
 
   const handleSave = () => {
-    if (!deadline) return;
-    // Todo fix the types
-    const popUpTask: Task = {
-      responsible: taskResponible,
-      title: title,
-      status: status,
-      deadline: typeof deadline === "string" ? new Date(deadline) : deadline,
-      completed: status === "completed" ? new Date() : null,
-      type: taskType,
-      description: taskDescription,
-    } as Task;
-    if (task) {
-      modifyTask(task, popUpTask);
-    } else {
-      addTask(popUpTask);
-    }
-    closePopUp();
+    $projectInput.setKey("tasks", [...input.tasks, task]);
+    $popUpOpen.set(false);
+    setTask(defaultTask);
   };
 
   const handleDelete = () => {
-    if (task) removeTask(task);
-    closePopUp();
+    // Todo
+    // if (task) removeTask(task);
+    $popUpOpen.set(false);
   };
 
   return (
@@ -67,7 +45,7 @@ export const PopUp: React.FC<PopUpProps> = ({
       style={{ overflowY: "auto", maxHeight: "100%" }}
     >
       <div className="justify- mb-16 mt-14 flex items-center gap-5 text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
-        <button onClick={closePopUp}>
+        <button onClick={() => $popUpOpen.set(false)}>
           <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
         </button>
         <div className="flex-grow">Uue taski loomine</div>
@@ -77,12 +55,14 @@ export const PopUp: React.FC<PopUpProps> = ({
           <div className="text-start text-base font-bold">
             Tööetapp
             <select
-              value={taskType}
-              onChange={(e) => setTaskType(e.currentTarget.value as TaskType)}
+              value={task.type}
+              onChange={(e) => setTask({ ...task, type: e.currentTarget.value as TaskType })}
               className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black"
             >
               {TaskType.options.map((x) => (
-                <option value={x}>{t.type[x]}</option>
+                <option key={x} value={x}>
+                  {t.type[x]}
+                </option>
               ))}
             </select>
           </div>
@@ -92,8 +72,8 @@ export const PopUp: React.FC<PopUpProps> = ({
             {"Staatus"}
             <SingleSelect
               selectOptions={TaskStatus.options.map((x) => ({ value: x, label: t.status[x] }))}
-              selectedOption={status}
-              parentSetMethod={(x) => setStatus(x as TaskStatus)}
+              selectedOption={task.status}
+              parentSetMethod={(x) => setTask({ ...task, status: x as TaskStatus })}
               dark={false}
             />
           </div>
@@ -104,8 +84,8 @@ export const PopUp: React.FC<PopUpProps> = ({
           <div className="text-start text-base font-bold">{"Taski nimi"}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
             <textarea
-              value={title}
-              onChange={(e) => setTitle(e.currentTarget.value)}
+              value={task.title}
+              onChange={(e) => setTask({ ...task, title: e.currentTarget.value })}
               className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>
@@ -114,9 +94,12 @@ export const PopUp: React.FC<PopUpProps> = ({
           <div className="w-full text-start text-base font-bold">
             {"Vastutaja"}
             <SingleSelect
-              selectOptions={convertedResponsible}
-              selectedOption={taskResponible}
-              parentSetMethod={(x) => setTaskResponsible(x)}
+              selectOptions={[
+                { value: "us", label: OUR_COMPANY_NAME },
+                { value: "them", label: $projectInput.get().companyName },
+              ]}
+              selectedOption={task.clientTask ? "them" : "us"}
+              parentSetMethod={(x) => setTask({ ...task, clientTask: x === "them" })}
               dark={false}
             />
           </div>
@@ -129,8 +112,16 @@ export const PopUp: React.FC<PopUpProps> = ({
                 placeholder={"Vali tähtaeg!"}
                 useRange={false}
                 asSingle={true}
-                value={{ startDate: deadline || null, endDate: deadline || null }}
-                onChange={(x) => (x ? setDeadline(x.startDate) : undefined)}
+                value={{ startDate: task.deadline || null, endDate: task.deadline || null }}
+                onChange={(x) =>
+                  x?.startDate
+                    ? setTask({
+                        ...task,
+                        deadline:
+                          typeof x.startDate === "string" ? new Date(x.startDate) : x.startDate,
+                      })
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -142,8 +133,8 @@ export const PopUp: React.FC<PopUpProps> = ({
           </div>
           <div className="mt-4 flex flex-col justify-center text-base max-md:max-w-full ">
             <textarea
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.currentTarget.value)}
+              value={task.description}
+              onChange={(e) => setTask({ ...task, description: e.currentTarget.value })}
               className="rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>

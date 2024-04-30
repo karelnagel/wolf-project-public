@@ -1,41 +1,38 @@
 import React from "react";
 import { Brush, CircleCheck, Code, X, MessageSquare, Pencil } from "lucide-react";
-import { Task } from "@wolf-project/db/schema";
+import { $projectInput } from "./NewProject/NewProject";
+import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
+import { useStore } from "@nanostores/react";
+import { $popUpOpen } from "./NewProject/Tasks";
+import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 
-interface TaskInfoProps {
-  projectTasks: Task[];
-  startIndex: number;
-  handlePopUpOpen: (x: Task) => void;
-}
+type Task = CreateProjectInput["tasks"][0];
 
-export const TaskInfo: React.FC<TaskInfoProps> = ({
-  projectTasks,
-  startIndex,
-  handlePopUpOpen,
-}) => {
-  const handleChange = (x: Task) => {
-    handlePopUpOpen(x);
-  };
+export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
+  const input = useStore($projectInput);
+  const tasks = input.tasks;
   let i: number;
-  if (projectTasks.length <= 2) {
+  if (tasks.length <= 2) {
     i = 0;
-  } else if (projectTasks.length - 1 === startIndex) {
+  } else if (tasks.length - 1 === startIndex) {
     i = Math.max(0, startIndex - 2);
-  } else if (projectTasks.length - 2 === startIndex) {
+  } else if (tasks.length - 2 === startIndex) {
     i = Math.max(0, startIndex - 1);
   } else {
     i = startIndex;
   }
-
+  const editTask = (_task: Task) => {
+    $popUpOpen.set(true);
+    // Todo
+  };
   return (
     <>
-      {projectTasks.map(
+      {tasks.map(
         (task, index) =>
           i <= index &&
           index < i + 3 && (
             <React.Fragment key={index}>
               {index === i && <Line Completed={task.completed} />}
-              {/* Conditionally apply border based on task status */}
               <div
                 key={index}
                 className={`grid w-full max-w-full grid-cols-7 items-center justify-between gap-5 self-start rounded-2xl px-5 py-2.5 max-md:flex-wrap ${
@@ -43,7 +40,7 @@ export const TaskInfo: React.FC<TaskInfoProps> = ({
                 }`}
               >
                 <div className="col-span-2 my-auto self-stretch text-center text-xl font-bold">
-                  {task.responsible}
+                  {task.clientTask ? $projectInput.get().companyName : OUR_COMPANY_NAME}
                 </div>
                 <Icons status={task.status} task={task} />
                 <div className="col-span-3 flex justify-between gap-5 self-stretch max-md:max-w-full max-md:flex-wrap">
@@ -77,7 +74,7 @@ export const TaskInfo: React.FC<TaskInfoProps> = ({
                   </div>
                 </div>
                 <button
-                  onClick={() => handleChange(task)}
+                  onClick={() => editTask(task)}
                   className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
                 >
                   Muuda

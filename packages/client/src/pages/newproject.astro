@@ -14,10 +14,5 @@ const employees = await db.query.usersTable.findMany({
 ---
 
 <Layout title={undefined} description={undefined}>
-  <NewProject
-    mandatoryMember={user.role === "limited" ? { id: user.id, name: user.name } : undefined}
-    employees={employees}
-    creatorId={user.id}
-    client:load
-  />
+  <NewProject employees={employees.map((e) => ({ value: e.id, label: e.name }))} client:load />
 </Layout>

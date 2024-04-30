@@ -2,28 +2,43 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
-import { Task } from "@wolf-project/db/schema";
-import { $tab } from "./NewProject";
+import { $projectInput, $tab } from "./NewProject";
+import { useStore } from "@nanostores/react";
+// import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
+import { atom } from "nanostores";
 
-export interface TasksProps {
-  projectTasks: Task[];
-  addTask: (x: Task) => void;
-  removeTask: (x: Task) => void;
-  modifyTask: (x: Task, y: Task) => void;
-  responsible: string[];
-}
+// type Task = CreateProjectInput["tasks"][0];
 
-export const Tasks: React.FC<TasksProps> = ({
-  projectTasks,
-  addTask,
-  modifyTask,
-  removeTask,
-  responsible,
-}) => {
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [task, setTask] = useState<Task>();
-  const firstInprogress = projectTasks.findIndex((x) => x.status === "inprogress");
-  const lastDone = projectTasks.findLastIndex((x) => x.status === "completed");
+// const sortProject = (x: Task[]): Task[] => {
+//   return x.slice().sort((a, b) => {
+//     const deadlineA = a.deadline ? new Date(a.deadline) : null;
+//     const deadlineB = b.deadline ? new Date(b.deadline) : null;
+//     if (!deadlineA && !deadlineB) {
+//       return 0;
+//     } else if (!deadlineA) {
+//       return 1;
+//     } else if (!deadlineB) {
+//       return -1;
+//     }
+//     if (deadlineA < deadlineB) {
+//       return -1;
+//     } else if (deadlineA > deadlineB) {
+//       return 1;
+//     } else {
+//       return 0;
+//     }
+//   });
+// };
+
+export const $popUpOpen = atom(false);
+
+export const Tasks = () => {
+  const input = useStore($projectInput);
+  const tasks = input.tasks;
+  const popupOpen = useStore($popUpOpen);
+
+  const firstInprogress = tasks.findIndex((x) => x.status === "inprogress");
+  const lastDone = tasks.findLastIndex((x) => x.status === "completed");
   const [startIndex, setStartIndex] = useState<number>();
 
   useEffect(() => {
@@ -38,17 +53,8 @@ export const Tasks: React.FC<TasksProps> = ({
     setStartIndex(0);
   }, [firstInprogress, lastDone]);
 
-  const handlePopUpToggle = () => {
-    setShowPopUp(!showPopUp);
-    setTask(undefined);
-  };
-
-  const handleChangePopUpToggle = (x: Task) => {
-    setTask(x);
-    setShowPopUp(!showPopUp);
-  };
   const increaseStartIndex = () => {
-    if (startIndex! < projectTasks.length - 1) setStartIndex(startIndex! + 1);
+    if (startIndex! < tasks.length - 1) setStartIndex(startIndex! + 1);
   };
 
   const decreaseStartIndex = () => {
@@ -65,7 +71,7 @@ export const Tasks: React.FC<TasksProps> = ({
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
             <div className="flex grow flex-col self-center">
               <div>Veebiarenduse projekt</div>
-              {projectTasks.length > 3 && (
+              {tasks.length > 3 && (
                 <button
                   onClick={decreaseStartIndex}
                   className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10"
@@ -73,12 +79,8 @@ export const Tasks: React.FC<TasksProps> = ({
                   <ChevronUpCircle className="h-9 w-9 " />
                 </button>
               )}
-              <TaskInfo
-                projectTasks={projectTasks}
-                startIndex={startIndex!}
-                handlePopUpOpen={handleChangePopUpToggle}
-              />
-              {projectTasks.length > 3 && (
+              <TaskInfo startIndex={startIndex!} />
+              {tasks.length > 3 && (
                 <button
                   onClick={increaseStartIndex}
                   className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10"
@@ -89,7 +91,7 @@ export const Tasks: React.FC<TasksProps> = ({
               <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
                 <button
                   className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
-                  onClick={!showPopUp ? handlePopUpToggle : undefined}
+                  onClick={() => $popUpOpen.set(true)}
                 >
                   Lisa task
                 </button>
@@ -105,20 +107,10 @@ export const Tasks: React.FC<TasksProps> = ({
         </div>
         <div
           className={`fixed right-0 top-0 w-2/5 transform shadow-lg transition-transform ${
-            showPopUp ? "translate-x-0" : "translate-x-full"
+            popupOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {showPopUp && (
-            <PopUp
-              addTask={addTask}
-              removeTask={removeTask}
-              modifyTask={modifyTask}
-              responsible={responsible}
-              task={task}
-              closePopUp={handlePopUpToggle}
-              locale={"et"}
-            />
-          )}
+          {popupOpen && <PopUp />}
         </div>
       </div>
     </div>

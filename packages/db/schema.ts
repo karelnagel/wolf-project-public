@@ -101,7 +101,6 @@ export const Task = z.object({
   type: TaskType,
   status: TaskStatus,
   clientTask: z.boolean(),
-  responsible: z.string(),
 });
 export type Task = z.infer<typeof Task>;
 
@@ -115,7 +114,6 @@ export const tasksTable = sqliteTable("tasks", {
   type: text("type").$type<TaskType>().notNull(),
   status: text("status").$type<TaskStatus>().notNull(),
   clientTask: integer("client_task", { mode: "boolean" }).notNull(),
-  responsible: text("responsible").notNull(),
 });
 export const tasksRelations = relations(tasksTable, ({ one, many }) => ({
   project: one(projectsTable, {

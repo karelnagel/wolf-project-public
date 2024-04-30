@@ -1,63 +1,35 @@
-import { $tab, Employee } from "./NewProject";
+import { $projectInput, $tab, Employee } from "./NewProject";
 import { EmployeeSelector } from "./EmployeeSelector";
 import { ProjectManagerSelector } from "./ProjectManagerSelector";
+import { useStore } from "@nanostores/react";
 
-interface CreateProjectProps {
-  projectName: string;
-  projectDescription: string;
-  updateProjectName: (x: string) => void;
-  updateProjectDescription: (x: string) => void;
-  employees: Employee[];
-  fixedOption: Employee | undefined;
-  addEmployees: (x: Employee) => void;
-  removeEmployees: (x: Employee) => void;
-  updateProjectManager: (x: Employee | undefined) => void;
-}
+export const CreateProject = ({ employees }: { employees: Employee[] }) => {
+  const input = useStore($projectInput);
 
-export const CreateProject: React.FC<CreateProjectProps> = ({
-  projectName,
-  projectDescription,
-  updateProjectName,
-  updateProjectDescription,
-  employees,
-  fixedOption,
-  addEmployees,
-  removeEmployees,
-  updateProjectManager,
-}) => {
   return (
-    <form className="flex flex-col items-center rounded-2xl max-md:px-5 ">
+    <div className="flex flex-col items-center rounded-2xl max-md:px-5 ">
       <div className="gap-  border-primary2 mt-28 flex w-[643px] max-w-full flex-col  justify-center rounded-2xl border px-8 py-10 max-md:mt-10 max-md:px-5">
         <div className="self-center text-xl font-semibold">Uus projekt</div>
         <div className="mt-12 font-semibold max-md:mt-10 max-md:max-w-full">Projekti nimi</div>
         <input
-          value={projectName}
-          onChange={(e) => updateProjectName(e.currentTarget.value)}
+          value={input.name}
+          onChange={(e) => $projectInput.setKey("name", e.currentTarget.value)}
           className=" bg-primary focus:outline-primary2 mt-4  rounded-2xl focus:outline max-md:max-w-full"
         />
         <div className="mt-8 font-semibold max-md:max-w-full">Projekti kirjeldus</div>
         <textarea
-          value={projectDescription}
-          onChange={(e) => updateProjectDescription(e.currentTarget.value)}
+          value={input.description}
+          onChange={(e) => $projectInput.setKey("description", e.currentTarget.value)}
           className="bg-primary mt-4 h-[145px] rounded-2xl max-md:max-w-full"
         />
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
           <div className="font-semibold">
             {"Projectijuht"}
-            <ProjectManagerSelector
-              employeesList={employees}
-              fixedOption={fixedOption}
-              setProjectManager={updateProjectManager}
-            />
+            <ProjectManagerSelector employees={employees} />
           </div>
           <div className="flex w-full flex-col text-base">
             <div className="font-semibold">Seotud inimesed</div>
-            <EmployeeSelector
-              employeesList={employees}
-              fixedOption={fixedOption}
-              addEmployees={addEmployees}
-              removeEmployees={removeEmployees}
-            />
+            <EmployeeSelector employees={employees} />
           </div>
         </div>
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
@@ -75,6 +47,6 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           {"Edasi"}
         </button>
       </div>
-    </form>
+    </div>
   );
 };

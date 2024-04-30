@@ -1,8 +1,9 @@
 import Select, { components, DropdownIndicatorProps } from "react-select";
 import { ChevronDown } from "lucide-react";
-import React, { useState } from "react";
-import { Employee } from "./NewProject";
+import React from "react";
+import { $projectInput, Employee } from "./NewProject";
 import clsx from "clsx";
+import { useStore } from "@nanostores/react";
 
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee, false>) => {
   return (
@@ -22,25 +23,8 @@ const optionsStyle = {
   focus: "bg-black rounded-2xl",
 };
 
-interface EmployeeSelectorProps {
-  employeesList: Employee[];
-  fixedOption: Employee | undefined;
-  setProjectManager: (x: Employee | undefined) => void;
-}
-
-export const ProjectManagerSelector: React.FC<EmployeeSelectorProps> = ({
-  employeesList: employeesList,
-  fixedOption,
-  setProjectManager,
-}) => {
-  const [value, setValue] = useState<Employee | null>(
-    employeesList.find((x) => x.id === fixedOption?.id) ?? null,
-  );
-  const onChange = (x: Employee | null) => {
-    setValue(x);
-    setProjectManager(x !== null ? x : undefined);
-  };
-
+export const ProjectManagerSelector = ({ employees }: { employees: Employee[] }) => {
+  const input = useStore($projectInput);
   return (
     <Select
       unstyled
@@ -67,12 +51,13 @@ export const ProjectManagerSelector: React.FC<EmployeeSelectorProps> = ({
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
       }}
       placeholder={"Vali töötaja"}
-      value={value}
-      options={employeesList}
-      onChange={onChange}
+      value={employees.find((x) => x.value === input.projectManager)}
+      options={employees}
+      onChange={(x) => {
+        if (x) $projectInput.setKey("projectManager", x.value);
+      }}
       closeMenuOnSelect
-      isDisabled={fixedOption === undefined ? false : true}
-      components={{ DropdownIndicator: fixedOption === undefined ? DropdownIndicator : null }}
+      components={{ DropdownIndicator }}
     />
   );
 };
