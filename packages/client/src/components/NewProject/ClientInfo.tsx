@@ -108,16 +108,12 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
                   Vali keel
                 </div>
-                { <SingleSelect
+                <SingleSelect
                   selectOptions={languageOptions}
                   selectedOption={language}
                   parentSetMethod={handleLanguageChange}
                   dark={true}
-                />}
-                {/*<select className=" bg-primary w-2/3 rounded-2xl px-2 py-2.5 font-normal ">
-                  <option value="et">Eesti keel</option>
-                  <option value="en">English</option>
-                </select>*/}
+                />
               </div>
               <button
                 type="submit"
