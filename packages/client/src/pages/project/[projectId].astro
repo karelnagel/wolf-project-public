@@ -2,7 +2,8 @@
 import { useTranslations } from "@wolf-project/i18n";
 import Layout from "../../components/Layout.astro";
 import { db, like, Projects, Tasks } from "astro:db";
-import { AddTask } from "../../components/Task";
+// Todo idk kust see import peaks tulema
+// import { AddTask } from "../../components/Task";
 
 const t = useTranslations("en");
 
@@ -49,5 +50,5 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, id));
       </div>
     ))
   }
-  <AddTask projectRef={id} client:load />
+  <!-- <AddTask projectRef={id} client:load /> -->
 </Layout>

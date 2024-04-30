@@ -14,10 +14,11 @@ const UserZod = z.object({
   role: z.string(),
   language: z.string(),
   job: z.string().nullable(),
+  company: z.string(),
 });
 
-const Client = UserZod.omit({ userId: true, job: true });
-const Employee = UserZod.omit({ userId: true });
+export const Client = UserZod.omit({ userId: true, job: true, role: true });
+export const Employee = UserZod.omit({ userId: true, company: true });
 
 export type Client = z.infer<typeof Client>;
 export type Employee = z.infer<typeof Employee>;
@@ -29,7 +30,7 @@ export const employee = root.router({
     .mutation(async ({ input: { name, email, role, language, job } }) => {
       const result = await db
         .insert(Users)
-        .values({ userId: getRandomId(), name, email, role, language, job })
+        .values({ userId: getRandomId(), name, email, role, language, job, company: "Wolf-Agency OÜ" })
         .returning();
       return result[0]!;
     }),
@@ -47,13 +48,13 @@ export const employee = root.router({
 });
 
 export const client = root.router({
-  create: publicProcedure
+  create: privateProcedure
     .input(Client)
     .output(UserZod)
-    .mutation(async ({ input: { name, email, role, language } }) => {
+    .mutation(async ({ input: { name, email, language, company } }) => {
       const result = await db
         .insert(Users)
-        .values({ userId: getRandomId(), name, email, role, language })
+        .values({ userId: getRandomId(), name, email, role: "client", language, company })
         .returning();
       return result[0]!;
     }),
@@ -71,6 +72,7 @@ export const authenticate = root.router({
         token = jwt.sign({ userId: exists[0]?.userId }, env.JWT_SECRET, {
           expiresIn: "5m",
         });
+        console.log('exists', exists[0]?.locale)
         await sendEmail({
           to: [input.email!],
           token: token,
