@@ -7,7 +7,7 @@ export const en = {
   },
   login: {
     body: (url: string) =>
-      `To login to your account, please click this [link](${url}). Link lasts for 5 minutes.`,
+      `To login to your account, please click this ${url}. Link lasts for 5 minutes.`,
     title: `Wolf Project login email`,
   },
   type: {
