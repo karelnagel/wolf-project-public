@@ -9,5 +9,3 @@ const connection = createClient({
 });
 
 export const db = drizzle(connection, { schema });
-
-export * from "./schema";

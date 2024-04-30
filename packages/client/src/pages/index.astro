@@ -1,6 +1,7 @@
 ---
 import Layout from "../components/Layout.astro";
-import { db, projectsTable } from "@wolf-project/db";
+import { projectsTable } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 
 const t = Astro.locals.t;
 const projects = await db.select().from(projectsTable);

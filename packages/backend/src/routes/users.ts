@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure, publicProcedure, root } from "../root";
-import { usersTable, db, User } from "@wolf-project/db";
+import { usersTable, User } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import jwt from "jsonwebtoken";
 import { env } from "@wolf-project/shared/env";

@@ -5,9 +5,9 @@ import {
   usersTable,
   projectUsersTable,
   tasksTable,
-  db,
   Task,
-} from "@wolf-project/db";
+} from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
 

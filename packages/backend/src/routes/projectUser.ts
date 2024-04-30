@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure, root } from "../root";
-import { projectUsersTable, db, PriviledgeLevel } from "@wolf-project/db";
+import { projectUsersTable, PriviledgeLevel } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 
 const ProjectUserZod = z.object({
   projectId: z.string(),

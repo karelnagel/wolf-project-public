@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
-import { UserRole } from "@wolf-project/db";
+import { UserRole } from "@wolf-project/db/schema";
 import { Locale } from "@wolf-project/i18n";
 
 export const NewUser = () => {

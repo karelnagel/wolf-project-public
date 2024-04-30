@@ -1,5 +1,6 @@
 import { privateProcedure, root } from "../root";
-import { db, commentsTable, Comment } from "@wolf-project/db";
+import { db } from "@wolf-project/db";
+import { commentsTable, Comment } from "@wolf-project/db/schema";
 import { getRandomId } from "@wolf-project/shared/helpers";
 
 export const comments = root.router({

@@ -1,6 +1,6 @@
 import React from "react";
 import { Brush, CircleCheck, Code, X, MessageSquare, Pencil } from "lucide-react";
-import { Task } from "@wolf-project/db";
+import { Task } from "@wolf-project/db/schema";
 
 interface TaskInfoProps {
   projectTasks: Task[];

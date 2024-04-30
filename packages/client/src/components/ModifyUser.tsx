@@ -2,7 +2,7 @@ import { useState } from "react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
 import { Employee } from "@wolf-project/backend/src/routes/users";
 import { Locale } from "@wolf-project/i18n";
-import { UserRole } from "@wolf-project/db";
+import { UserRole } from "@wolf-project/db/schema";
 
 interface ModifyUserProps {
   userId: string;

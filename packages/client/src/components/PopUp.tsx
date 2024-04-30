@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
 import { Locale, useTranslations } from "@wolf-project/i18n";
-import { Task, TaskStatus, TaskType } from "@wolf-project/db";
+import { Task, TaskStatus, TaskType } from "@wolf-project/db/schema";
 
 interface PopUpProps {
   task: Task | undefined;

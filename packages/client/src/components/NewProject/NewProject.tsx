@@ -5,7 +5,7 @@ import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
 import { useAPI, client } from "@wolf-project/backend/src/client";
 import { Locale } from "@wolf-project/i18n";
-import { Task } from "@wolf-project/db";
+import { Task } from "@wolf-project/db/schema";
 
 interface NewProjectProps {
   employees: Employee[];

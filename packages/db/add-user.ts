@@ -1,5 +1,6 @@
 import { getRandomId } from "@wolf-project/shared/helpers";
-import { db, usersTable } from "./src";
+import { db } from ".";
+import { usersTable } from "./schema";
 
 const addUser = async (email: string, name: string) => {
   const res = await db

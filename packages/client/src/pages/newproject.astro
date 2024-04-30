@@ -1,5 +1,6 @@
 ---
-import { db, usersTable } from "@wolf-project/db";
+import { usersTable } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 import Layout from "../components/Layout.astro";
 import { NewProject } from "../components/NewProject/NewProject";
 import { or, eq } from "drizzle-orm";

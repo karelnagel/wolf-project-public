@@ -1,5 +1,6 @@
 import { privateProcedure, root } from "../root";
-import { tasksTable, db, Task } from "@wolf-project/db";
+import { tasksTable, Task } from "@wolf-project/db/schema";
+import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 
 export const tasks = root.router({
