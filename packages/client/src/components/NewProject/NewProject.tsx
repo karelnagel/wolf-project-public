@@ -13,7 +13,7 @@ export interface Employee {
 }
 
 type Tab = "project" | "clients" | "tasks" | "confirm";
-export const $tab = atom<Tab>("project");
+export const $tab = atom<Tab>("tasks");
 
 export const $projectInput = map<CreateProjectInput>({
   companyName: "",
@@ -36,9 +36,6 @@ export const NewProject = ({ employees }: { employees: Employee[] }) => {
 
 const Tabs = ({ employees }: { employees: Employee[] }) => {
   const tab = useStore($tab);
-  useEffect(() => {
-    console.log({ tab });
-  }, [tab]);
   return (
     <>
       {tab === "project" && <CreateProject employees={employees} />}

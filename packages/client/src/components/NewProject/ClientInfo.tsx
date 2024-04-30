@@ -84,7 +84,7 @@ export const ClientInfo = () => {
                     label: t.language[value],
                   }))}
                   selectedOption={client.language}
-                  parentSetMethod={(x) => setClient({ ...client, language: x as Locale })}
+                  onChange={(x) => setClient({ ...client, language: x as Locale })}
                   dark={true}
                 />
               </div>

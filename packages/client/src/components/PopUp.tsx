@@ -73,7 +73,7 @@ export const PopUp = () => {
             <SingleSelect
               selectOptions={TaskStatus.options.map((x) => ({ value: x, label: t.status[x] }))}
               selectedOption={task.status}
-              parentSetMethod={(x) => setTask({ ...task, status: x as TaskStatus })}
+              onChange={(x) => setTask({ ...task, status: x as TaskStatus })}
               dark={false}
             />
           </div>
@@ -96,10 +96,10 @@ export const PopUp = () => {
             <SingleSelect
               selectOptions={[
                 { value: "us", label: OUR_COMPANY_NAME },
-                { value: "them", label: $projectInput.get().companyName },
+                { value: "them", label: input.companyName },
               ]}
               selectedOption={task.clientTask ? "them" : "us"}
-              parentSetMethod={(x) => setTask({ ...task, clientTask: x === "them" })}
+              onChange={(x) => setTask({ ...task, clientTask: x === "them" })}
               dark={false}
             />
           </div>
