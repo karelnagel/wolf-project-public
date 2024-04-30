@@ -3,7 +3,8 @@
   "main": "index.ts",
   "scripts": {
     "migrate": "dotenv -e ../../.env -- drizzle-kit push:sqlite",
-    "add-user": "dotenv -e ../../.env -- tsx add-user.ts"
+    "add-user": "dotenv -e ../../.env -- tsx add-user.ts",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@libsql/client": "^0.6.0",

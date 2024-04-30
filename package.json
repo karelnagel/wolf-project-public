@@ -16,7 +16,8 @@
     "check": "tsc --noEmit && cd packages/client && astro check",
     "deploy": "sst deploy --stage=main",
     "migrate": "cd packages/db && npm run migrate",
-    "add-user": "cd packages/db && npm run add-user"
+    "add-user": "cd packages/db && npm run add-user",
+    "studio":"cd packages/db && npm run studio"
   },
   "dependencies": {
     "@aws-sdk/middleware-retry": "^3.374.0",
