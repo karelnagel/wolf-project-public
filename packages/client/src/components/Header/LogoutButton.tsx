@@ -7,7 +7,7 @@ export const LogoutButton = ({ logout }: { logout: string }) => {
   return (
     <button
       onClick={onClick}
-      className="border-primary2 bg-primary hover:bg-primary2 justify-center rounded-2xl border border-solid px-4 py-3.5 text-center font-extrabold"
+      className="border-primary2 hover:bg-primary justify-center rounded-2xl border border-solid px-4 py-3.5 text-center font-extrabold"
     >
       {logout}
     </button>
