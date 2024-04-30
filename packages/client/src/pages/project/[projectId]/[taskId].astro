@@ -1,28 +1,19 @@
 ---
 import Layout from "../../../components/Layout.astro";
-import { db, eq, like, Tasks, Users } from "astro:db";
+import { db } from "@wolf-project/db";
 // Todo where is this?
 // import { AddComment } from "../../../components/Comment";
-import { Comments } from "astro:db";
 
 const t = Astro.locals.t;
 
 const { taskId } = Astro.params;
 if (!taskId) throw new Error("id is required");
 
-const task = await db.select().from(Tasks).where(like(Tasks.taskId, taskId));
-
-const comments = await db
-  .select({
-    name: Users.name,
-    job: Users.job,
-    body: Comments.body,
-    commentedAt: Comments.commentedAt,
-  })
-  .from(Comments)
-  .where(like(Comments.taskRef, taskId))
-  .innerJoin(Users, eq(Comments.commenterId, Users.userId));
-
+const task = await db.query.tasksTable.findFirst({
+  where: (x, { eq }) => eq(x.id, taskId),
+  with: { comments: { with: { commenter: true } } },
+});
+if (!task) throw new Error("task not found");
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -30,30 +21,28 @@ const comments = await db
     >{t.project.title}</a
   >
   <p>Task subpage</p>
-  {
-    task.map(({ taskId, title, description, deadline, status }) => (
-      <div>
-        <p>Task ID: {taskId}</p>
-        <p>Task title: {title}</p>
-        <p>Task description: {description}</p>
-        <p>
-          Deadline:{" "}
-          {deadline !== null
-            ? `${deadline!.getDate()}.${deadline!.getMonth() + 1}.${deadline!.getFullYear()}`
-            : null}
-        </p>
-        <p>Status: {status}</p>
-      </div>
-    ))
-  }
+  <div>
+    <p>Task ID: {task.id}</p>
+    <p>Task title: {task.title}</p>
+    <p>Task description: {task.description}</p>
+    <p>
+      Deadline:{" "}
+      {
+        task.deadline !== null
+          ? `${task.deadline!.getDate()}.${task.deadline!.getMonth() + 1}.${task.deadline!.getFullYear()}`
+          : null
+      }
+    </p>
+    <p>Status: {task.status}</p>
+  </div>
   <div>
     {
-      comments.map(({ body, name, job, commentedAt }) => (
+      task.comments.map(({ body, commenter: { name, job }, createdAt }) => (
         <div>
           <p>
             {name}
             {job !== null ? ` - ${job}` : null}
-            {`${commentedAt!.getHours()}:${commentedAt.getMinutes()} ${commentedAt!.getDate()}.${commentedAt!.getMonth() + 1}.${commentedAt!.getFullYear()}`}
+            {`${createdAt!.getHours()}:${createdAt.getMinutes()} ${createdAt!.getDate()}.${createdAt!.getMonth() + 1}.${createdAt!.getFullYear()}`}
           </p>
           <p>{body} </p>
         </div>
@@ -61,5 +50,5 @@ const comments = await db
     }
   </div>
 
-  <!-- <AddComment taskRef={id} commenterId={userId} client:load /> -->
+  <!-- <AddComment taskId={id} commenterId={userId} client:load /> -->
 </Layout>

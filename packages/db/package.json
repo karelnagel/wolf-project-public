@@ -1,0 +1,12 @@
+{
+    "name": "@wolf-project/db",
+    "main": "src/index.ts",
+    "scripts": {
+        "migrate": "dotenv -e ../../.env -- drizzle-kit push:sqlite"
+    },
+    "dependencies": {
+        "@libsql/client": "^0.6.0",
+        "drizzle-kit": "^0.20.17",
+        "drizzle-orm": "^0.30.9"
+    }
+}

@@ -15,6 +15,7 @@ export const en = {
     design: "Design",
     development: "Development",
     feedback: "Feedback",
+    other: "Other",
   },
   status: {
     pending: "Pending",

@@ -1,16 +1,21 @@
 import { z } from "zod";
 import { privateProcedure, root } from "../root";
-import { Projects, Users, ProjectUser, Tasks, db } from "astro:db";
+import {
+  projectsTable,
+  usersTable,
+  projectUsersTable,
+  tasksTable,
+  db,
+  Task,
+} from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
-import { Task } from "./tasks";
 
 const CreateProjectZod = z.object({
-  projectName: z.string(),
-  projectCreator: z.string(),
-  projectDescription: z.string(),
+  name: z.string(),
+  description: z.string(),
   clients: Client.array(),
-  tasks: Task.omit({ projectRef: true }).array(),
+  tasks: Task.omit({ projectId: true, id: true }).array(),
   selectedEmployees: z.string().array(),
   projectManager: z.string(),
 });
@@ -20,26 +25,19 @@ export const projects = root.router({
     .input(CreateProjectZod)
     .mutation(
       async ({
-        input: {
-          projectName,
-          projectCreator,
-          projectDescription,
-          clients,
-          tasks,
-          projectManager,
-          selectedEmployees,
-        },
+        input: { name, description, clients, tasks, projectManager, selectedEmployees },
+        ctx: { user },
       }) => {
         const pInsert = await db
-          .insert(Projects)
-          .values({ projectName, projectId: getRandomId(), projectCreator, projectDescription })
-          .returning({ projectId: Projects.projectId });
-        const pId = pInsert[0]!.projectId;
+          .insert(projectsTable)
+          .values({ name, id: getRandomId(), creatorId: user.id, description })
+          .returning({ id: projectsTable.id });
+        const pId = pInsert[0]!.id;
         for (const client of clients) {
           const cInsert = await db
-            .insert(Users)
+            .insert(usersTable)
             .values({
-              userId: getRandomId(),
+              id: getRandomId(),
               name: client.name,
               email: client.email,
               language: client.language,
@@ -47,41 +45,40 @@ export const projects = root.router({
               role: "client",
             })
             .onConflictDoUpdate({
-              target: [Users.email],
+              target: [usersTable.email],
               set: { name: client.name, company: client.company, language: client.language },
             })
-            .returning({ userId: Users.userId });
+            .returning({ id: usersTable.id });
           await db
-            .insert(ProjectUser)
-            .values({ projectId: pId, userId: cInsert[0]!.userId, priviledgeLevel: "client" });
+            .insert(projectUsersTable)
+            .values({ projectId: pId, userId: cInsert[0]!.id, priviledgeLevel: "client" });
         }
         await db
-          .insert(ProjectUser)
+          .insert(projectUsersTable)
           .values({ projectId: pId, userId: projectManager, priviledgeLevel: "manager" });
         await db
-          .insert(ProjectUser)
+          .insert(projectUsersTable)
           .values(
             selectedEmployees.map((t) => ({
               projectId: pId,
               userId: t,
-              priviledgeLevel: "employee",
+              priviledgeLevel: "employee" as const,
             })),
           )
           .onConflictDoNothing();
-        await db
-          .insert(Tasks)
-          .values(
-            tasks.map((t) => ({
-              title: t.title,
-              description: t.description,
-              responsible: t.responsible,
-              status: t.status,
-              completed: t.completed,
-              deadline: t.deadline,
-              taskId: getRandomId(),
-              projectRef: pId,
-            })),
-          );
+        await db.insert(tasksTable).values(
+          tasks.map((t) => ({
+            id: getRandomId(),
+            title: t.title,
+            description: t.description!,
+            responsible: t.responsible,
+            status: t.status,
+            completed: t.completed,
+            deadline: t.deadline!,
+            projectId: pId,
+            type: t.type,
+          })),
+        );
       },
     ),
 });

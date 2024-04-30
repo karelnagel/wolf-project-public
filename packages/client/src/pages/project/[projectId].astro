@@ -1,37 +1,38 @@
 ---
 import Layout from "../../components/Layout.astro";
-import { db, like, Projects, Tasks } from "astro:db";
+import { db} from "@wolf-project/db";
 // Todo idk kust see import peaks tulema
 // import { AddTask } from "../../components/Task";
 
-const t = Astro.locals.t;
 const { projectId } = Astro.params;
 if (!projectId) throw new Error("id is required");
-const project = await db.select().from(Projects).where(like(Projects.projectId, projectId));
-const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, projectId));
+
+const t = Astro.locals.t;
+
+const project = await db.query.projectsTable.findFirst({
+  where: (x, { eq }) => eq(x.id, projectId),
+  with: { tasks: true },
+});
+if (!project) throw new Error("project not found");
 ---
 
 <Layout title={undefined} description={undefined}>
   <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/"
     >{t.project.title}</a
   >
+  <div>
+    <p>Project ID: {project.id}</p>
+    <p>Project Name: {project.name}</p>
+  </div>
   {
-    project.map(({ projectId, projectName }) => (
+    project.tasks.map(({ id, title, description, deadline, status }) => (
       <div>
-        <p>Project ID: {projectId}</p>
-        <p>Project Name: {projectName}</p>
-      </div>
-    ))
-  }
-  {
-    tasks.map(({ taskId, title, description, deadline, status }) => (
-      <div>
-        <p>Task ID: {taskId}</p>
+        <p>Task ID: {id}</p>
         <p>
           Task title:{" "}
           <a
             class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            href={`/project/${projectId}/${taskId}`}
+            href={`/project/${projectId}/${id}`}
           >
             {title}
           </a>
@@ -47,5 +48,5 @@ const tasks = await db.select().from(Tasks).where(like(Tasks.projectRef, project
       </div>
     ))
   }
-  <!-- <AddTask projectRef={id} client:load /> -->
+  <!-- <AddTask projectId={id} client:load /> -->
 </Layout>

@@ -17,6 +17,7 @@ export const et: I18nLocale = {
     design: "Disain",
     development: "Arendustöö",
     feedback: "Tagasiside",
+    other: "Muud",
   },
   status: {
     pending: "Ootel",

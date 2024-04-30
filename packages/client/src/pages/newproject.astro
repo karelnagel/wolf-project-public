@@ -1,26 +1,22 @@
 ---
-import { db, Users, eq, or } from "astro:db";
+import { db, usersTable } from "@wolf-project/db";
 import Layout from "../components/Layout.astro";
 import { NewProject } from "../components/NewProject/NewProject";
-import { Employee } from "../components/NewProject/NewProject";
+import { or, eq } from "drizzle-orm";
 
 const user = Astro.locals.user!;
 if (user.role !== "admin" && user.role !== "limited") return Astro.redirect("/401");
-let mandatoryUser: Employee | undefined;
-if (user.role === "limited") {
-  mandatoryUser = { value: user.userId, label: user.name };
-}
-const employees = await db
-  .select({ value: Users.userId, label: Users.name })
-  .from(Users)
-  .where(or(eq(Users.role, "admin"), eq(Users.role, "limited")));
+
+const employees = await db.query.usersTable.findMany({
+  where: or(eq(usersTable.role, "admin"), eq(usersTable.role, "limited")),
+});
 ---
 
 <Layout title={undefined} description={undefined}>
   <NewProject
-    mandatoryMember={mandatoryUser}
+    mandatoryMember={user.role === "limited" ? { id: user.id, name: user.name } : undefined}
     employees={employees}
-    creatorId={user.userId}
+    creatorId={user.id}
     client:load
   />
 </Layout>

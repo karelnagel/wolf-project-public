@@ -1,9 +1,9 @@
 ---
 import Layout from "../components/Layout.astro";
-import { db, Projects } from "astro:db";
+import { db, projectsTable } from "@wolf-project/db";
 
 const t = Astro.locals.t;
-const projects = await db.select().from(Projects);
+const projects = await db.select().from(projectsTable);
 ---
 
 <Layout title={undefined} description={undefined}>
@@ -13,12 +13,12 @@ const projects = await db.select().from(Projects);
     {
       projects.map((project) => (
         <div>
-          {project.projectId} -{" "}
+          {project.id} -{" "}
           <a
             class="font-medium text-primary2 underline dark:text-blue-500 hover:no-underline"
-            href={`./project/${project.projectId}`}
+            href={`./project/${project.id}`}
           >
-            {project.projectName}
+            {project.name}
           </a>
         </div>
       ))

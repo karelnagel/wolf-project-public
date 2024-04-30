@@ -1,25 +1,16 @@
 ---
-import { db, like } from "astro:db";
+import { db } from "@wolf-project/db";
 import Layout from "../../components/Layout.astro";
 import { ModifyUser } from "../../components/ModifyUser";
-import { Users } from "astro:db";
-import { Employee } from "@wolf-project/backend/src/routes/users";
 
 const { userId } = Astro.params;
-if (!userId) throw new Error("id is required");
-const query = await db
-  .select({
-    name: Users.name,
-    email: Users.email,
-    role: Users.role,
-    language: Users.language,
-    job: Users.job,
-  })
-  .from(Users)
-  .where(like(Users.userId, userId));
+if (!userId) throw new Error("User id is required");
 
-const user = query[0] as Employee;
-if (user === undefined) throw new Error("Invalid ID!");
+const user = await db.query.usersTable.findFirst({
+  where: (x, { eq }) => eq(x.id, userId),
+});
+
+if (user === undefined) throw new Error("No User found!");
 ---
 
 <Layout title={undefined} description={undefined}>

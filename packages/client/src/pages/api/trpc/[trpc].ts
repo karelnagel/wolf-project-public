@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 import { appRouter } from "@wolf-project/backend";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { verifyToken } from "@wolf-project/shared/serverHelper";
-import { Users, db, eq } from "astro:db";
+import { db } from "@wolf-project/db";
 
 export const createContext = async (_opts: FetchCreateContextFnOptions) => {
   const token = _opts.req.headers
@@ -16,8 +16,10 @@ export const createContext = async (_opts: FetchCreateContextFnOptions) => {
   const userId = verifyToken(token);
   if (!userId) return { user: null };
 
-  const user = await db.select().from(Users).where(eq(Users.userId, userId));
-  return { user: user[0] || null };
+  const user = await db.query.usersTable.findFirst({
+    where: (x, { eq }) => eq(x.id, userId),
+  });
+  return { user };
 };
 export type CreateContext = typeof createContext;
 

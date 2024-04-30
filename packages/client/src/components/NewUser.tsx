@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { client, useAPI } from "@wolf-project/backend/src/client";
+import { UserRole } from "@wolf-project/db";
+import { Locale } from "@wolf-project/i18n";
 
 export const NewUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState<UserRole>();
   const [job, setJob] = useState("");
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState<Locale>();
   const allowedEmail = "veebihunt.ee";
   const [emailError, setEmailError] = useState<string | null>(null);
 
@@ -19,7 +21,9 @@ export const NewUser = () => {
       setEmailError("Lubatud on ainult firma email!");
       return;
     }
-    await mutate({ name, email, role, job, language });
+    if (!role || !language) return;
+
+    await mutate({ name, email, role, job, language, company: "Veebihunt" });
     window.location.href = "/admin";
   };
 
@@ -45,14 +49,14 @@ export const NewUser = () => {
           onChange={(e) => setJob(e.target.value)}
           required
         />
-        <select value={language} onChange={(e) => setLanguage(e.target.value)} required>
+        <select value={language} onChange={(e) => setLanguage(e.target.value as Locale)} required>
           <option value="" disabled hidden>
             Vali töötaja keel
           </option>
           <option value="en">English</option>
           <option value="et">Eesti</option>
         </select>
-        <select value={role} onChange={(e) => setRole(e.target.value)} required>
+        <select value={role} onChange={(e) => setRole(e.target.value as UserRole)} required>
           <option value="" disabled hidden>
             Vali töötaja õigused süsteemis
           </option>

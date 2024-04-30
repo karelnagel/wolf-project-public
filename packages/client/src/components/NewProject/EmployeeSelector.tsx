@@ -61,19 +61,19 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
   removeEmployees,
 }) => {
   const [value, setValue] = useState<readonly Employee[]>(
-    employeesList.filter((x) => x.value === fixedOption?.value),
+    employeesList.filter((x) => x.id === fixedOption?.id),
   );
   const onChange = (newValue: OnChangeValue<Employee, true>, actionMeta: ActionMeta<Employee>) => {
     switch (actionMeta.action) {
       case "pop-value":
       case "remove-value":
-        if (actionMeta.removedValue.value === fixedOption?.value) {
+        if (actionMeta.removedValue.id === fixedOption?.id) {
           return;
         }
         removeEmployees(actionMeta.removedValue);
         break;
       case "clear":
-        newValue = employeesList.filter((x) => x.value === fixedOption?.value);
+        newValue = employeesList.filter((x) => x.id === fixedOption?.id);
         const removedEmployees = value.filter((employee) => !newValue.includes(employee));
         removedEmployees.forEach(removeEmployees);
         break;

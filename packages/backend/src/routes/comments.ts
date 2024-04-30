@@ -1,24 +1,15 @@
-import { z } from "zod";
 import { privateProcedure, root } from "../root";
-import { Comments, db } from "astro:db";
+import { db, commentsTable, Comment } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 
-const CommentZod = z.object({
-  commentId: z.string(),
-  taskRef: z.string(),
-  body: z.string(),
-  commenterId: z.string(),
-  commentedAt: z.date(),
-});
-export type Comment = z.infer<typeof CommentZod>;
 export const comments = root.router({
   create: privateProcedure
-    .input(CommentZod.omit({ commentId: true, commentedAt: true }))
-    .output(CommentZod)
-    .mutation(async ({ input: { taskRef, body, commenterId } }) => {
+    .input(Comment.omit({ id: true, createdAt: true, commenterId: true }))
+    .output(Comment)
+    .mutation(async ({ input: { taskId, body }, ctx: { user } }) => {
       const comments = await db
-        .insert(Comments)
-        .values({ commentId: getRandomId(), taskRef, body, commenterId, commentedAt: new Date() })
+        .insert(commentsTable)
+        .values({ id: getRandomId(), taskId, body, commenterId: user.id, createdAt: new Date() })
         .returning();
       return comments[0]!;
     }),
