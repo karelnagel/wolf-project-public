@@ -3,11 +3,10 @@ import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
 import { Task } from "@wolf-project/db/schema";
+import { $tab } from "./NewProject";
 
 export interface TasksProps {
   projectTasks: Task[];
-  returnClientTab: () => void;
-  leaveTasksTab: () => void;
   addTask: (x: Task) => void;
   removeTask: (x: Task) => void;
   modifyTask: (x: Task, y: Task) => void;
@@ -16,8 +15,6 @@ export interface TasksProps {
 
 export const Tasks: React.FC<TasksProps> = ({
   projectTasks,
-  returnClientTab,
-  leaveTasksTab,
   addTask,
   modifyTask,
   removeTask,
@@ -62,7 +59,7 @@ export const Tasks: React.FC<TasksProps> = ({
     <div className="flex justify-center px-16 py-20 max-md:px-5">
       <div className="flex w-full flex-col max-md:max-w-full">
         <div className="flex w-full items-start justify-center gap-5 text-center font-semibold max-md:max-w-full max-md:flex-wrap">
-          <button className="text-primary2" onClick={returnClientTab}>
+          <button className="text-primary2" onClick={() => $tab.set("clients")}>
             <ArrowLeft className="aspect-square h-11 w-11 shrink-0" />
           </button>
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
@@ -98,7 +95,7 @@ export const Tasks: React.FC<TasksProps> = ({
                 </button>
                 <button
                   className="bg-primary2 justify-center whitespace-nowrap rounded-2xl px-5 py-2.5"
-                  onClick={leaveTasksTab}
+                  onClick={() => $tab.set("confirm")}
                 >
                   Edasi
                 </button>

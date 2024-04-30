@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { CircleUserRound, Trash } from "lucide-react";
-import { Client } from "./NewProject";
+import { $tab, Client } from "./NewProject";
 import { Locale, useTranslations } from "@wolf-project/i18n";
 import { SingleSelect } from "../SingleSelect";
 
 interface ClientInfoProps {
   companyName: string;
   clients: Client[];
-  leaveClientTab: () => void;
-  returnProjectTab: () => void;
   updateCompanyName: (x: React.ChangeEvent<HTMLTextAreaElement>) => void;
   addClient: (x: Client) => void;
   removeClient: (x: Client) => void;
@@ -17,8 +15,6 @@ interface ClientInfoProps {
 export const ClientInfo: React.FC<ClientInfoProps> = ({
   companyName,
   clients,
-  leaveClientTab,
-  returnProjectTab,
   updateCompanyName,
   addClient,
   removeClient,
@@ -115,13 +111,13 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
         <div className="mt-8 flex max-w-md flex-wrap justify-center gap-5 whitespace-nowrap text-base font-extrabold">
           <button
             className="border-primary justify-center rounded-2xl border-[3px] border-solid px-12 py-2.5 max-md:px-5"
-            onClick={returnProjectTab}
+            onClick={() => $tab.set("project")}
           >
             Tagasi
           </button>
           <button
             className="bg-primary2 justify-center rounded-2xl px-12 py-2.5 max-md:px-5"
-            onClick={leaveClientTab}
+            onClick={() => $tab.set("tasks")}
           >
             Edasi
           </button>
@@ -130,6 +126,7 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
     </div>
   );
 };
+
 const Info: React.FC<Client & { removeClient: ({ name, email, language }: Client) => void }> = ({
   name,
   email,

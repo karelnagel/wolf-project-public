@@ -1,4 +1,4 @@
-import { Employee } from "./NewProject";
+import { $tab, Employee } from "./NewProject";
 import { EmployeeSelector } from "./EmployeeSelector";
 import { ProjectManagerSelector } from "./ProjectManagerSelector";
 
@@ -7,7 +7,6 @@ interface CreateProjectProps {
   projectDescription: string;
   updateProjectName: (x: string) => void;
   updateProjectDescription: (x: string) => void;
-  leaveProjectTab: () => void;
   employees: Employee[];
   fixedOption: Employee | undefined;
   addEmployees: (x: Employee) => void;
@@ -20,7 +19,6 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
   projectDescription,
   updateProjectName,
   updateProjectDescription,
-  leaveProjectTab,
   employees,
   fixedOption,
   addEmployees,
@@ -71,7 +69,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             /*needs development*/}
         </div>
         <button
-          onClick={leaveProjectTab}
+          onClick={() => $tab.set("clients")}
           className="button bg-primary2 mt-12 justify-center self-center rounded-2xl px-8 py-3 text-base max-md:mt-10 max-md:px-5"
         >
           {"Edasi"}

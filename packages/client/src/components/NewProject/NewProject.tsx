@@ -6,6 +6,8 @@ import { Confirm } from "./Confirm";
 import { useAPI, client } from "@wolf-project/backend/src/client";
 import { Locale } from "@wolf-project/i18n";
 import { Task } from "@wolf-project/db/schema";
+import { atom } from "nanostores";
+import { useStore } from "@nanostores/react";
 
 interface NewProjectProps {
   employees: Employee[];
@@ -30,22 +32,21 @@ const useIsClientSide = () => {
   return isClientSide;
 };
 
+type Tab = "project" | "clients" | "tasks" | "confirm";
+export const $tab = atom<Tab>("project");
+
 export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const initialSelectedEmployee: Employee | undefined = mandatoryMember;
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
   const [projectManager, setProjectManager] = useState<string>();
+  const tab = useStore($tab);
 
   const [companyName, setCompanyName] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
 
   const [projectTasks, setProjectTasks] = useState<Task[]>([]);
-
-  const [projectTab, setProjectTab] = useState(true);
-  const [clientTab, setClientTab] = useState(false);
-  const [tasksTab, setTasksTab] = useState(false);
-  const [confirmTab, setConfirmTab] = useState(false);
 
   const { mutate, isLoading, error } = useAPI(client.projects.create.mutate);
 
@@ -118,35 +119,6 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
     setProjectTasks(sortProject(projectTasks.filter((task) => task !== x)));
   };
 
-  const projectToClient = () => {
-    setProjectTab(!projectTab);
-    setClientTab(!clientTab);
-  };
-  const clientToProject = () => {
-    setProjectTab(!projectTab);
-    setClientTab(!clientTab);
-  };
-
-  const clientToTasks = () => {
-    setClientTab(!clientTab);
-    setTasksTab(!tasksTab);
-  };
-
-  const tasksToClient = () => {
-    setTasksTab(!tasksTab);
-    setClientTab(!clientTab);
-  };
-
-  const tasksToConfirm = () => {
-    setTasksTab(!tasksTab);
-    setConfirmTab(!confirmTab);
-  };
-
-  const confirmToTasks = () => {
-    setConfirmTab(!confirmTab);
-    setTasksTab(!tasksTab);
-  };
-
   const handleSubmit = () => {
     mutate({
       name: projectName,
@@ -169,13 +141,12 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
   if (!isClientSide) return null;
   return (
     <>
-      {projectTab && (
+      {tab === "project" && (
         <CreateProject
           projectName={projectName}
           projectDescription={projectDescription}
           updateProjectName={updateProjectName}
           updateProjectDescription={updateProjectDescription}
-          leaveProjectTab={projectToClient}
           employees={employees}
           fixedOption={initialSelectedEmployee}
           addEmployees={addEmployees}
@@ -183,36 +154,26 @@ export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMemb
           updateProjectManager={updateProjectManager}
         />
       )}
-      {clientTab && (
+      {tab === "clients" && (
         <ClientInfo
           companyName={companyName}
           clients={clients}
-          leaveClientTab={clientToTasks}
-          returnProjectTab={clientToProject}
           updateCompanyName={updateCompanyName}
           addClient={addClient}
           removeClient={removeClient}
           locale={"et"}
         />
       )}
-      {tasksTab && (
+      {tab === "tasks" && (
         <Tasks
           projectTasks={projectTasks}
           addTask={addTask}
           modifyTask={modifyTask}
           removeTask={removeTask}
-          returnClientTab={tasksToClient}
-          leaveTasksTab={tasksToConfirm}
           responsible={[companyName, "Wolf-Agency OÜ"]}
         />
       )}
-      {confirmTab && (
-        <Confirm
-          returnTasks={confirmToTasks}
-          confirmCreation={handleSubmit}
-          isLoading={isLoading}
-        />
-      )}
+      {tab === "confirm" && <Confirm confirmCreation={handleSubmit} isLoading={isLoading} />}
     </>
   );
 };
