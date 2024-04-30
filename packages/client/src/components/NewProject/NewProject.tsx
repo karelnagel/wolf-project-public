@@ -30,10 +30,7 @@ const useIsClientSide = () => {
   return isClientSide;
 };
 
-export const NewProject: React.FC<NewProjectProps> = ({
-  employees,
-  mandatoryMember,
-}) => {
+export const NewProject: React.FC<NewProjectProps> = ({ employees, mandatoryMember }) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const initialSelectedEmployee: Employee | undefined = mandatoryMember;

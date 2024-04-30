@@ -56,7 +56,9 @@ export const authenticate = root.router({
     const user = await db.query.usersTable.findFirst({
       where: (x, { like }) => like(x.email, input.email),
     });
-    if (!user) return {};
+    // if (!user) return {};
+    if (!user)
+      throw new Error("User not found! We can remove this in production, but good for development");
 
     try {
       token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
