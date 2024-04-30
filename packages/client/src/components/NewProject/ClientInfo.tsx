@@ -82,8 +82,9 @@ export const ClientInfo: React.FC<ClientInfoProps> = ({
               </div>
             </div>
           </div>
-          {clients.map((client) => (
+          {clients.map((client, i) => (
             <Info
+              key={i}
               name={client.name}
               email={client.email}
               language={client.language}

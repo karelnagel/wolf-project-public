@@ -40,6 +40,7 @@ export const ProjectManagerSelector: React.FC<EmployeeSelectorProps> = ({
     setValue(x);
     setProjectManager(x !== null ? x : undefined);
   };
+
   return (
     <Select
       unstyled

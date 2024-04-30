@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CreateProject } from "./CreateProject";
 import { Tasks, Task } from "./Tasks";
 import ClientInfo from "./ClientInfo";
@@ -19,6 +19,14 @@ export interface Client {
   email: string;
   language: string;
 }
+
+const useIsClientSide = () => {
+  const [isClientSide, setIsClientSide] = useState(false);
+  useEffect(() => {
+    setIsClientSide(true);
+  }, []);
+  return isClientSide;
+};
 
 export const NewProject: React.FC<NewProjectProps> = ({
   employees,
@@ -159,7 +167,8 @@ export const NewProject: React.FC<NewProjectProps> = ({
 
     if (error) console.log(error);
   };
-
+  const isClientSide = useIsClientSide();
+  if (!isClientSide) return null;
   return (
     <>
       {projectTab && (
