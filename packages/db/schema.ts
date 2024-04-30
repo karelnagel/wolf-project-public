@@ -3,6 +3,20 @@ import { relations } from "drizzle-orm";
 import { Locale } from "@wolf-project/i18n";
 import z from "zod";
 
+export const Companies = z.object({
+  id: z.string(),
+  name: z.string()
+});
+export type Companies = z.infer<typeof Companies>;
+export const companiesTable = sqliteTable("companies", {
+  id: text("id").primaryKey(),
+  name: text('name').notNull(),
+});
+export const companiesRelations = relations(companiesTable, ({ one, many }) => ({
+  users: one(usersTable),
+  tasks: many(tasksTable)
+}))
+
 export const UserRole = z.enum(["admin", "limited", "client"]);
 export type UserRole = z.infer<typeof UserRole>;
 
@@ -13,7 +27,7 @@ export const User = z.object({
   role: UserRole,
   language: Locale,
   job: z.string().nullable(),
-  company: z.string(),
+  companyId: z.string(),
 });
 export type User = z.infer<typeof User>;
 
@@ -24,10 +38,14 @@ export const usersTable = sqliteTable("users", {
   role: text("role").$type<UserRole>().notNull(),
   language: text("language").$type<Locale>().notNull(),
   job: text("job"),
-  company: text("company").notNull(),
+  companyId: text('companyId').notNull(),
 });
-export const userRelations = relations(usersTable, ({ many }) => ({
+export const userRelations = relations(usersTable, ({ one, many }) => ({
   projects: many(projectUsersTable),
+  companies: one(companiesTable, {
+    fields: [usersTable.companyId],
+    references: [companiesTable.id]
+  })
 }));
 
 export const PriviledgeLevel = z.enum(["employee", "manager", "client"]);
@@ -61,6 +79,7 @@ export const projectUsersRelations = relations(projectUsersTable, ({ one }) => (
     references: [usersTable.id],
   }),
 }));
+
 
 export const Projects = z.object({
   id: z.string(),
@@ -100,7 +119,7 @@ export const Task = z.object({
   completed: z.date().nullable(),
   type: TaskType,
   status: TaskStatus,
-  responsible: z.string(),
+  companyId: z.string(),
 });
 export type Task = z.infer<typeof Task>;
 
@@ -113,7 +132,7 @@ export const tasksTable = sqliteTable("tasks", {
   completed: integer("completed", { mode: "timestamp" }),
   type: text("type").$type<TaskType>().notNull(),
   status: text("status").$type<TaskStatus>().notNull(),
-  responsible: text("responsible").notNull(),
+  companyId: text("companyId").notNull(),
 });
 export const tasksRelations = relations(tasksTable, ({ one, many }) => ({
   project: one(projectsTable, {
@@ -121,6 +140,10 @@ export const tasksRelations = relations(tasksTable, ({ one, many }) => ({
     references: [projectsTable.id],
   }),
   comments: many(commentsTable),
+  company: one(companiesTable, {
+    fields: [tasksTable.companyId],
+    references: [companiesTable.id],
+  })
 }));
 
 export const Comment = z.object({
