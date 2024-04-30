@@ -1,4 +1,4 @@
-import { Body, Container, Html, Row } from "@react-email/components";
+import { Body, Container, Html, Text, Row } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 import config from "@wolf-project/client/tailwind.config";
 import { Locale, useTranslations } from "@wolf-project/i18n";
@@ -17,7 +17,9 @@ export const MagiclinkEmail: React.FC<MagiclinkEmailProps> = ({ token, locale })
       <Tailwind config={config}>
         <Body>
           <Container>
-            <Row>{t.login.body(url)}</Row>
+            <Row>
+              <Text>{t.login.body(url)}</Text>
+            </Row>
           </Container>
         </Body>
       </Tailwind>
