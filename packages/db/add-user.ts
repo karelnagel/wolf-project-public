@@ -13,7 +13,8 @@ const addUser = async (email: string, name: string) => {
       role: "admin",
       job: "Construction worker",
     })
-    .returning();
+    .returning()
+    .onConflictDoNothing();
   console.log(res);
 };
 
