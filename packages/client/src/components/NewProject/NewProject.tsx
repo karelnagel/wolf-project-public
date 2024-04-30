@@ -157,22 +157,6 @@ export const NewProject: React.FC<NewProjectProps> = ({
       selectedEmployees,
     });
 
-    console.log(
-      "projectName: ",
-      projectName,
-      " projectDescription: ",
-      projectDescription,
-      " selectedEmployees: ",
-      selectedEmployees,
-      " clients: ",
-      clients,
-      " companyName: ",
-      companyName,
-      " projectsTasks ",
-      projectTasks,
-      " projectManager: ",
-      projectManager,
-    );
 
     if (error) console.log(error);
   };
