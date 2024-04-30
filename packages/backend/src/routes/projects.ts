@@ -5,14 +5,6 @@ import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
 import { Task } from "./tasks";
 
-
-const ProjectZod = z.object({
-  projectId: z.string(),
-  projectName: z.string(),
-  projectCreator: z.string(),
-  projectDescription: z.string(),
-});
-
 const CreateProjectZod = z.object({
   projectName: z.string(),
   projectCreator: z.string(),
