@@ -3,7 +3,14 @@ export const en = {
   title: "Wolf Project English",
   description: "Wolf Project description",
   project: {
-    title: "Project subpage",
+    login: "Login Page",
+    dashboard: "Dashboard",
+    newproject: "New Project Page",
+    admin: "Admin page"
+  },
+  header: {
+    logout: "Log out",
+    newproject: "New project",
   },
   login: {
     body: (url: string) =>
