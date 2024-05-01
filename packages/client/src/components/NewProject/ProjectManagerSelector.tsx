@@ -1,6 +1,6 @@
 import Select, { components, DropdownIndicatorProps } from "react-select";
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { Employee } from "./NewProject";
 import clsx from "clsx";
 import { useStore } from "@nanostores/react";
