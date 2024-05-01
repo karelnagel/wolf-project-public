@@ -13,7 +13,7 @@ export interface Employee {
 }
 
 type Tab = "project" | "clients" | "tasks" | "confirm";
-export const $tab = atom<Tab>("tasks");
+export const $tab = atom<Tab>("project");
 
 export const $projectInput = map<CreateProjectInput>({
   companyName: "",
