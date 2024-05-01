@@ -1,6 +1,5 @@
 ---
-import { LogoutButton } from "./Header/LogoutButton";
-import { NewProjectButton } from "./Header/NewProjectButton";
+import { Button } from "./Button";
 const user = Astro.locals.user;
 const t = Astro.locals.t;
 const logout = t.header.logout;
@@ -10,9 +9,23 @@ const newproject = t.header.newproject;
 <div class="flex items-center justify-between p-4">
   {
     !Astro.url.pathname.startsWith("/login") && user && user?.role !== "client" && (
-      <NewProjectButton newproject={newproject} client:load />
+      <Button href="/newproject" client:load>
+        {newproject}
+      </Button>
     )
   }
-  {(<div class="flex flex-grow items-center justify-center font-semibold text-3xl mt-4">Login Page</div>)}
-  {user && !Astro.url.pathname.startsWith("/login") && <LogoutButton logout={logout} client:load />}
+  {
+    !Astro.url.pathname.startsWith("/login") && (
+      <div class="flex flex-grow items-center justify-center font-semibold text-3xl mt-4">
+        Wolf Projects
+      </div>
+    )
+  }
+  {
+    !Astro.url.pathname.startsWith("/login") && user && (
+      <Button href="/logout" client:load>
+        {logout}
+      </Button>
+    )
+  }
 </div>

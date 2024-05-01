@@ -6,14 +6,15 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
   const { mutate, isLoading } = useAPI(client.authenticate.login.query);
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate({ email });
-    setLoggingIn(true);
+    mutate({ email }).then(() => {
+      setLoggingIn(true);
+    });
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <div className="mt-72 flex flex-col items-center justify-center">
       <div className="border-primary2 flex min-h-[18rem] min-w-[18rem] flex-col items-center justify-center rounded-2xl border border-solid">
         {!loggingIn && (
           <div>
