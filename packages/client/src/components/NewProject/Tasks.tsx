@@ -5,7 +5,6 @@ import { TaskInfo } from "../TaskInfo";
 import { $popUpOpen, $projectInput, $tab } from "./state";
 import { useStore } from "@nanostores/react";
 
-
 export const Tasks = () => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
@@ -65,7 +64,7 @@ export const Tasks = () => {
               <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
                 <button
                   className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
-                  onClick={() => $popUpOpen.set(true)}
+                  onClick={() => $popUpOpen.set({ type: "new" })}
                 >
                   Lisa task
                 </button>

@@ -4,7 +4,24 @@ import { atom, map } from "nanostores";
 export type Tab = "project" | "clients" | "tasks" | "confirm";
 export const $tab = atom<Tab>("project");
 
-export const $popUpOpen = atom(false);
+type Popup = { type: "new" } | { type: "edit"; index: number };
+export const $popUpOpen = atom<Popup | null>(null);
+
+const defaultTask: CreateProjectTask = {
+  title: "",
+  status: "pending",
+  deadline: new Date(),
+  completed: null,
+  type: "input",
+  description: "",
+  clientTask: false,
+};
+
+export const $selectedTask = map<CreateProjectTask>(defaultTask);
+$popUpOpen.subscribe((popup) => {
+  if (!popup || popup.type === "new") $selectedTask.set(defaultTask);
+  else if (popup.type === "edit") $selectedTask.set($projectInput.get().tasks[popup.index]!);
+});
 
 export const sortTasks = (x: CreateProjectTask[]): CreateProjectTask[] => {
   return x.slice().sort((a, b) => {

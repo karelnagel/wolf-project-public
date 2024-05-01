@@ -1,40 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
 import { useTranslations } from "@wolf-project/i18n";
 import { TaskStatus, TaskType } from "@wolf-project/db/schema";
-import { $popUpOpen, $projectInput, setTasks } from "./NewProject/state";
+import { $popUpOpen, $projectInput, $selectedTask, setTasks } from "./NewProject/state";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
-import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
-
-const defaultTask: CreateProjectTask = {
-  title: "",
-  status: "pending",
-  deadline: new Date(),
-  completed: null,
-  type: "input",
-  description: "",
-  clientTask: false,
-};
 
 export const PopUp = () => {
   const t = useTranslations("et");
   const input = useStore($projectInput);
-  const [task, setTask] = useState<CreateProjectTask>(defaultTask);
+  const task = useStore($selectedTask);
+  const popup = useStore($popUpOpen);
 
   const handleSave = () => {
-    setTasks([...input.tasks, task]);
-    $popUpOpen.set(false);
-    setTask(defaultTask);
+    if (popup?.type === "edit") setTasks(input.tasks.map((x, i) => (i === popup.index ? task : x)));
+    else setTasks([...input.tasks, task]);
+
+    $popUpOpen.set(null);
   };
 
   const handleDelete = () => {
-    // Todo
-    // if (task) removeTask(task);
-    $popUpOpen.set(false);
+    if (popup?.type !== "edit") return;
+    setTasks(input.tasks.filter((_, i) => i !== popup.index));
+    $popUpOpen.set(null);
   };
 
   return (
@@ -43,7 +34,7 @@ export const PopUp = () => {
       style={{ overflowY: "auto", maxHeight: "100%" }}
     >
       <div className="justify- mb-16 mt-14 flex items-center gap-5 text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
-        <button onClick={() => $popUpOpen.set(false)}>
+        <button onClick={() => $popUpOpen.set(null)}>
           <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
         </button>
         <div className="flex-grow">Uue taski loomine</div>
@@ -54,7 +45,7 @@ export const PopUp = () => {
             Tööetapp
             <select
               value={task.type}
-              onChange={(e) => setTask({ ...task, type: e.currentTarget.value as TaskType })}
+              onChange={(e) => $selectedTask.setKey("type", e.currentTarget.value as TaskType)}
               className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black"
             >
               {TaskType.options.map((x) => (
@@ -71,7 +62,7 @@ export const PopUp = () => {
             <SingleSelect
               selectOptions={TaskStatus.options.map((x) => ({ value: x, label: t.status[x] }))}
               selectedOption={task.status}
-              onChange={(x) => setTask({ ...task, status: x as TaskStatus })}
+              onChange={(x) => $selectedTask.setKey("status", x as TaskStatus)}
               dark={false}
             />
           </div>
@@ -83,7 +74,7 @@ export const PopUp = () => {
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
             <textarea
               value={task.title}
-              onChange={(e) => setTask({ ...task, title: e.currentTarget.value })}
+              onChange={(e) => $selectedTask.setKey("title", e.currentTarget.value)}
               className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>
@@ -97,7 +88,7 @@ export const PopUp = () => {
                 { value: "them", label: input.companyName },
               ]}
               selectedOption={task.clientTask ? "them" : "us"}
-              onChange={(x) => setTask({ ...task, clientTask: x === "them" })}
+              onChange={(x) => $selectedTask.setKey("clientTask", x === "them")}
               dark={false}
             />
           </div>
@@ -113,11 +104,10 @@ export const PopUp = () => {
                 value={{ startDate: task.deadline || null, endDate: task.deadline || null }}
                 onChange={(x) =>
                   x?.startDate
-                    ? setTask({
-                        ...task,
-                        deadline:
-                          typeof x.startDate === "string" ? new Date(x.startDate) : x.startDate,
-                      })
+                    ? $selectedTask.setKey(
+                        "deadline",
+                        typeof x.startDate === "string" ? new Date(x.startDate) : x.startDate,
+                      )
                     : undefined
                 }
               />
@@ -132,7 +122,7 @@ export const PopUp = () => {
           <div className="mt-4 flex flex-col justify-center text-base max-md:max-w-full ">
             <textarea
               value={task.description}
-              onChange={(e) => setTask({ ...task, description: e.currentTarget.value })}
+              onChange={(e) => $selectedTask.setKey("description", e.currentTarget.value)}
               className="rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>

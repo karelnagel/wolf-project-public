@@ -18,10 +18,7 @@ export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
   } else {
     i = startIndex;
   }
-  const editTask = (_task: CreateProjectTask) => {
-    $popUpOpen.set(true);
-    // Todo
-  };
+
   return (
     <>
       {tasks.map(
@@ -71,7 +68,7 @@ export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
                   </div>
                 </div>
                 <button
-                  onClick={() => editTask(task)}
+                  onClick={() => $popUpOpen.set({ type: "edit", index })}
                   className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
                 >
                   Muuda
