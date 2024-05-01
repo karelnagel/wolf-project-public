@@ -38,7 +38,7 @@ export const ProjectPage = ({
               projectId,
               tasks: $projectInput.get().tasks.map((task) => ({ ...task, projectId })),
             })
-            .then((x) => {
+            .then(() => {
               alert("Tasks saved!");
             });
         },
