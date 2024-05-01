@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CreateProject } from "./CreateProject";
 import { Tasks } from "./Tasks";
 import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
 import { useStore } from "@nanostores/react";
 import { $tab } from "./state";
+import { useIsClientSide } from "../ProjectPage";
 
 export interface Employee {
   value: string;
@@ -13,10 +14,8 @@ export interface Employee {
 
 // Client side check is needed because react-select doesn't work in SSR for some reason
 export const NewProject = ({ employees }: { employees: Employee[] }) => {
-  const [isClientSide, setIsClientSide] = useState(false);
-  useEffect(() => setIsClientSide(true), []);
-  if (!isClientSide) return null;
-
+  const isClient = useIsClientSide();
+  if (!isClient) return null;
   return <Tabs employees={employees} />;
 };
 
@@ -26,7 +25,13 @@ const Tabs = ({ employees }: { employees: Employee[] }) => {
     <>
       {tab === "project" && <CreateProject employees={employees} />}
       {tab === "clients" && <ClientInfo />}
-      {tab === "tasks" && <Tasks />}
+      {tab === "tasks" && (
+        <Tasks
+          canEdit
+          confirmButton={{ label: "Edasi", onClick: () => $tab.set("confirm") }}
+          onBackClick={() => $tab.set("clients")}
+        />
+      )}
       {tab === "confirm" && <Confirm />}
     </>
   );

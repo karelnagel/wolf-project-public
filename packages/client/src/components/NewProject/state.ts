@@ -53,6 +53,7 @@ export const $projectInput = map<CreateProjectInput>({
   tasks: [],
   clients: [],
 });
+
 export const setTasks = (tasks: CreateProjectTask[]) => {
   $projectInput.setKey("tasks", sortTasks(tasks));
 };

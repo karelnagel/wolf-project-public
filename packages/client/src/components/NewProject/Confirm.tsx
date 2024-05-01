@@ -3,12 +3,11 @@ import { $projectInput, $tab } from "./state";
 import { client, useAPI } from "@wolf-project/backend/src/client";
 
 export const Confirm = () => {
-  const { mutate, isLoading, error } = useAPI(client.projects.create.mutate);
+  const { mutate, isLoading } = useAPI(client.projects.create.mutate);
 
-  const handleSubmit = () => {
-    mutate($projectInput.get());
-
-    if (error) console.log(error);
+  const handleSubmit = async () => {
+    const res = await mutate($projectInput.get());
+    window.location.href = `/project/${res.id}`;
   };
   return (
     <div className="flex items-center justify-center px-20 py-12 font-semibold max-md:px-5">

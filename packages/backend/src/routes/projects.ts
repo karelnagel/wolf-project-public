@@ -81,6 +81,7 @@ export const projects = root.router({
             clientTask: t.clientTask,
           })),
         );
+        return { id: pId };
       },
     ),
 });

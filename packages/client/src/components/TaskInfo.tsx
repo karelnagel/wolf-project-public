@@ -5,7 +5,7 @@ import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
 import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
 
-export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
+export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit: boolean }) => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
   let i: number;
@@ -68,10 +68,12 @@ export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
                   </div>
                 </div>
                 <button
-                  onClick={() => $popUpOpen.set({ type: "edit", index })}
+                  onClick={() => {
+                    if (canEdit) $popUpOpen.set({ type: "edit", index });
+                  }}
                   className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
                 >
-                  Muuda
+                  {canEdit ? "Muuda" : "Vaata"}
                 </button>
               </div>
               <Line Completed={task.completed} />
