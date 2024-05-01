@@ -43,6 +43,7 @@ export const sortTasks = (x: CreateProjectTask[]): CreateProjectTask[] => {
     }
   });
 };
+
 export const $projectInput = map<CreateProjectInput>({
   companyName: "",
   description: "",
