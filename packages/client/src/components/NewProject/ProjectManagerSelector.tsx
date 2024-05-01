@@ -1,5 +1,5 @@
 import Select, { components, DropdownIndicatorProps } from "react-select";
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { Employee } from "./NewProject";
 import clsx from "clsx";
@@ -7,7 +7,7 @@ import clsx from "clsx";
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee, false>) => {
   return (
     <components.DropdownIndicator {...props}>
-      <ChevronDown color="#32853f" size={24} fill="#32853f" rotate={270} />
+      <Plus color="#32853f" size={20} fill="#32853f" rotate={270} />
     </components.DropdownIndicator>
   );
 };

@@ -14,7 +14,7 @@ import clsx from "clsx";
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee>) => {
   return (
     <components.DropdownIndicator {...props}>
-      <Plus color="#32853f" size={24} fill="#32853f" rotate={270} />
+      <Plus color="#32853f" size={20} fill="#32853f" rotate={270} />
     </components.DropdownIndicator>
   );
 };
