@@ -18,6 +18,7 @@ const canEdit = true;
 <Layout title={undefined} description={undefined}>
   <ProjectPage
     canEdit={canEdit}
+    projectId={projectId}
     project={{
       ...project,
       clients: project.users.filter((u) => u.priviledgeLevel === "client").map((u) => u.user),

@@ -1,13 +1,15 @@
 import { CreateProjectInput, CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
+import { getRandomId } from "@wolf-project/shared/helpers";
 import { atom, map } from "nanostores";
 
 export type Tab = "project" | "clients" | "tasks" | "confirm";
 export const $tab = atom<Tab>("project");
 
-type Popup = { type: "new" } | { type: "edit"; index: number };
+type Popup = { type: "new" } | { type: "edit"; id: string };
 export const $popUpOpen = atom<Popup | null>(null);
 
-const defaultTask: CreateProjectTask = {
+const defaultTask = (): CreateProjectTask => ({
+  id: getRandomId(),
   title: "",
   status: "pending",
   deadline: new Date(),
@@ -15,12 +17,13 @@ const defaultTask: CreateProjectTask = {
   type: "input",
   description: "",
   clientTask: false,
-};
+});
 
-export const $selectedTask = map<CreateProjectTask>(defaultTask);
+export const $selectedTask = map<CreateProjectTask>(defaultTask());
 $popUpOpen.subscribe((popup) => {
-  if (!popup || popup.type === "new") $selectedTask.set(defaultTask);
-  else if (popup.type === "edit") $selectedTask.set($projectInput.get().tasks[popup.index]!);
+  if (!popup || popup.type === "new") $selectedTask.set(defaultTask());
+  else if (popup.type === "edit")
+    $selectedTask.set($projectInput.get().tasks.find((task) => task.id === popup.id)!);
 });
 
 export const sortTasks = (x: CreateProjectTask[]): CreateProjectTask[] => {

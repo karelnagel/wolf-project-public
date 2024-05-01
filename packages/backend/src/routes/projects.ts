@@ -16,7 +16,7 @@ const CreateProjectInput = z.object({
   description: z.string(),
   companyName: z.string(),
   clients: Client.array().min(1),
-  tasks: Task.omit({ projectId: true, id: true }).array().min(1),
+  tasks: Task.omit({ projectId: true }).array().min(1),
   employees: z.string().array(),
   projectManager: z.string(),
 });

@@ -16,7 +16,8 @@ export const PopUp = () => {
   const popup = useStore($popUpOpen);
 
   const handleSave = () => {
-    if (popup?.type === "edit") setTasks(input.tasks.map((x, i) => (i === popup.index ? task : x)));
+    if (popup?.type === "edit")
+      setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
     else setTasks([...input.tasks, task]);
 
     $popUpOpen.set(null);
@@ -24,7 +25,7 @@ export const PopUp = () => {
 
   const handleDelete = () => {
     if (popup?.type !== "edit") return;
-    setTasks(input.tasks.filter((_, i) => i !== popup.index));
+    setTasks(input.tasks.filter((task) => task.id !== popup.id));
     $popUpOpen.set(null);
   };
 

@@ -69,7 +69,7 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
                 </div>
                 <button
                   onClick={() => {
-                    if (canEdit) $popUpOpen.set({ type: "edit", index });
+                    if (canEdit) $popUpOpen.set({ type: "edit", id: task.id });
                   }}
                   className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
                 >

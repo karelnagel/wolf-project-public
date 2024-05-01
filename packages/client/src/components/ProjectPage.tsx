@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Tasks } from "./NewProject/Tasks";
 import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 import { $projectInput } from "./NewProject/state";
+import { client } from "@wolf-project/backend/src/client";
 
 export const useIsClientSide = () => {
   const [isClient, setIsClient] = useState(false);
@@ -14,7 +15,9 @@ export const useIsClientSide = () => {
 export const ProjectPage = ({
   project,
   canEdit,
+  projectId,
 }: {
+  projectId: string;
   project: CreateProjectInput;
   canEdit: boolean;
 }) => {
@@ -30,8 +33,14 @@ export const ProjectPage = ({
       confirmButton={{
         label: "Save",
         onClick: () => {
-          // Todo save tasks in the database
-          console.log("This should save these tasks:", $projectInput.get().tasks);
+          client.tasks.save
+            .mutate({
+              projectId,
+              tasks: $projectInput.get().tasks.map((task) => ({ ...task, projectId })),
+            })
+            .then((x) => {
+              alert("Tasks saved!");
+            });
         },
       }}
     />
