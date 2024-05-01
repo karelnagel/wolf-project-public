@@ -6,7 +6,9 @@ export type Tab = "project" | "clients" | "tasks" | "confirm";
 export const $tab = atom<Tab>("project");
 
 type Popup = { type: "new" } | { type: "edit"; id: string };
-export const $popUpOpen = atom<Popup | null>(null);
+export const $taskEditPopUp = atom<Popup | null>(null);
+
+export const $taskInfoPopUp = atom<string | null>(null);
 
 const defaultTask = (): CreateProjectTask => ({
   id: getRandomId(),
@@ -20,7 +22,7 @@ const defaultTask = (): CreateProjectTask => ({
 });
 
 export const $selectedTask = map<CreateProjectTask>(defaultTask());
-$popUpOpen.subscribe((popup) => {
+$taskEditPopUp.subscribe((popup) => {
   if (!popup || popup.type === "new") $selectedTask.set(defaultTask());
   else if (popup.type === "edit")
     $selectedTask.set($projectInput.get().tasks.find((task) => task.id === popup.id)!);

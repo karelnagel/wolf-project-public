@@ -1,6 +1,6 @@
 import React from "react";
 import { Brush, CircleCheck, Code, X, MessageSquare, Pencil } from "lucide-react";
-import { $popUpOpen, $projectInput } from "./NewProject/state";
+import { $taskEditPopUp, $projectInput, $taskInfoPopUp } from "./NewProject/state";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
 import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
@@ -29,7 +29,8 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
               {index === i && <Line Completed={task.completed} />}
               <div
                 key={index}
-                className={`grid w-full max-w-full grid-cols-7 items-center justify-between gap-5 self-start rounded-2xl px-5 py-2.5 max-md:flex-wrap ${
+                onClick={() => $taskInfoPopUp.set(task.id)}
+                className={`grid w-full max-w-full cursor-pointer grid-cols-7 items-center justify-between gap-5 self-start rounded-2xl px-5 py-2.5 max-md:flex-wrap ${
                   task.status === "inprogress" ? " border-primary2 my-5 border-[1px] py-5" : ""
                 }`}
               >
@@ -68,8 +69,9 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
                   </div>
                 </div>
                 <button
-                  onClick={() => {
-                    if (canEdit) $popUpOpen.set({ type: "edit", id: task.id });
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (canEdit) $taskEditPopUp.set({ type: "edit", id: task.id });
                   }}
                   className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
                 >

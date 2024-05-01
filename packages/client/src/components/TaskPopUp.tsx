@@ -1,15 +1,20 @@
 import * as React from "react";
 import { ArrowLeft, TrendingUp, CalendarCheck, User, Plus } from "lucide-react";
 import { Comments } from "./Comment";
+import { $taskInfoPopUp } from "./NewProject/state";
 
-function TaskPopUp() {
+export const TaskInfoPopUp = () => {
   return (
-    <div className="flex items-center justify-center rounded-2xl px-16 py-20 max-md:px-5">
-      <div className="mt-20 flex w-2/3 flex-col max-md:mt-10 max-md:max-w-full">
+    <div className="flex w-full items-end">
+      <div className="h-full w-full" onClick={() => $taskInfoPopUp.set(null)}></div>
+      <div
+        className="bg-primary mt-20 flex w-2/3 flex-col rounded-2xl px-16 pt-20"
+        style={{ overflowY: "auto", maxHeight: "100vh" }}
+      >
         <div className="flex max-w-full items-center justify-between">
-          <div className="flex items-center">
+          <button className="flex items-center" onClick={() => $taskInfoPopUp.set(null)}>
             <ArrowLeft />
-          </div>
+          </button>
           <div className="text-center text-2xl font-semibold">Avakuva disaini loomine</div>
           <button className="bg-primary2 rounded-2xl px-5 py-2.5 text-base font-bold">Muuda</button>
         </div>
@@ -47,10 +52,11 @@ function TaskPopUp() {
         <Comments taskId="task-reference" />
         <div className="border-primary2 mt-16 flex justify-between gap-5 rounded-2xl border border-solid p-6 text-xl font-semibold text-white max-md:mt-10 max-md:max-w-full max-md:flex-wrap max-md:px-5">
           <div className="my-auto">Tulemus</div>
-          <Plus className="text-primary2  my-auto h-8 w-8" />
+          <button>
+            <Plus className="text-primary2  my-auto h-8 w-8" />
+          </button>
         </div>
       </div>
     </div>
   );
-}
-export default TaskPopUp;
+};
