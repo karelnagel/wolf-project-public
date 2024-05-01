@@ -17,7 +17,7 @@
     "deploy": "sst deploy --stage=main",
     "migrate": "cd packages/db && npm run migrate",
     "add-user": "cd packages/db && npm run add-user",
-    "studio":"cd packages/db && npm run studio"
+    "studio": "cd packages/db && npm run studio"
   },
   "dependencies": {
     "@aws-sdk/middleware-retry": "^3.374.0",

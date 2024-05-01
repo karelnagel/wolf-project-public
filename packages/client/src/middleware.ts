@@ -17,7 +17,7 @@ export const onRequest = defineMiddleware(async (Astro, next) => {
     Astro.locals.user = user || null;
   }
   Astro.locals.t = useTranslations(Astro.locals.user?.language);
-
+  Astro.locals.lang = Astro.locals.user?.language || 'en';
   if (PUBLIC_PAGES.some((s) => Astro.url.pathname.startsWith(s))) return next();
 
   // If user isn't logged in, redirect to login

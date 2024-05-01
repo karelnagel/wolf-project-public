@@ -1,64 +1,31 @@
-import React, { useState } from "react";
-import Datepicker, { DateType } from "react-tailwindcss-datepicker";
+import React from "react";
+import Datepicker from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
-import { Locale, useTranslations } from "@wolf-project/i18n";
-import { Task, TaskStatus, TaskType } from "@wolf-project/db/schema";
+import { useTranslations } from "@wolf-project/i18n";
+import { TaskStatus, TaskType } from "@wolf-project/db/schema";
+import { $popUpOpen, $projectInput, $selectedTask, setTasks } from "./NewProject/state";
+import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
+import { useStore } from "@nanostores/react";
 
-interface PopUpProps {
-  task: Task | undefined;
-  addTask: (x: Task) => void;
-  modifyTask: (x: Task, y: Task) => void;
-  removeTask: (x: Task) => void;
-  responsible: string[];
-  closePopUp: () => void;
-  locale: Locale;
-}
-
-export const PopUp: React.FC<PopUpProps> = ({
-  task,
-  addTask,
-  modifyTask,
-  removeTask,
-  responsible,
-  closePopUp,
-  locale,
-}) => {
-  const t = useTranslations(locale);
-
-  const [status, setStatus] = useState<TaskStatus>(task?.status || "pending");
-  const [taskType, setTaskType] = useState<TaskType>(task?.type || "input");
-  const [title, setTitle] = useState(task?.title || "");
-  const [taskResponible, setTaskResponsible] = useState(task?.responsible || "");
-  const [deadline, setDeadline] = useState<DateType>(task?.deadline || null);
-  const [taskDescription, setTaskDescription] = useState(task?.description || "");
-
-  const convertedResponsible = responsible.map((value) => ({ value, label: value }));
+export const PopUp = () => {
+  const t = useTranslations("et");
+  const input = useStore($projectInput);
+  const task = useStore($selectedTask);
+  const popup = useStore($popUpOpen);
 
   const handleSave = () => {
-    if (!deadline) return;
-    // Todo fix the types
-    const popUpTask: Task = {
-      responsible: taskResponible,
-      title: title,
-      status: status,
-      deadline: typeof deadline === "string" ? new Date(deadline) : deadline,
-      completed: status === "completed" ? new Date() : null,
-      type: taskType,
-      description: taskDescription,
-    } as Task;
-    if (task) {
-      modifyTask(task, popUpTask);
-    } else {
-      addTask(popUpTask);
-    }
-    closePopUp();
+    if (popup?.type === "edit") setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
+    else setTasks([...input.tasks, task]);
+
+    $popUpOpen.set(null);
   };
 
   const handleDelete = () => {
-    if (task) removeTask(task);
-    closePopUp();
+    if (popup?.type !== "edit") return;
+    setTasks(input.tasks.filter((task) => task.id !== popup.id));
+    $popUpOpen.set(null);
   };
 
   return (
@@ -67,7 +34,7 @@ export const PopUp: React.FC<PopUpProps> = ({
       style={{ overflowY: "auto", maxHeight: "100%" }}
     >
       <div className="justify- mb-16 mt-14 flex items-center gap-5 text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
-        <button onClick={closePopUp}>
+        <button onClick={() => $popUpOpen.set(null)}>
           <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
         </button>
         <div className="flex-grow">Uue taski loomine</div>
@@ -76,24 +43,19 @@ export const PopUp: React.FC<PopUpProps> = ({
         <div className="flex items-center justify-between">
           <div className="text-start text-base font-bold">
             Tööetapp
-            <select
-              value={taskType}
-              onChange={(e) => setTaskType(e.currentTarget.value as TaskType)}
-              className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black"
-            >
-              {TaskType.options.map((x) => (
-                <option value={x}>{t.type[x]}</option>
-              ))}
-            </select>
+            <SingleSelect
+              selectOptions={TaskType.options.map((x) => ({ value: x, label: t.type[x] }))}
+              selectedOption={task.type}
+              onChange={(x) => $selectedTask.setKey("type", x as TaskType)}
+              dark={false}
+            />
           </div>
-        </div>
-        <div>
           <div className="text-start text-base font-bold">
             {"Staatus"}
             <SingleSelect
               selectOptions={TaskStatus.options.map((x) => ({ value: x, label: t.status[x] }))}
-              selectedOption={status}
-              parentSetMethod={(x) => setStatus(x as TaskStatus)}
+              selectedOption={task.status}
+              onChange={(x) => $selectedTask.setKey("status", x as TaskStatus)}
               dark={false}
             />
           </div>
@@ -104,8 +66,8 @@ export const PopUp: React.FC<PopUpProps> = ({
           <div className="text-start text-base font-bold">{"Taski nimi"}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
             <textarea
-              value={title}
-              onChange={(e) => setTitle(e.currentTarget.value)}
+              value={task.title}
+              onChange={(e) => $selectedTask.setKey("title", e.currentTarget.value)}
               className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>
@@ -114,9 +76,12 @@ export const PopUp: React.FC<PopUpProps> = ({
           <div className="w-full text-start text-base font-bold">
             {"Vastutaja"}
             <SingleSelect
-              selectOptions={convertedResponsible}
-              selectedOption={taskResponible}
-              parentSetMethod={(x) => setTaskResponsible(x)}
+              selectOptions={[
+                { value: "us", label: OUR_COMPANY_NAME },
+                { value: "them", label: input.companyName },
+              ]}
+              selectedOption={task.clientTask ? "them" : "us"}
+              onChange={(x) => $selectedTask.setKey("clientTask", x === "them")}
               dark={false}
             />
           </div>
@@ -129,8 +94,15 @@ export const PopUp: React.FC<PopUpProps> = ({
                 placeholder={"Vali tähtaeg!"}
                 useRange={false}
                 asSingle={true}
-                value={{ startDate: deadline || null, endDate: deadline || null }}
-                onChange={(x) => (x ? setDeadline(x.startDate) : undefined)}
+                value={{ startDate: task.deadline || null, endDate: task.deadline || null }}
+                onChange={(x) =>
+                  x?.startDate
+                    ? $selectedTask.setKey(
+                        "deadline",
+                        typeof x.startDate === "string" ? new Date(x.startDate) : x.startDate,
+                      )
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -142,8 +114,8 @@ export const PopUp: React.FC<PopUpProps> = ({
           </div>
           <div className="mt-4 flex flex-col justify-center text-base max-md:max-w-full ">
             <textarea
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.currentTarget.value)}
+              value={task.description}
+              onChange={(e) => $selectedTask.setKey("description", e.currentTarget.value)}
               className="rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>

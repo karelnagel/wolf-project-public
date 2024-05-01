@@ -6,5 +6,6 @@ declare namespace App {
   interface Locals {
     user: import("@wolf-project/db/schema").User | null;
     t: import("@wolf-project/i18n").I18nLocale;
+    lang: string | null;
   }
 }

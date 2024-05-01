@@ -7,7 +7,6 @@ export const NewUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<UserRole>();
-  const [job, setJob] = useState("");
   const [language, setLanguage] = useState<Locale>();
   const allowedEmail = "veebihunt.ee";
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -23,7 +22,7 @@ export const NewUser = () => {
     }
     if (!role || !language) return;
 
-    await mutate({ name, email, role, job, language });
+    await mutate({ name, email, role, language });
     window.location.href = "/admin";
   };
 
@@ -41,12 +40,6 @@ export const NewUser = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
-          required
-        />
-        <input
-          placeholder="Töötaja tööroll"
-          value={job}
-          onChange={(e) => setJob(e.target.value)}
           required
         />
         <select value={language} onChange={(e) => setLanguage(e.target.value as Locale)} required>

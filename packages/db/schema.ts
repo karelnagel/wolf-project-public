@@ -12,7 +12,6 @@ export const User = z.object({
   email: z.string(),
   role: UserRole,
   language: Locale,
-  job: z.string().nullable(),
 });
 export type User = z.infer<typeof User>;
 
@@ -22,7 +21,6 @@ export const usersTable = sqliteTable("users", {
   email: text("email").notNull().unique(),
   role: text("role").$type<UserRole>().notNull(),
   language: text("language").$type<Locale>().notNull(),
-  job: text("job"),
 });
 export const userRelations = relations(usersTable, ({ many }) => ({
   projects: many(projectUsersTable),
@@ -101,7 +99,6 @@ export const Task = z.object({
   type: TaskType,
   status: TaskStatus,
   clientTask: z.boolean(),
-  responsible: z.string(),
 });
 export type Task = z.infer<typeof Task>;
 
@@ -115,7 +112,6 @@ export const tasksTable = sqliteTable("tasks", {
   type: text("type").$type<TaskType>().notNull(),
   status: text("status").$type<TaskStatus>().notNull(),
   clientTask: integer("client_task", { mode: "boolean" }).notNull(),
-  responsible: text("responsible").notNull(),
 });
 export const tasksRelations = relations(tasksTable, ({ one, many }) => ({
   project: one(projectsTable, {

@@ -13,7 +13,6 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
-  const [job, setJob] = useState(user.job);
   const [language, setLanguage] = useState(user.language);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [modifying, setModifying] = useState(false);
@@ -32,7 +31,7 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
       setEmailError("Lubatud on ainult firma email!");
       return;
     }
-    await mutate({ id: userId, name, email, role, job, language });
+    await mutate({ id: userId, name, email, role, language });
     window.location.href = "/admin";
   };
 
@@ -53,12 +52,6 @@ export const ModifyUser: React.FC<ModifyUserProps> = ({ userId, user }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            required
-            disabled={!modifying}
-          />
-          <input
-            value={job || undefined}
-            onChange={(e) => setJob(e.target.value)}
             required
             disabled={!modifying}
           />

@@ -1,17 +1,23 @@
 ---
 import { AstroCookieSetOptions } from "astro";
-import Layout from "../components/Layout.astro";
-import { server } from "@wolf-project/backend/src/server";
+import jwt from "jsonwebtoken";
+import { env } from "@wolf-project/shared/env";
+
 const urlToken = Astro.url.searchParams.get("token");
 
 if (urlToken === null) return Astro.redirect("401");
 
-const result = await server({ user: null }).authenticate.session({ token: urlToken });
-
-if (typeof result === "string") {
-  Astro.cookies.set("x-auth-token", result, { path: "/" } as AstroCookieSetOptions);
+try {
+  const decodedToken = jwt.verify(urlToken, env.JWT_SECRET) as { userId: string };
+  console.log(decodedToken.userId);
+  const token = jwt.sign({ userId: decodedToken.userId }, env.JWT_SECRET, {
+    expiresIn: "7d",
+    issuer: "W-Wolf Agency OÜ",
+  });
+  Astro.cookies.set("x-auth-token", token, { path: "/" } as AstroCookieSetOptions);
   return Astro.redirect("/");
-} else return Astro.redirect("401");
+} catch (e) {
+  return Astro.redirect("401");
+}
 ---
 
-<Layout title={undefined} description={undefined} />

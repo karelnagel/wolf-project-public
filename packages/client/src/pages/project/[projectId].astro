@@ -1,26 +1,33 @@
 ---
 import Layout from "../../components/Layout.astro";
 import { db } from "@wolf-project/db";
+import { ProjectPage } from "../../components/ProjectPage";
 
 const { projectId } = Astro.params;
 if (!projectId) throw new Error("id is required");
 
-const t = Astro.locals.t;
-
 const project = await db.query.projectsTable.findFirst({
   where: (x, { eq }) => eq(x.id, projectId),
-  with: { tasks: true },
+  with: { tasks: true, users: { with: { user: true } } },
 });
 if (!project) throw new Error("project not found");
-
-
-
-/* ToDo */
-
+// Todo check if can edit
+const canEdit = true;
 ---
 
 <Layout title={undefined} description={undefined}>
-  <a class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" href="/"
-    >{"Tagasi avalehel"}</a
-  >
+  <ProjectPage
+    t={Astro.locals.t.form}
+    canEdit={canEdit}
+    projectId={projectId}
+    project={{
+      ...project,
+      clients: project.users.filter((u) => u.priviledgeLevel === "client").map((u) => u.user),
+      employees: project.users
+        .filter((u) => u.priviledgeLevel !== "employee")
+        .map((u) => u.user.id),
+      projectManager: "",
+    }}
+    client:load
+  />
 </Layout>

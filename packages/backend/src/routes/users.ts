@@ -8,7 +8,7 @@ import { env } from "@wolf-project/shared/env";
 import { sendEmail } from "../lib/email";
 import { like } from "drizzle-orm";
 
-export const Client = User.omit({ id: true, job: true, role: true });
+export const Client = User.omit({ id: true, role: true });
 export const Employee = User.omit({ id: true });
 
 export type Client = z.infer<typeof Client>;
@@ -77,23 +77,4 @@ export const authenticate = root.router({
 
     return {};
   }),
-  session: publicProcedure
-    .input(z.object({ token: z.string().nullish() }))
-    .query(async ({ input }) => {
-      if (input.token === null) {
-        return "Token is null";
-      }
-      try {
-        const decodedToken = jwt.verify(input.token!, env.JWT_SECRET) as { userId: string };
-        console.log(decodedToken.userId);
-        const token = jwt.sign({ userId: decodedToken.userId }, env.JWT_SECRET, {
-          expiresIn: "7d",
-          issuer: "W-Wolf Agency OÜ",
-        });
-        console.log("Token:", token);
-        return token;
-      } catch (e) {
-        return { Error: e };
-      }
-    }),
 });

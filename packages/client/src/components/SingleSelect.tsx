@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Select from "react-select";
 import clsx from "clsx";
 
@@ -10,7 +10,7 @@ interface SelectOptions {
 interface SingleSelectProps {
   selectOptions: SelectOptions[];
   selectedOption: string | undefined;
-  parentSetMethod: (x: string) => void;
+  onChange: (x: string) => void;
   dark: boolean;
 }
 
@@ -33,27 +33,9 @@ const optionsStyle = {
 export const SingleSelect: React.FC<SingleSelectProps> = ({
   selectOptions,
   selectedOption,
-  parentSetMethod,
+  onChange,
   dark,
 }) => {
-  const matchedOption = selectOptions.find((x) => x.value === selectedOption);
-  const [value, setValue] = useState<SelectOptions | null>();
-
-  /*If deleted, will break popup initial rendering */
-  useEffect(() => {
-    if (matchedOption !== undefined) {
-      setValue(matchedOption);
-      parentSetMethod(matchedOption.value);
-    }
-  }, [matchedOption, parentSetMethod]);
-
-  /*Black magic */
-  const onChange = (x: SelectOptions | null) => {
-    if (x === null) return;
-    setValue(x);
-    parentSetMethod(x.value);
-  };
-
   return (
     <Select
       unstyled
@@ -80,9 +62,11 @@ export const SingleSelect: React.FC<SingleSelectProps> = ({
       }}
       options={selectOptions}
       isSearchable={false}
-      value={value}
+      value={selectOptions.find((x) => x.value === selectedOption)}
       placeholder={false}
-      onChange={onChange}
+      onChange={(x) => {
+        if (x) onChange(x.value);
+      }}
     />
   );
 };

@@ -11,30 +11,24 @@ import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
 
-const CreateProjectZod = z.object({
+const CreateProjectInput = z.object({
   name: z.string(),
   description: z.string(),
   companyName: z.string(),
-  clients: Client.array(),
-  tasks: Task.omit({ projectId: true, id: true }).array(),
-  selectedEmployees: z.string().array(),
+  clients: Client.array().min(1),
+  tasks: Task.omit({ projectId: true }).array().min(1),
+  employees: z.string().array(),
   projectManager: z.string(),
 });
+export type CreateProjectInput = z.infer<typeof CreateProjectInput>;
+export type CreateProjectTask = CreateProjectInput["tasks"][number];
 
 export const projects = root.router({
   create: privateProcedure
-    .input(CreateProjectZod)
+    .input(CreateProjectInput)
     .mutation(
       async ({
-        input: {
-          name,
-          description,
-          clients,
-          tasks,
-          projectManager,
-          selectedEmployees,
-          companyName,
-        },
+        input: { name, description, clients, tasks, projectManager, employees, companyName },
         ctx: { user },
       }) => {
         const pInsert = await db
@@ -67,7 +61,7 @@ export const projects = root.router({
         await db
           .insert(projectUsersTable)
           .values(
-            selectedEmployees.map((t) => ({
+            employees.map((t) => ({
               projectId: pId,
               userId: t,
               priviledgeLevel: "employee" as const,
@@ -79,7 +73,6 @@ export const projects = root.router({
             id: getRandomId(),
             title: t.title,
             description: t.description!,
-            responsible: t.responsible,
             status: t.status,
             completed: t.completed,
             deadline: t.deadline!,
@@ -88,6 +81,7 @@ export const projects = root.router({
             clientTask: t.clientTask,
           })),
         );
+        return { id: pId };
       },
     ),
 });

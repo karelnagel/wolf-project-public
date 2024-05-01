@@ -2,31 +2,26 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
-import { Task } from "@wolf-project/db/schema";
+import { $popUpOpen, $projectInput } from "./state";
+import { useStore } from "@nanostores/react";
+import { I18nLocale } from "@wolf-project/i18n";
 
-export interface TasksProps {
-  projectTasks: Task[];
-  returnClientTab: () => void;
-  leaveTasksTab: () => void;
-  addTask: (x: Task) => void;
-  removeTask: (x: Task) => void;
-  modifyTask: (x: Task, y: Task) => void;
-  responsible: string[];
-}
-
-export const Tasks: React.FC<TasksProps> = ({
-  projectTasks,
-  returnClientTab,
-  leaveTasksTab,
-  addTask,
-  modifyTask,
-  removeTask,
-  responsible,
+export const Tasks = ({
+  onBackClick,
+  canEdit,
+  confirmButton,
+}: {
+  onBackClick: () => void;
+  canEdit: boolean;
+  confirmButton: { label: string; onClick: () => void };
+  t: I18nLocale["form"];
 }) => {
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [task, setTask] = useState<Task>();
-  const firstInprogress = projectTasks.findIndex((x) => x.status === "inprogress");
-  const lastDone = projectTasks.findLastIndex((x) => x.status === "completed");
+  const input = useStore($projectInput);
+  const tasks = input.tasks;
+  const popupOpen = useStore($popUpOpen);
+
+  const firstInprogress = tasks.findIndex((x) => x.status === "inprogress");
+  const lastDone = tasks.findLastIndex((x) => x.status === "completed");
   const [startIndex, setStartIndex] = useState<number>();
 
   useEffect(() => {
@@ -41,17 +36,8 @@ export const Tasks: React.FC<TasksProps> = ({
     setStartIndex(0);
   }, [firstInprogress, lastDone]);
 
-  const handlePopUpToggle = () => {
-    setShowPopUp(!showPopUp);
-    setTask(undefined);
-  };
-
-  const handleChangePopUpToggle = (x: Task) => {
-    setTask(x);
-    setShowPopUp(!showPopUp);
-  };
   const increaseStartIndex = () => {
-    if (startIndex! < projectTasks.length - 1) setStartIndex(startIndex! + 1);
+    if (startIndex! < tasks.length - 1) setStartIndex(startIndex! + 1);
   };
 
   const decreaseStartIndex = () => {
@@ -62,13 +48,13 @@ export const Tasks: React.FC<TasksProps> = ({
     <div className="flex justify-center px-16 py-20 max-md:px-5">
       <div className="flex w-full flex-col max-md:max-w-full">
         <div className="flex w-full items-start justify-center gap-5 text-center font-semibold max-md:max-w-full max-md:flex-wrap">
-          <button className="text-primary2" onClick={returnClientTab}>
+          <button className="text-primary2" onClick={onBackClick}>
             <ArrowLeft className="aspect-square h-11 w-11 shrink-0" />
           </button>
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
             <div className="flex grow flex-col self-center">
-              <div>Veebiarenduse projekt</div>
-              {projectTasks.length > 3 && (
+              <div>{input.name}</div>
+              {tasks.length > 3 && (
                 <button
                   onClick={decreaseStartIndex}
                   className="text-primary2 mt-11 aspect-[1.03] self-center max-md:mt-10"
@@ -76,12 +62,8 @@ export const Tasks: React.FC<TasksProps> = ({
                   <ChevronUpCircle className="h-9 w-9 " />
                 </button>
               )}
-              <TaskInfo
-                projectTasks={projectTasks}
-                startIndex={startIndex!}
-                handlePopUpOpen={handleChangePopUpToggle}
-              />
-              {projectTasks.length > 3 && (
+              <TaskInfo startIndex={startIndex!} canEdit={canEdit} />
+              {tasks.length > 3 && (
                 <button
                   onClick={increaseStartIndex}
                   className="text-primary2 m-11 aspect-[1.03] self-center max-md:mt-10"
@@ -89,39 +71,31 @@ export const Tasks: React.FC<TasksProps> = ({
                   <ChevronDownCircle className="h-9 w-9" />
                 </button>
               )}
-              <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
-                <button
-                  className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
-                  onClick={!showPopUp ? handlePopUpToggle : undefined}
-                >
-                  Lisa task
-                </button>
-                <button
-                  className="bg-primary2 justify-center whitespace-nowrap rounded-2xl px-5 py-2.5"
-                  onClick={leaveTasksTab}
-                >
-                  Edasi
-                </button>
-              </div>
+              {canEdit && (
+                <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
+                  <button
+                    className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
+                    onClick={() => $popUpOpen.set({ type: "new" })}
+                  >
+                    Lisa task
+                  </button>
+                  <button
+                    className="bg-primary2 justify-center whitespace-nowrap rounded-2xl px-5 py-2.5"
+                    onClick={confirmButton.onClick}
+                  >
+                    {confirmButton.label}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
         <div
           className={`fixed right-0 top-0 w-2/5 transform shadow-lg transition-transform ${
-            showPopUp ? "translate-x-0" : "translate-x-full"
+            popupOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {showPopUp && (
-            <PopUp
-              addTask={addTask}
-              removeTask={removeTask}
-              modifyTask={modifyTask}
-              responsible={responsible}
-              task={task}
-              closePopUp={handlePopUpToggle}
-              locale={"et"}
-            />
-          )}
+          {popupOpen && <PopUp />}
         </div>
       </div>
     </div>
