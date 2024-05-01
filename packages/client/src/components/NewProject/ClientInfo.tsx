@@ -51,7 +51,6 @@ export const ClientInfo = () => {
               key={i}
               name={client.name}
               email={client.email}
-              language={client.language}
               removeClient={() =>
                 $projectInput.setKey(
                   "clients",
@@ -116,15 +115,11 @@ export const ClientInfo = () => {
   );
 };
 
-const Info: React.FC<Client & { removeClient: ({ name, email, language }: Client) => void }> = ({
+const Info: React.FC<{ name: string; email: string; removeClient: () => void }> = ({
   name,
   email,
-  language,
   removeClient,
 }) => {
-  const handleClick = () => {
-    removeClient({ name, email, language });
-  };
   return (
     <div className="border-primary mt-4 flex items-center gap-5 rounded-2xl border border-solid p-2.5 text-center">
       <CircleUserRound className="aspect-square h-10 w-10 shrink self-center align-middle" />
@@ -132,7 +127,7 @@ const Info: React.FC<Client & { removeClient: ({ name, email, language }: Client
         <div className="text-base font-normal">{name}</div>
         <div className="mt-1.5 text-base font-normal">{email}</div>
       </div>
-      <button className="ml-auto" onClick={handleClick}>
+      <button className="ml-auto" onClick={removeClient}>
         <Trash />
       </button>
     </div>

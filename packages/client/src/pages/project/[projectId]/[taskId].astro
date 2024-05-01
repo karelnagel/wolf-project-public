@@ -37,11 +37,10 @@ if (!task) throw new Error("task not found");
   </div>
   <div>
     {
-      task.comments.map(({ body, commenter: { name, job }, createdAt }) => (
+      task.comments.map(({ body, commenter: { name }, createdAt }) => (
         <div>
           <p>
             {name}
-            {job !== null ? ` - ${job}` : null}
             {`${createdAt!.getHours()}:${createdAt.getMinutes()} ${createdAt!.getDate()}.${createdAt!.getMonth() + 1}.${createdAt!.getFullYear()}`}
           </p>
           <p>{body} </p>

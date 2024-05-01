@@ -8,7 +8,7 @@ import { env } from "@wolf-project/shared/env";
 import { sendEmail } from "../lib/email";
 import { like } from "drizzle-orm";
 
-export const Client = User.omit({ id: true, job: true, role: true });
+export const Client = User.omit({ id: true, role: true });
 export const Employee = User.omit({ id: true });
 
 export type Client = z.infer<typeof Client>;
