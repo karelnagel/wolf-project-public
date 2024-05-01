@@ -16,8 +16,7 @@ export const PopUp = () => {
   const popup = useStore($popUpOpen);
 
   const handleSave = () => {
-    if (popup?.type === "edit")
-      setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
+    if (popup?.type === "edit") setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
     else setTasks([...input.tasks, task]);
 
     $popUpOpen.set(null);
@@ -44,20 +43,13 @@ export const PopUp = () => {
         <div className="flex items-center justify-between">
           <div className="text-start text-base font-bold">
             Tööetapp
-            <select
-              value={task.type}
-              onChange={(e) => $selectedTask.setKey("type", e.currentTarget.value as TaskType)}
-              className="mt-4 w-full rounded-2xl bg-white px-2 py-1.5 font-semibold text-black"
-            >
-              {TaskType.options.map((x) => (
-                <option key={x} value={x}>
-                  {t.type[x]}
-                </option>
-              ))}
-            </select>
+            <SingleSelect
+              selectOptions={TaskType.options.map((x) => ({ value: x, label: t.type[x] }))}
+              selectedOption={task.type}
+              onChange={(x) => $selectedTask.setKey("type", x as TaskType)}
+              dark={false}
+            />
           </div>
-        </div>
-        <div>
           <div className="text-start text-base font-bold">
             {"Staatus"}
             <SingleSelect

@@ -11,8 +11,14 @@ if (user.role !== "admin" && user.role !== "limited") return Astro.redirect("/40
 const employees = await db.query.usersTable.findMany({
   where: or(eq(usersTable.role, "admin"), eq(usersTable.role, "limited")),
 });
+
+const t = Astro.locals.t;
 ---
 
 <Layout title={undefined} description={undefined}>
-  <NewProject employees={employees.map((e) => ({ value: e.id, label: e.name }))} client:load />
+  <NewProject
+    t={t["form"]}
+    employees={employees.map((e) => ({ value: e.id, label: e.name }))}
+    client:load
+  />
 </Layout>

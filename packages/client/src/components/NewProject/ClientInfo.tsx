@@ -29,7 +29,7 @@ export const ClientInfo = () => {
         <textarea
           value={input.companyName}
           onChange={(e) => $projectInput.setKey("companyName", e.target.value)}
-          placeholder="Ettevtte nimi"
+          placeholder={t.placeholder.companyName}
           className="bg-primary mt-8 h-12 w-2/3 resize-none justify-center rounded-2xl px-2.5 py-3 text-base text-opacity-50"
         ></textarea>
         <div className="mt-7 flex w-2/3 flex-col justify-center">
@@ -62,13 +62,13 @@ export const ClientInfo = () => {
           {showForm && (
             <form onSubmit={handleAddClient} className="text-center">
               <textarea
-                placeholder="Nimi"
+                placeholder={t.placeholder.name}
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
                 value={client.name}
                 onChange={(e) => setClient({ ...client, name: e.target.value })}
               />
               <textarea
-                placeholder="E-mail"
+                placeholder={t.placeholder.email}
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center  whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
                 value={client.email}
                 onChange={(e) => setClient({ ...client, email: e.target.value })}

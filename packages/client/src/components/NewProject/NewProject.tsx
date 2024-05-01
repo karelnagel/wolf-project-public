@@ -6,6 +6,7 @@ import { Confirm } from "./Confirm";
 import { useStore } from "@nanostores/react";
 import { $tab } from "./state";
 import { useIsClientSide } from "../ProjectPage";
+import { I18nLocale } from "@wolf-project/i18n";
 
 export interface Employee {
   value: string;
@@ -13,13 +14,13 @@ export interface Employee {
 }
 
 // Client side check is needed because react-select doesn't work in SSR for some reason
-export const NewProject = ({ employees }: { employees: Employee[] }) => {
+export const NewProject = ({ employees, t }: { employees: Employee[]; t: I18nLocale["form"] }) => {
   const isClient = useIsClientSide();
   if (!isClient) return null;
-  return <Tabs employees={employees} />;
+  return <Tabs employees={employees} t={t} />;
 };
 
-const Tabs = ({ employees }: { employees: Employee[] }) => {
+const Tabs = ({ employees, t }: { employees: Employee[]; t: I18nLocale["form"] }) => {
   const tab = useStore($tab);
   return (
     <>
@@ -28,8 +29,9 @@ const Tabs = ({ employees }: { employees: Employee[] }) => {
       {tab === "tasks" && (
         <Tasks
           canEdit
-          confirmButton={{ label: "Edasi", onClick: () => $tab.set("confirm") }}
+          confirmButton={{ label: t.forward, onClick: () => $tab.set("confirm") }}
           onBackClick={() => $tab.set("clients")}
+          t={t}
         />
       )}
       {tab === "confirm" && <Confirm />}

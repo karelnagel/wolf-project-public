@@ -4,15 +4,18 @@ import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
 import { $popUpOpen, $projectInput } from "./state";
 import { useStore } from "@nanostores/react";
+import { I18nLocale } from "@wolf-project/i18n";
 
 export const Tasks = ({
   onBackClick,
   canEdit,
   confirmButton,
+  t,
 }: {
   onBackClick: () => void;
   canEdit: boolean;
   confirmButton: { label: string; onClick: () => void };
+  t: I18nLocale["form"];
 }) => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
