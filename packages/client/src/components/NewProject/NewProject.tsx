@@ -3,27 +3,13 @@ import { CreateProject } from "./CreateProject";
 import { Tasks } from "./Tasks";
 import ClientInfo from "./ClientInfo";
 import { Confirm } from "./Confirm";
-import { atom, map } from "nanostores";
 import { useStore } from "@nanostores/react";
-import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
+import { $tab } from "./state";
 
 export interface Employee {
   value: string;
   label: string;
 }
-
-type Tab = "project" | "clients" | "tasks" | "confirm";
-export const $tab = atom<Tab>("project");
-
-export const $projectInput = map<CreateProjectInput>({
-  companyName: "",
-  description: "",
-  name: "",
-  projectManager: "",
-  employees: [],
-  tasks: [],
-  clients: [],
-});
 
 // Client side check is needed because react-select doesn't work in SSR for some reason
 export const NewProject = ({ employees }: { employees: Employee[] }) => {

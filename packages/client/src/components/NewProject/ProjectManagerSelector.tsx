@@ -1,9 +1,10 @@
 import Select, { components, DropdownIndicatorProps } from "react-select";
 import { ChevronDown } from "lucide-react";
 import React from "react";
-import { $projectInput, Employee } from "./NewProject";
+import { Employee } from "./NewProject";
 import clsx from "clsx";
 import { useStore } from "@nanostores/react";
+import { $projectInput } from "./state";
 
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee, false>) => {
   return (

@@ -2,33 +2,9 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
-import { $projectInput, $tab } from "./NewProject";
+import { $popUpOpen, $projectInput, $tab } from "./state";
 import { useStore } from "@nanostores/react";
-// import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
-import { atom } from "nanostores";
 
-// const sortProject = (x: Task[]): Task[] => {
-//   return x.slice().sort((a, b) => {
-//     const deadlineA = a.deadline ? new Date(a.deadline) : null;
-//     const deadlineB = b.deadline ? new Date(b.deadline) : null;
-//     if (!deadlineA && !deadlineB) {
-//       return 0;
-//     } else if (!deadlineA) {
-//       return 1;
-//     } else if (!deadlineB) {
-//       return -1;
-//     }
-//     if (deadlineA < deadlineB) {
-//       return -1;
-//     } else if (deadlineA > deadlineB) {
-//       return 1;
-//     } else {
-//       return 0;
-//     }
-//   });
-// };
-
-export const $popUpOpen = atom(false);
 
 export const Tasks = () => {
   const input = useStore($projectInput);

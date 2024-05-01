@@ -1,9 +1,8 @@
 import React from "react";
 import { Brush, CircleCheck, Code, X, MessageSquare, Pencil } from "lucide-react";
-import { $projectInput } from "./NewProject/NewProject";
+import { $popUpOpen, $projectInput } from "./NewProject/state";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
-import { $popUpOpen } from "./NewProject/Tasks";
 import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
 
 export const TaskInfo = ({ startIndex }: { startIndex: number }) => {

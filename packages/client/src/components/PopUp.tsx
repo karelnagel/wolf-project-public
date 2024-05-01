@@ -5,11 +5,10 @@ import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
 import { useTranslations } from "@wolf-project/i18n";
 import { TaskStatus, TaskType } from "@wolf-project/db/schema";
-import { $projectInput } from "./NewProject/NewProject";
+import { $popUpOpen, $projectInput, setTasks } from "./NewProject/state";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
 import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
-import { $popUpOpen } from "./NewProject/Tasks";
 
 const defaultTask: CreateProjectTask = {
   title: "",
@@ -24,10 +23,10 @@ const defaultTask: CreateProjectTask = {
 export const PopUp = () => {
   const t = useTranslations("et");
   const input = useStore($projectInput);
-  const [task, setTask] = useState<Omit<CreateProjectTask, "id" | "projectId">>(defaultTask);
+  const [task, setTask] = useState<CreateProjectTask>(defaultTask);
 
   const handleSave = () => {
-    $projectInput.setKey("tasks", [...input.tasks, task]);
+    setTasks([...input.tasks, task]);
     $popUpOpen.set(false);
     setTask(defaultTask);
   };

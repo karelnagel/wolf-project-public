@@ -1,7 +1,8 @@
-import { $projectInput, $tab, Employee } from "./NewProject";
+import { Employee } from "./NewProject";
 import { EmployeeSelector } from "./EmployeeSelector";
 import { ProjectManagerSelector } from "./ProjectManagerSelector";
 import { useStore } from "@nanostores/react";
+import { $projectInput, $tab } from "./state";
 
 export const CreateProject = ({ employees }: { employees: Employee[] }) => {
   const input = useStore($projectInput);

@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { $projectInput, $tab } from "./NewProject";
+import { $projectInput, $tab } from "./state";
 import { client, useAPI } from "@wolf-project/backend/src/client";
 
 export const Confirm = () => {
