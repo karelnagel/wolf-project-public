@@ -3,6 +3,7 @@ import { Tasks } from "./NewProject/Tasks";
 import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 import { $projectInput } from "./NewProject/state";
 import { client } from "@wolf-project/backend/src/client";
+import { I18nLocale } from "@wolf-project/i18n";
 
 export const useIsClientSide = () => {
   const [isClient, setIsClient] = useState(false);
@@ -16,7 +17,9 @@ export const ProjectPage = ({
   project,
   canEdit,
   projectId,
+  t,
 }: {
+  t: I18nLocale["form"];
   projectId: string;
   project: CreateProjectInput;
   canEdit: boolean;
@@ -26,6 +29,7 @@ export const ProjectPage = ({
   if (!isClient) return null;
   return (
     <Tasks
+      t={t}
       canEdit={canEdit}
       onBackClick={() => {
         window.location.href = "/";

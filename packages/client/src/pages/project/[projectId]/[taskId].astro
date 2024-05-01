@@ -4,7 +4,6 @@ import { db } from "@wolf-project/db";
 // Todo where is this?
 // import { AddComment } from "../../../components/Comment";
 
-const t = Astro.locals.t;
 
 const { taskId } = Astro.params;
 if (!taskId) throw new Error("id is required");

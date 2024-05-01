@@ -10,7 +10,6 @@ export const Tasks = ({
   onBackClick,
   canEdit,
   confirmButton,
-  t,
 }: {
   onBackClick: () => void;
   canEdit: boolean;
