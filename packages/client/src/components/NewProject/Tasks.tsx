@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { PopUp } from "../PopUp";
+import { TaskEditPopUp } from "../PopUp";
 import { ChevronUpCircle, ChevronDownCircle, ArrowLeft } from "lucide-react";
 import { TaskInfo } from "../TaskInfo";
-import { $popUpOpen, $projectInput } from "./state";
+import { $taskEditPopUp, $projectInput, $taskInfoPopUp } from "./state";
 import { useStore } from "@nanostores/react";
 import { I18nLocale } from "@wolf-project/i18n";
+import { TaskInfoPopUp } from "../TaskPopUp";
 
 export const Tasks = ({
   onBackClick,
@@ -18,7 +19,8 @@ export const Tasks = ({
 }) => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
-  const popupOpen = useStore($popUpOpen);
+  const popupOpen = useStore($taskEditPopUp);
+  const taskInfoPopup = useStore($taskInfoPopUp);
 
   const firstInprogress = tasks.findIndex((x) => x.status === "inprogress");
   const lastDone = tasks.findLastIndex((x) => x.status === "completed");
@@ -53,7 +55,7 @@ export const Tasks = ({
           </button>
           <div className="flex items-start gap-5 text-3xl max-md:mt-10">
             <div className="flex grow flex-col self-center">
-              <div>{input.name}</div>
+              <div className="mb-11">{input.name}</div>
               {tasks.length > 3 && (
                 <button
                   onClick={decreaseStartIndex}
@@ -75,7 +77,7 @@ export const Tasks = ({
                 <div className="flex max-w-[281px] justify-between gap-12 self-center text-base font-semibold">
                   <button
                     className="bg-primary2 justify-center rounded-2xl px-5 py-2.5"
-                    onClick={() => $popUpOpen.set({ type: "new" })}
+                    onClick={() => $taskEditPopUp.set({ type: "new" })}
                   >
                     Lisa task
                   </button>
@@ -91,11 +93,18 @@ export const Tasks = ({
           </div>
         </div>
         <div
-          className={`fixed right-0 top-0 w-2/5 transform shadow-lg transition-transform ${
+          className={`fixed right-0 top-0 w-full transform shadow-lg transition-transform ${
             popupOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {popupOpen && <PopUp />}
+          {popupOpen && <TaskEditPopUp />}
+        </div>
+        <div
+          className={`fixed right-0 top-0 flex h-full w-full  transform shadow-lg transition-transform ${
+            taskInfoPopup ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {taskInfoPopup && <TaskInfoPopUp />}
         </div>
       </div>
     </div>
