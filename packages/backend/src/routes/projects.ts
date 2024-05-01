@@ -21,6 +21,7 @@ const CreateProjectInput = z.object({
   projectManager: z.string(),
 });
 export type CreateProjectInput = z.infer<typeof CreateProjectInput>;
+export type CreateProjectTask = CreateProjectInput["tasks"][number];
 
 export const projects = root.router({
   create: privateProcedure

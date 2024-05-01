@@ -4,9 +4,7 @@ import { $projectInput } from "./NewProject/NewProject";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
 import { $popUpOpen } from "./NewProject/Tasks";
-import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
-
-type Task = CreateProjectInput["tasks"][0];
+import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
 
 export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
   const input = useStore($projectInput);
@@ -21,7 +19,7 @@ export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
   } else {
     i = startIndex;
   }
-  const editTask = (_task: Task) => {
+  const editTask = (_task: CreateProjectTask) => {
     $popUpOpen.set(true);
     // Todo
   };
@@ -88,7 +86,7 @@ export const TaskInfo = ({ startIndex }: { startIndex: number }) => {
   );
 };
 
-const Icons = ({ status, task }: { status: string; task: Task }) => {
+const Icons = ({ status, task }: { status: string; task: CreateProjectTask }) => {
   const Icon =
     status === "completed"
       ? CircleCheck

@@ -7,8 +7,6 @@ import { useStore } from "@nanostores/react";
 // import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 import { atom } from "nanostores";
 
-// type Task = CreateProjectInput["tasks"][0];
-
 // const sortProject = (x: Task[]): Task[] => {
 //   return x.slice().sort((a, b) => {
 //     const deadlineA = a.deadline ? new Date(a.deadline) : null;

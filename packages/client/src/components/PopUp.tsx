@@ -8,11 +8,10 @@ import { TaskStatus, TaskType } from "@wolf-project/db/schema";
 import { $projectInput } from "./NewProject/NewProject";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
-import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
+import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
 import { $popUpOpen } from "./NewProject/Tasks";
 
-type Task = CreateProjectInput["tasks"][0];
-const defaultTask: Task = {
+const defaultTask: CreateProjectTask = {
   title: "",
   status: "pending",
   deadline: new Date(),
@@ -25,7 +24,7 @@ const defaultTask: Task = {
 export const PopUp = () => {
   const t = useTranslations("et");
   const input = useStore($projectInput);
-  const [task, setTask] = useState<Omit<Task, "id" | "projectId">>(defaultTask);
+  const [task, setTask] = useState<Omit<CreateProjectTask, "id" | "projectId">>(defaultTask);
 
   const handleSave = () => {
     $projectInput.setKey("tasks", [...input.tasks, task]);
