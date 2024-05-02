@@ -36,7 +36,6 @@ export const Confirm = ({ t }: { t: I18nLocale["form"] }) => {
         )}
         <div className="mt-8 flex max-w-md flex-col flex-wrap justify-center gap-5 whitespace-nowrap text-base font-extrabold">
           <Button
-            dark={false}
             onClick={handleSubmit}
             label={isLoading ? <Loader2 className="animate-spin" /> : t.generate}
           />

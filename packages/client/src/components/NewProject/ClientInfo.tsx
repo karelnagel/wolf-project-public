@@ -103,7 +103,7 @@ export const ClientInfo = ({
         </div>
         <div className="mt-8 flex max-w-md flex-wrap justify-center gap-5 whitespace-nowrap text-base font-extrabold">
           <Button onClick={() => $tab.set("project")} dark={true} label={t.form.backward} />
-          <Button onClick={() => $tab.set("tasks")} dark={false} label={t.form.forward} />
+          <Button onClick={() => $tab.set("tasks")} label={t.form.forward} />
         </div>
       </div>
     </div>

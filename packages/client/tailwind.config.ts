@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
+import tailwindScrollbar from "tailwind-scrollbar"
 export default {
   theme: {
     extend: {
@@ -15,7 +16,7 @@ export default {
       spacing: {},
     },
   },
-  plugins: [typography],
+  plugins: [typography, tailwindScrollbar],
   content: [
     "./src/**/*.{js,ts,jsx,tsx,astro}",
     "../../node_modules/react-tailwindcss-datepicker/dist/index.esm.js",

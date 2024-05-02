@@ -17,6 +17,7 @@ export const et: I18nLocale = {
     admin: "Admini lehele",
     projects: "projektihaldur"
   },
+  newUser: "Uus kasutaja",
   login: {
     body: (url) =>
       `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
@@ -75,8 +76,24 @@ export const et: I18nLocale = {
     inprogress: "Töös",
     completed: "Tehtud",
   },
+  userForm: {
+    name: "Nimi",
+    email: "Tööemail",
+    language: "Keel",
+    priviledge: "Privileegi tase",
+    editUser: "Muuda kasutaja infot",
+    newUser: "Uus kasutaja",
+    save: "Salvesta",
+    delete: "Kustuta",
+    cancel: "Katkesta",
+
+  },
   language: {
     et: "Eesti keel",
     en: "Inglise keel",
   },
+  priviledge: {
+    admin: "Admin",
+    limited: "Piiratud",
+  }
 };

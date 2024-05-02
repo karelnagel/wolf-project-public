@@ -52,7 +52,7 @@ export const Tasks = ({
         <div className="flex w-full items-start justify-center gap-5 text-center font-semibold max-md:max-w-full max-md:flex-wrap">
           <div className="border-primary2 flex flex-col items-start gap-5 rounded-2xl border px-4 py-6 text-3xl max-md:mt-10">
             <div className="flex grow flex-col self-center p-4">
-              <div className="inline-block align-middle mb-4">{t.form.tasks}</div>
+              <div className="mb-4 inline-block align-middle">{t.form.tasks}</div>
               {tasks.length > 3 && (
                 <button
                   onClick={decreaseStartIndex}
@@ -75,24 +75,23 @@ export const Tasks = ({
               <Button dark={true} onClick={() => $tab.set("clients")} label={t.form.backward} />
               {canEdit && (
                 <Button
-                  dark={false}
                   onClick={() => $taskEditPopUp.set({ type: "new" })}
                   label={t.form.addTask}
                 />
               )}
-              <Button dark={false} onClick={() => $tab.set("confirm")} label={t.form.forward} />
+              <Button onClick={() => $tab.set("confirm")} label={t.form.forward} />
             </div>
           </div>
         </div>
         <div
-          className={`fixed right-0 top-0 w-full transform shadow-lg z-10 transition-transform ${
+          className={`fixed right-0 top-0 z-10 w-full transform shadow-lg transition-transform ${
             popupOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {popupOpen && <TaskEditPopUp t={t} lang={lang} />}
         </div>
         <div
-          className={`fixed right-0 top-0 flex h-full w-full z-10 transform shadow-lg transition-transform ${
+          className={`fixed right-0 top-0 z-10 flex h-full w-full transform shadow-lg transition-transform ${
             taskInfoPopup ? "translate-x-0" : "translate-x-full"
           }`}
         >

@@ -45,7 +45,9 @@ export const TaskEditPopUp = ({
           <button onClick={() => $taskEditPopUp.set(null)}>
             <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
           </button>
-          <div className="flex-grow">{popup?.type === 'edit' ? t.form.editTask : t.form.newTask}</div>
+          <div className="flex-grow">
+            {popup?.type === "edit" ? t.form.editTask : t.form.newTask}
+          </div>
         </div>
         <div className="mt-17 flex flex-col  max-md:mt-10 max-md:max-w-full">
           <div className="flex items-center justify-between">
@@ -140,11 +142,10 @@ export const TaskEditPopUp = ({
         </div>
         <div className="mt-16 flex gap-5 self-center text-base font-extrabold max-md:mt-10">
           <Button
-            dark={true}
             label={popup?.type === "edit" ? t.form.delete : t.form.cancel}
             onClick={handleDelete}
           />
-          <Button dark={false} label={t.form.save} onClick={handleSave} />
+          <Button label={t.form.save} onClick={handleSave} />
         </div>
       </div>
     </div>

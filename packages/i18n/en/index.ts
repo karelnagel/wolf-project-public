@@ -15,6 +15,7 @@ export const en = {
     admin: "Admin page",
     projects: 'Project management'
   },
+  newUser: "New User",
   login: {
     body: (url: string) =>
       `To login to your account, please click this ${url}. Link lasts for 5 minutes.`,
@@ -72,9 +73,24 @@ export const en = {
     inprogress: "In Progress",
     completed: "Completed",
   },
+  userForm: {
+    name: "Name",
+    email: "Work Email",
+    language: "Language",
+    priviledge: "Priviledge level",
+    editUser: "Change user info",
+    newUser: "New user",
+    save: "Save",
+    delete: "Delete",
+    cancel: "Cancel",
+  },
   language: {
     et: "Estonian",
     en: "English",
   },
+  priviledge: {
+    admin: "Admin",
+    limited: "Limited",
+  }
 };
 export type I18nLocale = typeof en;

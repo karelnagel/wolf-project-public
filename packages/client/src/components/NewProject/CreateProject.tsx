@@ -59,7 +59,7 @@ export const CreateProject = ({
             /*needs development*/}
         </div>
         <div className="flex justify-center font-semibold">
-          <Button dark={false} label={t.form.forward} onClick={() => $tab.set("clients")} />
+          <Button label={t.form.forward} onClick={() => $tab.set("clients")} />
         </div>
       </div>
     </div>
