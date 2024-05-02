@@ -3,14 +3,20 @@ import Datepicker from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ArrowLeft, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
-import { useTranslations } from "@wolf-project/i18n";
+import { I18nLocale } from "@wolf-project/i18n";
 import { TaskStatus, TaskType } from "@wolf-project/db/schema";
 import { $taskEditPopUp, $projectInput, $selectedTask, setTasks } from "./NewProject/state";
 import { useStore } from "@nanostores/react";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
+import { Button } from "./Buttons";
 
-export const TaskEditPopUp = () => {
-  const t = useTranslations("et");
+export const TaskEditPopUp = ({
+  t,
+  lang,
+}: {
+  t: { form: I18nLocale["form"]; type: I18nLocale["type"]; status: I18nLocale["status"] };
+  lang: string;
+}) => {
   const input = useStore($projectInput);
   const task = useStore($selectedTask);
   const popup = useStore($taskEditPopUp);
@@ -29,7 +35,7 @@ export const TaskEditPopUp = () => {
   };
 
   return (
-    <div className="flex w-full ">
+    <div className="flex w-full">
       <div className="h-screen w-full" onClick={() => $taskEditPopUp.set(null)}></div>
       <div
         className="bg-primary items-right flex w-3/5 flex-col justify-center rounded-2xl px-12 py-10 max-md:px-5"
@@ -39,12 +45,12 @@ export const TaskEditPopUp = () => {
           <button onClick={() => $taskEditPopUp.set(null)}>
             <ArrowLeft className="text-primary2 aspect-square h-9 w-9  shrink-0" />
           </button>
-          <div className="flex-grow">Uue taski loomine</div>
+          <div className="flex-grow">{popup?.type === 'edit' ? t.form.editTask : t.form.newTask}</div>
         </div>
         <div className="mt-17 flex flex-col  max-md:mt-10 max-md:max-w-full">
           <div className="flex items-center justify-between">
             <div className="h-full text-start text-base font-bold">
-              Tööetapp
+              {t.form.type}
               <SingleSelect
                 selectOptions={TaskType.options.map((x) => ({ value: x, label: t.type[x] }))}
                 selectedOption={task.type}
@@ -53,11 +59,18 @@ export const TaskEditPopUp = () => {
               />
             </div>
             <div className="text-start text-base font-bold">
-              {"Staatus"}
+              {t.form.status}
               <SingleSelect
                 selectOptions={TaskStatus.options.map((x) => ({ value: x, label: t.status[x] }))}
                 selectedOption={task.status}
-                onChange={(x) => $selectedTask.setKey("status", x as TaskStatus)}
+                onChange={(x) => {
+                  if (x === "completed") {
+                    $selectedTask.setKey("completed", new Date());
+                  } else {
+                    $selectedTask.setKey("completed", null);
+                  }
+                  $selectedTask.setKey("status", x as TaskStatus);
+                }}
                 dark={false}
               />
             </div>
@@ -65,7 +78,7 @@ export const TaskEditPopUp = () => {
         </div>
         <div className="mt-3.5 flex flex-col justify-center max-md:max-w-full">
           <div className="flex flex-col max-md:max-w-full">
-            <div className="text-start text-base font-bold">{"Taski nimi"}</div>
+            <div className="text-start text-base font-bold">{t.form.taskName}</div>
             <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
               <textarea
                 value={task.title}
@@ -76,7 +89,7 @@ export const TaskEditPopUp = () => {
           </div>
           <div className="mt-8 flex justify-center gap-5">
             <div className="w-full text-start text-base font-bold">
-              {"Vastutaja"}
+              {t.form.responsible}
               <SingleSelect
                 selectOptions={[
                   { value: "us", label: OUR_COMPANY_NAME },
@@ -89,11 +102,13 @@ export const TaskEditPopUp = () => {
             </div>
 
             <div className="flex w-full flex-col ">
-              <div className="mb-4 text-start text-base font-bold">{"Tähtaeg"}</div>
+              <div className="mb-4 text-start text-base font-bold">{t.form.deadline}</div>
               <div className="">
                 <Datepicker
+                  i18n={lang}
+                  readOnly={true}
+                  displayFormat={"DD/MM/YYYY"}
                   inputClassName={"bg-white h-1/2 w-full "}
-                  placeholder={"Vali tähtaeg!"}
                   useRange={false}
                   asSingle={true}
                   value={{ startDate: task.deadline || null, endDate: task.deadline || null }}
@@ -111,7 +126,7 @@ export const TaskEditPopUp = () => {
           </div>
           <div className="mt-8 flex flex-col max-md:max-w-full">
             <div className="flex flex-grow text-start text-base font-bold text-white max-md:max-w-full">
-              {"Taski kirjeldus"}
+              {t.form.taskDesc}
               <Paperclip className="text-primary2 ml-2 aspect-square w-5 max-md:mt-10" />
             </div>
             <div className="mt-4 flex flex-col justify-center text-base max-md:max-w-full ">
@@ -124,17 +139,12 @@ export const TaskEditPopUp = () => {
           </div>
         </div>
         <div className="mt-16 flex gap-5 self-center text-base font-extrabold max-md:mt-10">
-          {task && (
-            <button
-              onClick={handleDelete}
-              className="bg-primary justify-center rounded-2xl border-2 border-solid border-black px-9 py-4 max-md:px-5"
-            >
-              {"Kustuta"}
-            </button>
-          )}
-          <button onClick={handleSave} className="bg-primary2 rounded-2xl px-9 py-4">
-            {"Salvesta"}
-          </button>
+          <Button
+            dark={true}
+            label={popup?.type === "edit" ? t.form.delete : t.form.cancel}
+            onClick={handleDelete}
+          />
+          <Button dark={false} label={t.form.save} onClick={handleSave} />
         </div>
       </div>
     </div>

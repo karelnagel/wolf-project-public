@@ -11,6 +11,9 @@ export const en = {
   header: {
     logout: "Log out",
     newproject: "New project",
+    dashboard: "Dashboard",
+    admin: "Admin page",
+    projects: 'Project management'
   },
   login: {
     body: (url: string) =>
@@ -23,6 +26,7 @@ export const en = {
     companyName: "Self-Employee/Company name",
     name: "Name",
     email: "E-mail",
+    none: "No choices left"
   },
   form: {
     newProject: "New Project",
@@ -36,18 +40,25 @@ export const en = {
     forward: "Continue",
     backward: "Back",
     add: "Add",
+    tasks: "Tasks",
     addTask: "Add task",
+    newTask: "New Task",
+    editTask: "Edit task",
     type: "Type of task",
     status: "Status",
     taskName: "Task name",
     taskDesc: "Task description",
     responsible: "Responsible",
     deadline: "Deadline",
+    completed: "Completed",
     save: "Save",
     delete: "Delete",
+    cancel: "Cancel",
     change: "Change",
+    view: "View",
     readyMessage: "Ready?\nGenerate new project and notify client.",
-    generate: "Confirm and generate"
+    generate: "Confirm and generate",
+    error: "Something went wrong.\nCheck that you have filled every input field and added at least one task and client!"
   },
   type: {
     input: "Input",

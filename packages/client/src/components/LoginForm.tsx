@@ -8,9 +8,12 @@ export const LoginForm = () => {
   const { mutate, isLoading } = useAPI(client.authenticate.login.query);
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate({ email }).then(() => {
+    mutate({ email })
+      .then(() => {
+        setLoggingIn(true);
+      })
+      .catch(Error);
       setLoggingIn(true);
-    });
   };
 
   return (

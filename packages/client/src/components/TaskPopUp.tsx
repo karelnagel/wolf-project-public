@@ -2,8 +2,9 @@ import * as React from "react";
 import { ArrowLeft, TrendingUp, CalendarCheck, User, Plus } from "lucide-react";
 import { Comments } from "./Comment";
 import { $taskInfoPopUp } from "./NewProject/state";
+import { I18nLocale } from "@wolf-project/i18n";
 
-export const TaskInfoPopUp = () => {
+export const TaskInfoPopUp = ({ t }: { t: I18nLocale["form"] }) => {
   return (
     <div className="flex w-full items-end">
       <div className="h-full w-full" onClick={() => $taskInfoPopUp.set(null)}></div>
@@ -16,21 +17,21 @@ export const TaskInfoPopUp = () => {
             <ArrowLeft />
           </button>
           <div className="text-center text-2xl font-semibold">Avakuva disaini loomine</div>
-          <button className="bg-primary2 rounded-2xl px-5 py-2.5 text-base font-bold">Muuda</button>
+          <button className="bg-primary2 rounded-2xl px-5 py-2.5 text-base font-bold">{t.change}</button>
         </div>
         <div className="justify-left my-16 flex max-w-full gap-5 whitespace-nowrap rounded-2xl px-5  text-center text-base max-md:mt-10">
           <div className="flex flex-col font-semibold">
             <div className="flex gap-5 ">
               <TrendingUp />
-              <div>Staatus</div>
+              <div>{t.status}</div>
             </div>
             <div className="mt-8 flex gap-5 max-md:mr-2">
               <CalendarCheck />
-              <div>Tähtaeg</div>
+              <div>{t.deadline}</div>
             </div>
             <div className="mt-8 flex justify-center gap-5">
               <User />
-              <div>Vastutaja</div>
+              <div>{t.responsible}</div>
             </div>
           </div>
           <div className="my-auto flex flex-col gap-8 font-bold">

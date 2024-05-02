@@ -13,6 +13,9 @@ export const et: I18nLocale = {
   header: {
     logout: "Logi välja",
     newproject: "Uus projekt",
+    dashboard: "Töölauale",
+    admin: "Admini lehele",
+    projects: "projektihaldur"
   },
   login: {
     body: (url) =>
@@ -20,12 +23,14 @@ export const et: I18nLocale = {
     title: `Wolf Project login email`,
   },
   placeholder: {
-    projectManager: "Choose an employee",
-    employees: "Choose employee(s)",
+    projectManager: "Vali projektijuht",
+    employees: "Vali Töötaja(d)",
     companyName: "FIE/Ettevõtte nimi",
     name: "Nimi",
     email: "E-meil",
+    none: "Rohkem valikuid ei ole"
   },
+  /*Also used for Tasks and Popups*/
   form: {
     newProject: "Uus project",
     projectName: "Projekti nimi",
@@ -38,18 +43,25 @@ export const et: I18nLocale = {
     forward: "Järgmine",
     backward: "Tagasi",
     add: "Lisa",
+    tasks: "Ülesanded",
     addTask: "Lisa ülesanne",
+    newTask: "Uus ülesanne",
+    editTask: "Muuda ülesannet",
     type: "Ülesande tüüp",
     status: "Staatus",
     taskName: "Ülesande nimi",
     taskDesc: "Ülesande kirjeldus",
     responsible: "Vastutaja",
     deadline: "Tähtaeg",
+    completed: "Tehtud",
     save: "Salvesta",
     delete: "Kustuta",
+    cancel: "Katkesta",
     change: "Muuda",
+    view: "Vaata",
     readyMessage: "Valmis?\nGenereeri uus projekt ja teavita klienti.",
-    generate: "Kinnita ja genereeri"
+    generate: "Kinnita ja genereeri",
+    error: "Midagi läks valesti.\nKontrolli, et kõik väljad oleks täitetud ning oled lisanud vähemalt ühe ülesande ning kliendi!"
   },
   type: {
     input: "Sisend",

@@ -4,8 +4,17 @@ import { $taskEditPopUp, $projectInput, $taskInfoPopUp } from "./NewProject/stat
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { useStore } from "@nanostores/react";
 import { CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
+import { I18nLocale } from "@wolf-project/i18n";
 
-export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit: boolean }) => {
+export const TaskInfo = ({
+  startIndex,
+  canEdit,
+  t,
+}: {
+  startIndex: number;
+  canEdit: boolean;
+  t: I18nLocale["form"];
+}) => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
   let i: number;
@@ -18,7 +27,6 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
   } else {
     i = startIndex;
   }
-
   return (
     <>
       {tasks.map(
@@ -45,20 +53,30 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
                     </div>
                     <div className="mt-4 flex gap-5 text-base max-md:mx-2.5">
                       <div className="flex flex-col items-start font-semibold">
-                        <span className="font-bold">Tähtaeg:</span>
+                        <span className="font-bold">{t.deadline}</span>
                         <span className="font-medium">
                           {task.deadline?.toLocaleDateString("et")}
                         </span>
                       </div>
                       {task.completed && (
                         <div className="flex flex-col items-start">
-                          <span className="font-bold">Tehtud:</span>
+                          <span className="font-bold">{t.completed}</span>
                           <span
                             className={
                               task.completed &&
-                              (task.deadline ? task.completed > task.deadline : true)
+                              task.deadline &&
+                              new Date(
+                                task.completed.getFullYear(),
+                                task.completed.getMonth(),
+                                task.completed.getDate(),
+                              ).getTime() >
+                                new Date(
+                                  task.deadline.getFullYear(),
+                                  task.deadline.getMonth(),
+                                  task.deadline.getDate(),
+                                ).getTime()
                                 ? "text-red"
-                                : "text-primary"
+                                : "text-primary2"
                             }
                           >
                             {task.completed?.toLocaleDateString("et")}
@@ -73,9 +91,9 @@ export const TaskInfo = ({ startIndex, canEdit }: { startIndex: number; canEdit:
                     e.stopPropagation();
                     if (canEdit) $taskEditPopUp.set({ type: "edit", id: task.id });
                   }}
-                  className="bg-primary2 my-auto justify-center self-stretch rounded-2xl px-5 py-2.5 text-center text-xl font-semibold"
+                  className="bg-primary2 border-primary2 hover:bg-primary my-auto justify-center self-stretch rounded-2xl border px-5 py-2.5 text-center text-xl font-semibold"
                 >
-                  {canEdit ? "Muuda" : "Vaata"}
+                  {canEdit ? t.change : t.view}
                 </button>
               </div>
               <Line Completed={task.completed} />
