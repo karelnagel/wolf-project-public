@@ -6,17 +6,24 @@ import { useStore } from "@nanostores/react";
 import { $employees, $userEditPopUp } from "../NewProject/state";
 import _ from "lodash";
 import { User } from "@wolf-project/db/schema";
+import { useIsClientSide } from "../ProjectPage";
 
 const { pick } = _;
 
 export const AdminView = ({ t, employees }: { t: I18nLocale; employees: User[] }) => {
-  const popupOpen = useStore($userEditPopUp);
+  const isClient = useIsClientSide();
+  if (!isClient) return null;
   $employees.set(employees);
+  return <AdminViewWrapper t={t} employees={employees} />;
+};
+
+const AdminViewWrapper = ({ t, employees }: { t: I18nLocale; employees: User[] }) => {
+  const popupOpen = useStore($userEditPopUp);
   return (
     <div className="mx-auto mt-12 max-w-screen-xl justify-center">
       <div className="border-primary2 flex flex-col items-center justify-center gap-5 rounded-2xl border px-[115.5px] py-[40px]">
         <Button dark={true} label={t.newUser} onClick={() => $userEditPopUp.set({ type: "new" })} />
-        <div className="scrollbar-none mx-auto flex h-[67vh] flex-col overflow-auto rounded-2xl p-5">
+        <div className="scrollbar-thin scrollbar-track-black scrollbar-thumb-primary2 mx-auto flex h-[67vh] flex-col overflow-auto rounded-2xl p-5">
           <AdminUserList employees={employees} t={t} />
         </div>
         <div

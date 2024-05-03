@@ -68,7 +68,7 @@ export const ClientInfo = ({
             />
           ))}
           {showForm && (
-            <form onSubmit={handleAddClient} className="text-center">
+            <form onSubmit={handleAddClient} className="flex flex-col justify-center items-center text-center">
               <textarea
                 placeholder={t.placeholder.name}
                 className="bg-primary mt-4 h-12 w-full resize-none justify-center whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
@@ -83,7 +83,7 @@ export const ClientInfo = ({
                 required
                 onChange={(e) => setClient({ ...client, email: e.target.value })}
               />
-              <div className="mt-4 mb-4 flex gap-3 text-base text-opacity-50">
+              <div className="mt-4 mb-4 flex w-full gap-3 text-base text-opacity-50">
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
                   {t.form.chooseLang}
                 </div>

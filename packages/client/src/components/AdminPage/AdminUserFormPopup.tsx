@@ -42,7 +42,7 @@ export const UserFormPopup = ({
         onClick={() => $userEditPopUp.set(null)}
       ></div>
       <div
-        className="bg-primary items-right flex w-2/5 flex-col justify-center gap-5 rounded-2xl max-md:px-5"
+        className="bg-primary items-right flex w-3/5 flex-col justify-center gap-5 rounded-2xl max-md:px-5"
         style={{ overflowY: "auto", maxHeight: "100vh" }}
       >
         <div className="mx-[25px] mb-16 mt-14 flex items-center text-center text-2xl font-bold max-md:mt-10 max-md:max-w-full max-md:flex-wrap">
@@ -73,7 +73,7 @@ export const UserFormPopup = ({
             />
           </div>
         </div>
-        <div className="mx-[62px] flex flex-row gap-[30px]">
+        <div className="mx-[62px] flex flex-row justify-between">
           <div className="flex flex-col">
             <div className="text-start text-base font-bold">{t.userForm.language}</div>
             <SingleSelect
