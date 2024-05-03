@@ -1,11 +1,12 @@
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { $selectedEmployee, $userEditPopUp } from "../NewProject/state";
+import { $employees, $selectedEmployee, $userEditPopUp } from "../NewProject/state";
 import { useStore } from "@nanostores/react";
 import { I18nLocale, Locale } from "@wolf-project/i18n";
 import { SingleSelect } from "../SingleSelect";
 import { UserRole } from "@wolf-project/db/schema";
 import { Button } from "../Buttons";
-import { addEmployee, modifyEmployee, removeEmployee } from "./AdminMutates";
+import { addEmployee, getEmployee, modifyEmployee, removeEmployee } from "./AdminMutates";
+import { useState } from "react";
 export const UserFormPopup = ({
   t,
 }: {
@@ -13,25 +14,56 @@ export const UserFormPopup = ({
     userForm: I18nLocale["userForm"];
     language: I18nLocale["language"];
     priviledge: I18nLocale["priviledge"];
+    error: I18nLocale["error"];
   };
 }) => {
   const popup = useStore($userEditPopUp);
   const userInfo = useStore($selectedEmployee);
+  const employees = useStore($employees);
 
   const { addUser, isLoading: adding } = addEmployee();
   const { removeUser, isLoading: removing } = removeEmployee();
   const { modifyUser, isLoading: modifying } = modifyEmployee();
+  const { getUser } = getEmployee();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSave = async () => {
-    if (popup?.type === "edit") await modifyUser(popup.id, userInfo);
-    else {
-      await addUser(userInfo);
+    if (userInfo.name === "" && userInfo.name === "") {
+      setErrorMessage(t.error.missingInputs);
+      return;
     }
-    $userEditPopUp.set(null);
+    if (!userInfo.email.includes("@veebihunt.ee")) {
+      setErrorMessage(t.error.wrongWorkEmail);
+      return;
+    }
+    if (popup?.type === "edit") {
+      try {
+        await modifyUser(popup.id, userInfo);
+      } catch (modifyError) {
+        console.error((modifyError as Error).message);
+        setErrorMessage(t.error.dbIssue);
+        return;
+      }
+    } else {
+      try {
+        await addUser(userInfo);
+      } catch (addError) {
+        console.error((addError as Error).message);
+        setErrorMessage(t.error.dbIssue);
+        return;
+      }
+      const result = await getUser(userInfo);
+      $employees.set([...(employees || []), result]);
+      $userEditPopUp.set(null);
+    }
   };
 
   const handleDelete = async () => {
-    if (popup?.type === "edit") await removeUser(popup.id);
+    if (popup?.type === "edit") {
+      await removeUser(popup.id);
+      $employees.set(employees?.filter((employee) => employee.id !== popup?.id)!);
+    }
     $userEditPopUp.set(null);
   };
 
@@ -53,6 +85,7 @@ export const UserFormPopup = ({
             {popup?.type === "edit" ? t.userForm.editUser : t.userForm.newUser}
           </div>
         </div>
+        {errorMessage && <div className="flex justify-center items-center text-2xl font-bold">{errorMessage}</div>}
         <div className="mx-[62px] flex flex-col max-md:max-w-full">
           <div className="text-start text-base font-bold">{t.userForm.name}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">

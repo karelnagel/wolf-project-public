@@ -88,6 +88,12 @@ export const et: I18nLocale = {
     cancel: "Katkesta",
 
   },
+  error: {
+    missingInputs: "Täida nime ning emaili väljad!",
+    wrongWorkEmail: "Veendu, et lisasid tööemail uue töötajale!",
+    dbIssue: "Midagi läks andmebaasis töötlemisega valesti. Vaata console.errorit või kontakteeru arendajaga!"
+  },
+
   language: {
     et: "Eesti keel",
     en: "Inglise keel",

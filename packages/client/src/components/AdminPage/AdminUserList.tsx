@@ -2,13 +2,15 @@ import { CircleUserRound } from "lucide-react";
 import React from "react";
 import { Button } from "../Buttons";
 import { I18nLocale } from "@wolf-project/i18n";
-import { $userEditPopUp } from "../NewProject/state";
+import { $employees, $userEditPopUp } from "../NewProject/state";
 import { User } from "@wolf-project/db/schema";
+import { useStore } from "@nanostores/react";
 
-export const AdminUserList = ({ employees, t }: { employees: User[]; t: I18nLocale }) => {
+export const AdminUserList = ({ t }: { t: I18nLocale }) => {
+  const employees = useStore($employees);
   return (
     <>
-      {employees.map((employee, i) => (
+      {employees?.map((employee, i) => (
         <EmployeeInfo key={i} user={employee} label={t.form.change} />
       ))}
     </>

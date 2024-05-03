@@ -73,6 +73,7 @@ export const en = {
     inprogress: "In Progress",
     completed: "Completed",
   },
+    /*Used for UserPopUp*/
   userForm: {
     name: "Name",
     email: "Work Email",
@@ -83,6 +84,11 @@ export const en = {
     save: "Save",
     delete: "Delete",
     cancel: "Cancel",
+  },
+  error: {
+    missingInputs: "Fill in name and email input fields!",
+    wrongWorkEmail: "Ensure that you assinged work email to new Employee!",
+    dbIssue: "Something went wrong with Database. Check console.error or contact a developer!"
   },
   language: {
     et: "Estonian",
