@@ -19,5 +19,10 @@ select {
   @apply focus:outline-primary focus:outline;
 }
 .button {
-  @apply bg-primary2 rounded-2xl py-2 text-white;
+  @apply rounded-2xl py-2 text-white;
 }
+
+::-webkit-scrollbar-button {
+  display: none !important;
+}
+

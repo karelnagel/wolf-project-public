@@ -6,7 +6,8 @@ import { getRandomId } from "@wolf-project/shared/helpers";
 import jwt from "jsonwebtoken";
 import { env } from "@wolf-project/shared/env";
 import { sendEmail } from "../lib/email";
-import { like } from "drizzle-orm";
+import { like, eq, and } from "drizzle-orm";
+
 
 export const Client = User.omit({ id: true, role: true });
 export const Employee = User.omit({ id: true });
@@ -36,6 +37,20 @@ export const employee = root.router({
         .returning();
       return result[0]!;
     }),
+  delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      await db.delete(usersTable).where(eq(usersTable.id, input.id))
+    }),
+  get: privateProcedure
+    .input(Employee)
+    .output(User)
+    .mutation(async ({ input }) => {
+      const result = await db.select()
+        .from(usersTable)
+        .where(and(eq(usersTable.name, input.name), eq(usersTable.language, input.language), eq(usersTable.email, input.email), eq(usersTable.role, input.role)));
+      return result[0]!;
+    })
 });
 
 export const client = root.router({
@@ -78,3 +93,4 @@ export const authenticate = root.router({
     return {};
   }),
 });
+
