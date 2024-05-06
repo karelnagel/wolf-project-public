@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const SITE = "https://wolf-project.com";
+const SITE = "https://project.wolfagency.ee";
 
 test("test sitemap pages", async ({ page }) => {
   const res = await page.goto(SITE + "/sitemap.xml");
@@ -19,6 +19,14 @@ test("robots.txt", async ({ page }) => {
   expect(res?.status()).toBe(200);
   const txt = await res?.text();
   expect(txt).toContain("User-agent: *");
-  expect(txt).toContain("Allow: /");
+  expect(txt).toContain("Disallow: /");
   expect(txt).toContain(`Sitemap: ${SITE}/sitemap.xml`);
 });
+test("Login process", async ({ page }) => {
+  await page.goto(`${SITE}/login`);
+  await page.fill('input[type="email"]', 'testuser@example.com');
+  await page.click('button');
+  await page.waitForSelector('p.whitespace-normal');
+  const emailSentMessage = await page.textContent('p.whitespace-normal');
+  expect(emailSentMessage).toContain('Continue login process by opening magic link, which is sent to your email!');
+})
