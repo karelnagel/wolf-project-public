@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { execSync } from 'child_process';
 
-const SITE = "https://project.wolfagency.ee";
+const SITE = 'https://project.wolfagency.ee'
 
 test("test sitemap pages", async ({ page }) => {
   const res = await page.goto(SITE + "/sitemap.xml");
@@ -14,6 +15,7 @@ test("test sitemap pages", async ({ page }) => {
     expect(res?.status()).toBe(200);
   }
 });
+
 test("robots.txt", async ({ page }) => {
   const res = await page.goto(SITE + "/robots.txt");
   expect(res?.status()).toBe(200);
@@ -22,6 +24,7 @@ test("robots.txt", async ({ page }) => {
   expect(txt).toContain("Disallow: /");
   expect(txt).toContain(`Sitemap: ${SITE}/sitemap.xml`);
 });
+
 test("Login process", async ({ page }) => {
   await page.goto(`${SITE}/login`);
   await page.fill('input[type="email"]', 'testuser@example.com');
@@ -29,4 +32,15 @@ test("Login process", async ({ page }) => {
   await page.waitForSelector('p.whitespace-normal');
   const emailSentMessage = await page.textContent('p.whitespace-normal');
   expect(emailSentMessage).toContain('Continue login process by opening magic link, which is sent to your email!');
-})
+});
+
+test('Create User Account', async ({ }) => {
+  try {
+    execSync('npm run add-user "testuser@example.com" "Test User"', { stdio: 'inherit' });
+    console.log('User added successfully');
+    expect(true).toBe(true);
+  } catch (error) {
+    console.error('Error adding user:', error);
+    throw error;
+  }
+});
