@@ -15,7 +15,7 @@ export default defineConfig({
   site: SITE,
   integrations: [tailwind(), react(), sitemap({
     filter: (page) =>
-      page === `${SITE}/login`
+      page.includes('/login')
   })],
   vite: { plugins: [basicSsl()] },
 });
