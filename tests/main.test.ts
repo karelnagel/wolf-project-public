@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 const SITE = 'https://project.wolfagency.ee'
 
 test("test sitemap pages", async ({ page }) => {
-  const res = await page.goto(SITE + "/sitemap.xml");
+  const res = await page.goto(SITE + "/sitemap-0.xml");
   if (!res) throw new Error("No sitemap!");
   const text = await res.text();
   const urls = text.match(/<loc>(.*?)<\/loc>/g)?.map((x) => x.replace(/<loc>|<\/loc>/g, "")) || [];
