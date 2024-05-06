@@ -47,11 +47,15 @@ const optionsStyle = {
   focus: "bg-black rounded-2xl",
 };
 
-interface EmployeeSelectorProps {
+export const EmployeeSelector = ({
+  employees,
+  placeholder,
+  placeholderNone,
+}: {
   employees: Employee[];
-}
-
-export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({ employees }) => {
+  placeholder: string;
+  placeholderNone: string;
+}) => {
   const input = useStore($projectInput);
 
   return (
@@ -88,9 +92,9 @@ export const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({ employees })
         noOptionsMessage: () => "p-2 bg-primary border border-dashed rounded-sm",
       }}
       options={employees}
-      placeholder={"Vali töötaja(d)"}
+      placeholder={placeholder}
       noOptionsMessage={() => {
-        return <div>{"Rohkem töötajaid pole"}</div>;
+        return <div>{[placeholderNone]}</div>;
       }}
       value={input.employees.map((id) => employees.find((x) => x.value === id)!)}
       onChange={(newValue) => {

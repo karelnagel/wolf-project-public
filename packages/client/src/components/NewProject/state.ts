@@ -1,4 +1,6 @@
 import { CreateProjectInput, CreateProjectTask } from "@wolf-project/backend/src/routes/projects";
+import { Employee } from "@wolf-project/backend/src/routes/users";
+import { User } from "@wolf-project/db/schema";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { atom, map } from "nanostores";
 
@@ -6,9 +8,12 @@ export type Tab = "project" | "clients" | "tasks" | "confirm";
 export const $tab = atom<Tab>("project");
 
 type Popup = { type: "new" } | { type: "edit"; id: string };
-export const $taskEditPopUp = atom<Popup | null>(null);
 
+export const $employees = atom<User[] | null>(null);
+export const $taskEditPopUp = atom<Popup | null>(null);
+export const $userEditPopUp = atom<Popup | null>(null);
 export const $taskInfoPopUp = atom<string | null>(null);
+export const $userInfoPopUp = atom<string | null>(null);
 
 const defaultTask = (): CreateProjectTask => ({
   id: getRandomId(),
@@ -20,13 +25,30 @@ const defaultTask = (): CreateProjectTask => ({
   description: "",
   clientTask: false,
 });
+const defaultEmployee = (): Employee => ({
+  name: "",
+  email: "",
+  language: "et",
+  role: "limited"
+})
+
+export const $selectedEmployee = map<Employee>(defaultEmployee());
+
+$userEditPopUp.subscribe((popup) => {
+  if (!popup || popup.type === "new") $selectedEmployee.set(defaultEmployee());
+  else if (popup.type === 'edit') $selectedEmployee.set($employees.get()!.find((employee) => employee.id === popup.id)!)
+    ;
+})
 
 export const $selectedTask = map<CreateProjectTask>(defaultTask());
+
 $taskEditPopUp.subscribe((popup) => {
   if (!popup || popup.type === "new") $selectedTask.set(defaultTask());
   else if (popup.type === "edit")
     $selectedTask.set($projectInput.get().tasks.find((task) => task.id === popup.id)!);
 });
+
+
 
 export const sortTasks = (x: CreateProjectTask[]): CreateProjectTask[] => {
   return x.slice().sort((a, b) => {

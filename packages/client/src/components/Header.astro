@@ -1,31 +1,48 @@
 ---
-import { Button } from "./Button";
+import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
+import { NavButton } from "./Buttons";
 const user = Astro.locals.user;
 const t = Astro.locals.t;
-const logout = t.header.logout;
-const newproject = t.header.newproject;
+const newprojectFilter = ["/login", "/newproject"];
+const adminFilter = ["/login", "/admin"];
+let showNewProjectBtn = true;
+if (newprojectFilter.some((s) => Astro.url.pathname.startsWith(s))) showNewProjectBtn = false;
+let showAdminBtn = true;
+if (adminFilter.some((s) => Astro.url.pathname.startsWith(s))) showAdminBtn = false;
 ---
 
-<div class="flex items-center justify-between pt-20 px-20">
-  {
-    !Astro.url.pathname.startsWith("/login") && user && user?.role !== "client" && (
-      <Button href="/newproject" client:load>
-        {newproject}
-      </Button>
-    )
-  }
-  {
-    !Astro.url.pathname.startsWith("/login") && (
-      <div class="flex flex-grow items-center justify-center font-semibold text-3xl mt-4">
-        Wolf Projects
-      </div>
-    )
-  }
-  {
-    !Astro.url.pathname.startsWith("/login") && user && (
-      <Button href="/logout" client:load>
-        {logout}
-      </Button>
-    )
-  }
+<div class="relative flex items-center justify-center mt-6 pt-20 px-20">
+  <div
+    class="absolute inset-x-0 top-0 flex items-center justify-center font-semibold text-3xl mt-4"
+  >
+    <div class="absolute inset-0 bg-transparent z-0"></div>
+    {/* Transparent overlay */}
+    {OUR_COMPANY_NAME}
+  </div>
+  <div class="flex flex-row items-center justify-between w-full max-w-screen-xl z-10">
+    <div class="flex flex-row gap-2">
+      {
+        showNewProjectBtn && user && user?.role !== "client" && (
+          <NavButton href="/newproject" label={t.header.newproject} client:load />
+        )
+      }
+      {
+        (!showNewProjectBtn || !showAdminBtn) && user && (
+          <NavButton href="/" label={t.header.dashboard} client:load />
+        )
+      }
+      {
+        showAdminBtn && user && user?.role === "admin" && (
+          <NavButton href="admin" label={t.header.admin} client:load />
+        )
+      }
+    </div>
+    <div>
+      {
+        !Astro.url.pathname.startsWith("/login") && user && (
+          <NavButton href="/logout" label={t.header.logout} client:load />
+        )
+      }
+    </div>
+  </div>
 </div>

@@ -24,7 +24,13 @@ const optionsStyle = {
   focus: "bg-black rounded-2xl",
 };
 
-export const ProjectManagerSelector = ({ employees }: { employees: Employee[] }) => {
+export const ProjectManagerSelector = ({
+  employees,
+  placeholder,
+}: {
+  employees: Employee[];
+  placeholder: string;
+}) => {
   const input = useStore($projectInput);
   return (
     <Select
@@ -51,7 +57,7 @@ export const ProjectManagerSelector = ({ employees }: { employees: Employee[] })
         menu: () => "p-2 mt-2  min-w-48 mb-1 bg-primary border border-primary2 rounded-2xl",
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
       }}
-      placeholder={"Vali töötaja"}
+      placeholder={placeholder}
       value={employees.find((x) => x.value === input.projectManager)}
       options={employees}
       onChange={(x) => {

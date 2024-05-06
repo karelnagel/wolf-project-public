@@ -1,29 +1,16 @@
 ---
 import { db } from "@wolf-project/db";
 import Layout from "../../components/Layout.astro";
+import { AdminView } from "../../components/AdminPage/AdminView";
+import { User } from "@wolf-project/db/schema";
 
-const users = await db.query.usersTable.findMany({
+const t = Astro.locals.t;
+const employees: User[] = await db.query.usersTable.findMany({
   where: (x, { not, inArray }) => not(inArray(x.role, ["client"])),
 });
+
 ---
 
 <Layout title={undefined} description={undefined}>
-  <h1>Admin page</h1>
-  <button>
-    <a href="/admin/newuser">Uus kasutaja</a>
-  </button>
-  <div>
-    {
-      users.map((user) => (
-        <div>
-          <a
-            class="font-medium text-blue-6000 underline dark:text-blue-500 hover:no-underline"
-            href={`./admin/${user.id}`}
-          >
-            {user.name}
-          </a>
-        </div>
-      ))
-    }
-  </div>
+  <AdminView t={t} employees={employees} client:load />
 </Layout>

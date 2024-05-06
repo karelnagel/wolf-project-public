@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import aws from "astro-sst";
@@ -12,6 +13,9 @@ export default defineConfig({
     serverRoutes: ["api/*"],
   }),
   site: SITE,
-  integrations: [tailwind(), react()],
+  integrations: [tailwind(), react(), sitemap({
+    filter: (page) =>
+      page.includes('/login')
+  })],
   vite: { plugins: [basicSsl()] },
 });

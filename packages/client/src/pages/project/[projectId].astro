@@ -13,13 +13,16 @@ const project = await db.query.projectsTable.findFirst({
 if (!project) throw new Error("project not found");
 // Todo check if can edit
 const canEdit = true;
+
+const { form, status, type } = Astro.locals.t;
+const t = { form, status, type };
+const lang = Astro.locals.lang || "en";
 ---
 
 <Layout title={undefined} description={undefined}>
   <ProjectPage
-    t={Astro.locals.t.form}
+    t={t}
     canEdit={canEdit}
-    projectId={projectId}
     project={{
       ...project,
       clients: project.users.filter((u) => u.priviledgeLevel === "client").map((u) => u.user),
@@ -28,6 +31,7 @@ const canEdit = true;
         .map((u) => u.user.id),
       projectManager: "",
     }}
+    lang={lang}
     client:load
   />
 </Layout>

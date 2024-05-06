@@ -3,10 +3,11 @@ import { verifyToken } from "@wolf-project/shared/serverHelper";
 import { db } from "@wolf-project/db";
 import { useTranslations } from "@wolf-project/i18n";
 
-const PUBLIC_PAGES = ["/_astro", "/_image", "/api", "/verify", "/login", "/401", "/404"];
+const PUBLIC_PAGES = ["/_astro", "/_image", "/api", "/verify", "/login", "/401", "/404", '/robots.txt', '/sitemap'];
 
 export const onRequest = defineMiddleware(async (Astro, next) => {
   console.log(Astro.url.toString());
+
 
   const token = Astro.cookies.get("x-auth-token")?.value;
   const userId = verifyToken(token);
@@ -27,7 +28,7 @@ export const onRequest = defineMiddleware(async (Astro, next) => {
 
   // If user isn't adming they can't access admin pages
   if (Astro.locals.user?.role !== "admin" && Astro.url.pathname.startsWith("/admin")) {
-    return Astro.redirect("/");
+    return Astro.redirect("/401");
   }
   return next();
 });
