@@ -6,7 +6,7 @@ export const en = {
     login: "Login Page",
     dashboard: "Dashboard",
     newproject: "New Project Page",
-    admin: "Admin page"
+    admin: "Admin page",
   },
   header: {
     logout: "Log out",
@@ -28,6 +28,19 @@ export const en = {
     name: "Name",
     email: "E-mail",
     none: "No choices left"
+  },
+  allProjects: {
+    name: "Name",
+    manager: "Project Manager",
+    description: "Description",
+    client: "Client",
+    progress: "Progress",
+    type: "Project Type",
+    status: "Status",
+    deadline: "Deadline",
+    open: "Tasks",
+    changeProject: "Change project",
+    changeClient: "Change client info"
   },
   form: {
     newProject: "New Project",

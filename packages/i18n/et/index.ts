@@ -8,7 +8,7 @@ export const et: I18nLocale = {
     login: "Login Page",
     dashboard: "Dashboard",
     newproject: "New Project Page",
-    admin: "Admin page"
+    admin: "Admin page",
   },
   header: {
     logout: "Logi välja",
@@ -19,8 +19,7 @@ export const et: I18nLocale = {
   },
   newUser: "Uus kasutaja",
   login: {
-    body: (url) =>
-      `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
+    body: (url) => `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
     title: `Wolf Project login email`,
   },
   placeholder: {
@@ -30,6 +29,19 @@ export const et: I18nLocale = {
     name: "Nimi",
     email: "E-meil",
     none: "Rohkem valikuid ei ole"
+  },
+  allProjects: {
+    name: "Nimi",
+    manager: "Projektijuht",
+    description: "Kirjeldus",
+    client: "Klient",
+    type: "Projektitüüp",
+    progress: "Progress",
+    status: "Staatus",
+    deadline: "Tähtaeg",
+    open: "Vaata taske",
+    changeProject: "Muuda projekti",
+    changeClient: "Muuda kliendi infot"
   },
   /*Also used for Tasks and Popups*/
   form: {
