@@ -97,6 +97,14 @@ export const en = {
   priviledge: {
     admin: "Admin",
     limited: "Limited",
+  },
+  pageNotFound: {
+    title: "Error 404 ",
+    button: "Return to dashboard"
+  },
+  notAllowed: {
+    title: "Error 401 ",
+    button: "Return to dashboard"
   }
 };
 export type I18nLocale = typeof en;

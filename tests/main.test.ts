@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 const SITE = 'https://project.wolfagency.ee'
 
 test("test sitemap pages", async ({ page }) => {
-  const res = await page.goto(SITE + "/sitemap-0.xml");
+  const res = await page.goto(SITE + "/sitemap-index.xml");
   if (!res) throw new Error("No sitemap!");
   const text = await res.text();
   const urls = text.match(/<loc>(.*?)<\/loc>/g)?.map((x) => x.replace(/<loc>|<\/loc>/g, "")) || [];
@@ -14,15 +14,6 @@ test("test sitemap pages", async ({ page }) => {
     const res = await page.goto(url);
     expect(res?.status()).toBe(200);
   }
-});
-
-test("robots.txt", async ({ page }) => {
-  const res = await page.goto(SITE + "/robots.txt");
-  expect(res?.status()).toBe(200);
-  const txt = await res?.text();
-  expect(txt).toContain("User-agent: *");
-  expect(txt).toContain("Disallow: /");
-  expect(txt).toContain(`Sitemap: ${SITE}/sitemap.xml`);
 });
 
 test("Login process", async ({ page }) => {

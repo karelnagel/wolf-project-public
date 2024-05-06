@@ -17,22 +17,24 @@ export const Button = ({
   dark,
   type,
   disabled,
+  href,
 }: {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   label: ReactNode;
   dark?: boolean;
   disabled?: boolean;
+  href?: string;
 }) => {
   return (
     <>
       <button
         type={type}
         onClick={onClick}
-        className={`button flex items-center bg-primary2 hover:bg-primary border-primary2 justify-center rounded-2xl border text-wrap py-2.5 w-[104px] max-md:px-5 ${dark ? "dark:bg-inherit" : ""}`}
+        className={`button bg-primary2 hover:bg-primary border-primary2 flex w-[104px] items-center justify-center text-wrap rounded-2xl border py-2.5 max-md:px-5 ${dark ? "dark:bg-inherit" : ""}`}
         disabled={disabled}
       >
-        {label}
+        <a href={href}>{label}</a>
       </button>
     </>
   );

@@ -101,5 +101,13 @@ export const et: I18nLocale = {
   priviledge: {
     admin: "Admin",
     limited: "Piiratud",
+  },
+  pageNotFound: {
+    title: "Error 404 ",
+    button: "Tagasi avalehele!"
+  },
+  notAllowed: {
+    title: "Error 401 ",
+    button: "Tagasi avalehele"
   }
 };
