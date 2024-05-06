@@ -4,19 +4,31 @@ import { db } from "@wolf-project/db";
 import AllProjects from "../components/DisplayAllProjects";
 
 const t = Astro.locals.t;
-const projects = await db.query.projectsTable.findMany({
-  with: { tasks: true, users: {with: {user:true}} },
-});
+let projects;
+if (Astro.locals.user?.role === "admin") {
+  projects = await db.query.projectsTable.findMany({
+    with: { tasks: true, users: { with: { user: true } } },
+  });
+} else {
+  const projectUsers = await db.query.projectUsersTable.findMany({
+    where: (x, { eq }) => eq(x.userId, Astro.locals.user!.id),
+    with: { project: { with: { tasks: true, users: { with: { user: true } } } } },
+  });
+  projects = projectUsers.map((u) => u.project);
+}
+
 ---
 
 <Layout title={undefined} description={undefined}>
   <AllProjects
-    projects={projects.map((project) => ({
-      ...project,
-      deadline: project.tasks.toSorted((a, b)=>a.deadline.getTime()-b.deadline.getTime())[0]?.deadline.toDateString()!,
-      manager: project.users.find(u=>u.priviledgeLevel==="manager")?.user.name || "",
-      progress: `${project.tasks.filter(t=>t.completed).length}/${project.tasks.length}`,
-      status: project.tasks.every(t=>t.completed) ? t.status.completed : t.status.inprogress,
+    projects={projects.map((p) => ({
+      ...p,
+      deadline: p.tasks
+        .toSorted((a, b) => a.deadline.getTime() - b.deadline.getTime())[0]
+        ?.deadline.toDateString()!,
+      manager: p.users.find((u) => u.priviledgeLevel === "manager")?.user.name || "",
+      progress: `${p.tasks.filter((t) => t.completed).length}/${p.tasks.length}`,
+      status: p.tasks.every((t) => t.completed) ? t.status.completed : t.status.inprogress,
     }))}
     t={t.allProjects}
     client:load

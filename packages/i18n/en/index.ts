@@ -24,6 +24,7 @@ export const en = {
     name: "Name",
     email: "E-mail",
   },
+
   allProjects: {
     name: "Name",
     manager: "Project Manager",
@@ -32,7 +33,8 @@ export const en = {
     progress: "Progress",
     type: "Project Type",
     status: "Status",
-    deadline: "deadline"
+    deadline: "Deadline",
+    open: "Tasks"
   },
   form: {
     newProject: "New Project",

@@ -33,7 +33,8 @@ export const et: I18nLocale = {
     type: "Projektitüüp",
     progress: "Progress",
     status: "Staatus",
-    deadline: "Tähtaeg"
+    deadline: "Tähtaeg",
+    open: "Vaata taske"
   },
   form: {
     newProject: "Uus project",
