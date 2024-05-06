@@ -1,28 +1,24 @@
 ---
 import Layout from "../components/Layout.astro";
-import { projectsTable } from "@wolf-project/db/schema";
 import { db } from "@wolf-project/db";
+import AllProjects from "../components/DisplayAllProjects";
 
 const t = Astro.locals.t;
-const projects = await db.select().from(projectsTable);
+const projects = await db.query.projectsTable.findMany({
+  with: { tasks: true, users: {with: {user:true}} },
+});
 ---
 
 <Layout title={undefined} description={undefined}>
-  <p>{t.description}</p>
-  <div>
-    <h1>Projects</h1>
-    {
-      projects.map((project) => (
-        <div>
-          {project.id} -{" "}
-          <a
-            class="font-medium text-primary2 underline dark:text-blue-500 hover:no-underline"
-            href={`./project/${project.id}`}
-          >
-            {project.name}
-          </a>
-        </div>
-      ))
-    }
-  </div>
+  <AllProjects
+    projects={projects.map((project) => ({
+      ...project,
+      deadline: project.tasks.toSorted((a, b)=>a.deadline.getTime()-b.deadline.getTime())[0]?.deadline.toDateString()!,
+      manager: project.users.find(u=>u.priviledgeLevel==="manager")?.user.name || "",
+      progress: `${project.tasks.filter(t=>t.completed).length}/${project.tasks.length}`,
+      status: project.tasks.every(t=>t.completed) ? t.status.completed : t.status.inprogress,
+    }))}
+    t={t.allProjects}
+    client:load
+  />
 </Layout>

@@ -6,7 +6,7 @@ export const en = {
     login: "Login Page",
     dashboard: "Dashboard",
     newproject: "New Project Page",
-    admin: "Admin page"
+    admin: "Admin page",
   },
   header: {
     logout: "Log out",
@@ -23,6 +23,16 @@ export const en = {
     companyName: "Self-Employee/Company name",
     name: "Name",
     email: "E-mail",
+  },
+  allProjects: {
+    name: "Name",
+    manager: "Project Manager",
+    description: "Description",
+    client: "Client",
+    progress: "Progress",
+    type: "Project Type",
+    status: "Status",
+    deadline: "deadline"
   },
   form: {
     newProject: "New Project",
@@ -47,7 +57,7 @@ export const en = {
     delete: "Delete",
     change: "Change",
     readyMessage: "Ready?\nGenerate new project and notify client.",
-    generate: "Confirm and generate"
+    generate: "Confirm and generate",
   },
   type: {
     input: "Input",

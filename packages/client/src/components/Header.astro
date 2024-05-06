@@ -6,7 +6,7 @@ const logout = t.header.logout;
 const newproject = t.header.newproject;
 ---
 
-<div class="flex items-center justify-between p-4">
+<div class="flex items-center justify-between pt-20 px-20">
   {
     !Astro.url.pathname.startsWith("/login") && user && user?.role !== "client" && (
       <Button href="/newproject" client:load>

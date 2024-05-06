@@ -8,15 +8,14 @@ export const et: I18nLocale = {
     login: "Login Page",
     dashboard: "Dashboard",
     newproject: "New Project Page",
-    admin: "Admin page"
+    admin: "Admin page",
   },
   header: {
     logout: "Logi välja",
     newproject: "Uus projekt",
   },
   login: {
-    body: (url) =>
-      `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
+    body: (url) => `Sisselogimiseks vajutage järgmisele ${url}. Link eluiga on 5 minutit.`,
     title: `Wolf Project login email`,
   },
   placeholder: {
@@ -25,6 +24,16 @@ export const et: I18nLocale = {
     companyName: "FIE/Ettevõtte nimi",
     name: "Nimi",
     email: "E-meil",
+  },
+  allProjects: {
+    name: "Nimi",
+    manager: "Projektijuht",
+    description: "Kirjeldus",
+    client: "Klient",
+    type: "Projektitüüp",
+    progress: "Progress",
+    status: "Staatus",
+    deadline: "Tähtaeg"
   },
   form: {
     newProject: "Uus project",
@@ -49,7 +58,7 @@ export const et: I18nLocale = {
     delete: "Kustuta",
     change: "Muuda",
     readyMessage: "Valmis?\nGenereeri uus projekt ja teavita klienti.",
-    generate: "Kinnita ja genereeri"
+    generate: "Kinnita ja genereeri",
   },
   type: {
     input: "Sisend",
