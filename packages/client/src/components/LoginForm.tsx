@@ -17,7 +17,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="mt-72 flex flex-col items-center justify-center">
+    <div className="mt-64 flex flex-col items-center justify-center">
       <div className="border-primary2 flex min-h-[18rem] min-w-[18rem] flex-col items-center justify-center rounded-2xl border border-solid">
         {!loggingIn && (
           <div>

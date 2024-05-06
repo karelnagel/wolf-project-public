@@ -39,7 +39,9 @@ export const et: I18nLocale = {
     progress: "Progress",
     status: "Staatus",
     deadline: "Tähtaeg",
-    open: "Vaata taske"
+    open: "Vaata taske",
+    changeProject: "Muuda projekti",
+    changeClient: "Muuda kliendi infot"
   },
   /*Also used for Tasks and Popups*/
   form: {

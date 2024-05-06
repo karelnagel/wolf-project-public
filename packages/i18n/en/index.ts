@@ -38,7 +38,9 @@ export const en = {
     type: "Project Type",
     status: "Status",
     deadline: "Deadline",
-    open: "Tasks"
+    open: "Tasks",
+    changeProject: "Change project",
+    changeClient: "Change client info"
   },
   form: {
     newProject: "New Project",

@@ -40,7 +40,7 @@ const AllProjects = ({ t, projects }: { t: I18nLocale["allProjects"], projects: 
         
 
         <div
-          className={`fixed right-0 top-0 w-full transform shadow-lg transition-transform ${selectedProject ? "translate-x-0" : "translate-x-full"
+          className={`fixed right-0 top-0 w-full transform shadow-lg transition-transform z-20 ${selectedProject ? "translate-x-0" : "translate-x-full"
             }`}
         >
           {selectedProject && (
