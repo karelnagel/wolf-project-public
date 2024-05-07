@@ -6,8 +6,8 @@ import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 import { useStore } from "@nanostores/react";
 import { I18nLocale, Locale } from "@wolf-project/i18n";
 import { Button } from "../Buttons";
-import { useIsClientSide } from "../ProjectPage";
-import { set } from "lodash";
+import { User } from "@wolf-project/db/schema";
+import { client } from "@wolf-project/backend/src/client";
 
 type Client = CreateProjectInput["clients"][0];
 const defaultClient: Client = { name: "", email: "", language: "et" };
@@ -22,25 +22,26 @@ export const ClientInfoEdit = ({
 }: {
   t: Translations;
   companyName: string;
-  clients: Client[];
+  clients: User[];
+  projectId: string;
 }) => {
-  const isClient = useIsClientSide();
   const [companyName, setCompanyName] = useState(props.companyName);
   const [clients, setClients] = useState(props.clients);
 
-  if (!isClient) {
-    return null;
-  }
   return (
     <ClientInfo
       t={t}
       companyName={companyName}
       setCompanyName={setCompanyName}
       clients={clients}
-      setClients={setClients}
       back={() => window.history.back()}
       save={() => $tab.set("tasks")}
-      addClient={(c) => setClients( [...clients, c])}
+      addClient={(c) => client.clients.add.mutate({client: c, projectId: props.projectId}).then(c => setClients([...clients, c]))}
+      deleteClient={(index) =>
+        client.clients.delete
+          .mutate({ id: clients[index]!.id, projectId: props.projectId })
+          .then(({id}) => setClients(clients.filter(c => c.id !== id)))
+      }
     ></ClientInfo>
   );
 };
@@ -53,10 +54,15 @@ export const ClientInfoCreate = ({ t }: { t: Translations }) => {
       companyName={input.companyName}
       setCompanyName={(n) => $projectInput.setKey("companyName", n)}
       clients={input.clients}
-      setClients={(c) => $projectInput.setKey("clients", c)}
       back={() => $tab.set("project")}
       save={() => $tab.set("tasks")}
       addClient={(c) => $projectInput.setKey("clients", [...input.clients, c])}
+      deleteClient={(index) =>
+        $projectInput.setKey(
+          "clients",
+          input.clients.filter((_, i) => i !== index),
+        )
+      }
     ></ClientInfo>
   );
 };
@@ -68,10 +74,10 @@ export const ClientInfo = ({
   companyName: string;
   setCompanyName: (n: string) => void;
   clients: Client[];
-  setClients: (c: Client[]) => void;
   addClient: (c: Client) => void;
   back: () => void;
   save: () => void;
+  deleteClient: (i: number) => void;
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [client, setClient] = useState(defaultClient);
@@ -105,7 +111,7 @@ export const ClientInfo = ({
               key={i}
               name={client.name}
               email={client.email}
-              removeClient={() => props.setClients(props.clients.filter((c) => c !== client))}
+              removeClient={() => props.deleteClient(i)}
             />
           ))}
           {showForm && (
@@ -113,6 +119,7 @@ export const ClientInfo = ({
               onSubmit={(e) => {
                 e.preventDefault();
                 props.addClient(client);
+                setClient(defaultClient)
               }}
               className="flex flex-col items-center justify-center text-center"
             >

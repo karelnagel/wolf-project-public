@@ -15,6 +15,7 @@ if(!project) {
 
 <Layout title={undefined} description={undefined}>
   <ClientInfoEdit
+  projectId={projectId}
   clients={project.users.map(u=>u.user)}
     companyName={project.companyName}
   client:load
