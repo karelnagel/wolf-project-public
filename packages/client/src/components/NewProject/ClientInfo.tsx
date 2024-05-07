@@ -71,8 +71,6 @@ export const ClientInfo = ({
   setCompanyName: (n: string) => void;
   clients: Client[];
   addClient: (c: Client) => void;
-  back: () => void;
-  save: () => void;
   deleteClient: (i: number) => void;
 }) => {
   const [showForm, setShowForm] = useState(false);
