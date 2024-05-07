@@ -144,7 +144,8 @@ const ProjectInfo = ({
             /*needs development*/}
         </div>
         <div className="flex justify-center font-semibold">
-          <Button label={t.form.forward} onClick={props.save} />
+          <Button label={t.form.save} onClick={props.save} />
+
         </div>
       </div>
     </div>
