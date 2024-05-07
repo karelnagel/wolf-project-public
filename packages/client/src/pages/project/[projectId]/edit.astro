@@ -1,8 +1,33 @@
 ---
 import Layout from "../../../components/Layout.astro";
+import { db } from "@wolf-project/db";
+import { ProjectInfoEdit } from "../../../components/NewProject/CreateProject";
+import { usersTable } from "@wolf-project/db/schema";
+import { or, eq } from "drizzle-orm";
 
+const projectId = Astro.params.projectId!;
+const project = await db.query.projectsTable.findFirst({
+  where: (x, { eq }) => eq(x.id, projectId),
+});
+if (!project) {
+  return Astro.redirect("/404");
+}
+
+const employees = await db.query.usersTable.findMany({
+  where: or(eq(usersTable.role, "admin"), eq(usersTable.role, "limited")),
+});
 ---
 
 <Layout title={undefined} description={undefined}>
-     
+  <ProjectInfoEdit
+    id={project.id}
+    employees={employees.map(e=>({value: e.id, label: e.name}))}
+    t={{
+      form: Astro.locals.t.form,
+      placeholder: Astro.locals.t.placeholder,
+    }}
+    name={project.name}
+    description={project.description}
+    client:load
+  />
 </Layout>

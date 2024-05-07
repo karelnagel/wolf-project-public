@@ -35,7 +35,7 @@ export const ClientInfoEdit = ({
       setCompanyName={setCompanyName}
       clients={clients}
       back={() => window.history.back()}
-      save={() => $tab.set("tasks")}
+      save={() => console.log("Todo save!")}
       addClient={(c) => client.clients.add.mutate({client: c, projectId: props.projectId}).then(c => setClients([...clients, c]))}
       deleteClient={(index) =>
         client.clients.delete

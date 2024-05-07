@@ -1,5 +1,5 @@
 import React from "react";
-import { CreateProject } from "./CreateProject";
+import { ProjectInfoCreate } from "./CreateProject";
 import { Tasks } from "./Tasks";
 import { ClientInfoCreate } from "./ClientInfo";
 import { Confirm } from "./Confirm";
@@ -56,7 +56,7 @@ const Tabs = ({
   return (
     <>
       {tab === "project" && (
-        <CreateProject employees={employees} t={omit(t, ["language", "type", "status"])} />
+        <ProjectInfoCreate employees={employees} t={omit(t, ["language", "type", "status"])} />
       )}
       {tab === "clients" && <ClientInfoCreate t={t} />}
       {tab === "tasks" && <Tasks canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}

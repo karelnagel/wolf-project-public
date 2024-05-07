@@ -10,6 +10,7 @@ import {
 import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
+import {eq} from 'drizzle-orm'
 
 const CreateProjectInput = z.object({
   name: z.string(),
@@ -86,4 +87,8 @@ export const projects = root.router({
         });
       },
     ),
+    edit: privateProcedure.input(z.object({id: z.string(), name: z.string(), description: z.string()})).mutation(async({input})=>{
+        await db.update(projectsTable).set(input).where(eq(projectsTable.id, input.id))
+        return input
+    })
 });
