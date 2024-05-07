@@ -1,7 +1,7 @@
 import React from "react";
 import { CreateProject } from "./CreateProject";
 import { Tasks } from "./Tasks";
-import ClientInfo from "./ClientInfo";
+import { ClientInfoCreate } from "./ClientInfo";
 import { Confirm } from "./Confirm";
 import { useStore } from "@nanostores/react";
 import { $tab } from "./state";
@@ -58,7 +58,7 @@ const Tabs = ({
       {tab === "project" && (
         <CreateProject employees={employees} t={omit(t, ["language", "type", "status"])} />
       )}
-      {tab === "clients" && <ClientInfo t={t} />}
+      {tab === "clients" && <ClientInfoCreate t={t} />}
       {tab === "tasks" && <Tasks canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}
       {tab === "confirm" && <Confirm t={t.form} />}
     </>

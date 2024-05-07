@@ -1,0 +1,27 @@
+---
+import { ClientInfoEdit } from "../../../components/NewProject/ClientInfo";
+import Layout from "../../../components/Layout.astro";
+import { db } from "@wolf-project/db";
+
+const projectId = Astro.params.projectId!;
+const project = await db.query.projectsTable.findFirst({
+  where: (x, { eq }) => eq(x.id, projectId),
+  with: {users: {where: (x, { eq }) => eq(x.priviledgeLevel, "client"), with: { user:true }}}
+});
+if(!project) { 
+    return Astro.redirect("/404")
+}
+---
+
+<Layout title={undefined} description={undefined}>
+  <ClientInfoEdit
+  clients={project.users.map(u=>u.user)}
+    companyName={project.companyName}
+  client:load
+    t={{
+      form: Astro.locals.t.form,
+      placeholder: Astro.locals.t.placeholder,
+      language: Astro.locals.t.language,
+    }}
+  />
+</Layout>
