@@ -152,7 +152,8 @@ export const ClientInfo = ({
           )}
         </div>
         <div className="mt-8 flex max-w-md flex-wrap justify-center gap-5 whitespace-nowrap text-base font-extrabold">
-          <Button onClick={props.back} dark={true} label={t.form.backward} />
+          <Button onClick={() => window.history.back()} dark={true} label={t.form.backward} />
+
         </div>
       </div>
     </div>
