@@ -1,9 +1,12 @@
 import { SES } from "@aws-sdk/client-ses";
-import { EMAIL_SOURCE } from "@wolf-project/shared/consts";
 import { useTranslations } from "@wolf-project/i18n";
 import * as React from "react";
 import { render } from "@react-email/components";
 import { MagiclinkEmail, MagiclinkEmailProps } from "./email-template";
+import { DOMAIN } from "@wolf-project/shared/consts";
+
+export const EMAIL = process.env.EMAIL || `noreply@${DOMAIN}`;
+export const EMAIL_SOURCE = `Wolf Agency <${EMAIL}>`;
 
 const credentials = {
   accessKeyId: process.env.ADMIN_AWS_ACCESS_KEY_ID!,

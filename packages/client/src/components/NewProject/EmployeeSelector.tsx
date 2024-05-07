@@ -8,8 +8,6 @@ import { Plus, X } from "lucide-react";
 import React from "react";
 import { Employee } from "./NewProject";
 import clsx from "clsx";
-import { useStore } from "@nanostores/react";
-import { $projectInput } from "./state";
 
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee>) => {
   return (
@@ -48,15 +46,18 @@ const optionsStyle = {
 };
 
 export const EmployeeSelector = ({
+  allEmployees,
   employees,
+  setEmployees,
   placeholder,
   placeholderNone,
 }: {
-  employees: Employee[];
+  allEmployees: Employee[];
   placeholder: string;
   placeholderNone: string;
+  employees: string[];
+  setEmployees: (e:string[]) => void;
 }) => {
-  const input = useStore($projectInput);
 
   return (
     <Select
@@ -91,15 +92,14 @@ export const EmployeeSelector = ({
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
         noOptionsMessage: () => "p-2 bg-primary border border-dashed rounded-sm",
       }}
-      options={employees}
+      options={allEmployees}
       placeholder={placeholder}
       noOptionsMessage={() => {
         return <div>{[placeholderNone]}</div>;
       }}
-      value={input.employees.map((id) => employees.find((x) => x.value === id)!)}
+      value={employees.map((id) => allEmployees.find((x) => x.value === id)!)}
       onChange={(newValue) => {
-        $projectInput.setKey(
-          "employees",
+        setEmployees(
           newValue.map((x) => x.value),
         );
       }}
