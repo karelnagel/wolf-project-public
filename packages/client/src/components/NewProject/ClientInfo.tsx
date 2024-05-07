@@ -54,8 +54,6 @@ export const ClientInfoCreate = ({ t }: { t: Translations }) => {
       companyName={input.companyName}
       setCompanyName={(n) => $projectInput.setKey("companyName", n)}
       clients={input.clients}
-      back={() => $tab.set("project")}
-      save={() => $tab.set("tasks")}
       addClient={(c) => $projectInput.setKey("clients", [...input.clients, c])}
       deleteClient={(index) =>
         $projectInput.setKey(
