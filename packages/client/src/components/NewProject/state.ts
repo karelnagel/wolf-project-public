@@ -3,6 +3,7 @@ import { Employee } from "@wolf-project/backend/src/routes/users";
 import { User } from "@wolf-project/db/schema";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { atom, map } from "nanostores";
+import { Comment } from "@wolf-project/db/schema";
 
 export type Tab = "project" | "clients" | "tasks" | "confirm";
 export const $tab = atom<Tab>("project");
@@ -14,6 +15,9 @@ export const $taskEditPopUp = atom<Popup | null>(null);
 export const $userEditPopUp = atom<Popup | null>(null);
 export const $taskInfoPopUp = atom<string | null>(null);
 export const $userInfoPopUp = atom<string | null>(null);
+export const $comments = atom<Comment[] | null>(null);
+export const $users = atom<User[] | null>(null);
+export const $projectId = atom<string | null>(null);
 
 const defaultTask = (): CreateProjectTask => ({
   id: getRandomId(),
@@ -48,6 +52,14 @@ $taskEditPopUp.subscribe((popup) => {
     $selectedTask.set($projectInput.get().tasks.find((task) => task.id === popup.id)!);
 });
 
+
+$taskInfoPopUp.subscribe((id) => {
+  if (!id) { $selectedTask.set(defaultTask()) }
+  else {
+    $selectedTask.set($projectInput.get().tasks.find((task) => task.id === id)!);
+  }
+
+});
 
 
 export const sortTasks = (x: CreateProjectTask[]): CreateProjectTask[] => {

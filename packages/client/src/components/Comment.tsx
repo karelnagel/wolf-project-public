@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import { Paperclip } from "lucide-react";
+/*import { Paperclip } from "lucide-react";*/
 import { client, useAPI } from "@wolf-project/backend/src/client";
+import { $comments, $users } from "./NewProject/state";
+import { useStore } from "@nanostores/react";
+import { I18nLocale } from "@wolf-project/i18n";
 
-const comments = [
-  {
-    commenter: "Veini-Albert",
-    date: "Monday, April 1",
-    time: "15:06:12",
-    body: "Jep, nice. Kas saaks muidu logo veits paremale liigutada?",
-  },
-  {
-    commenter: "Hundi-Pets",
-    date: "Monday, April 1",
-    time: "15:11:09",
-    body: "Jaa, ikka",
-  },
-];
-
-export const Comments = ({ taskId }: { taskId: string }) => {
+export const Comments = ({ t, taskId }: { taskId: string; t: I18nLocale["comment"] }) => {
   const [comment, setComment] = useState("");
   const { mutate, error, isLoading } = useAPI(client.comments.create.mutate);
 
@@ -26,19 +14,23 @@ export const Comments = ({ taskId }: { taskId: string }) => {
     await mutate({ body: comment, taskId });
     window.location.reload();
   };
+  const comments = useStore($comments);
+  const users = useStore($users);
 
   return (
     <div className="border-primary2 mt-16 flex flex-col justify-center rounded-2xl border border-solid p-8 max-md:mt-10 max-md:max-w-full max-md:px-5">
       <div className="text-center text-xl font-extrabold text-white max-md:max-w-full">
-        Kommentaarid
+        {t.title}
       </div>
       <div className="mt-9 flex max-w-full flex-col text-center text-white">
-        {comments.map((comment, index) => (
+        {comments?.map((comment, index) => (
           <div key={index} className="flex w-full max-w-full flex-col py-5 text-left">
-            <div className=" font-extrabold">{comment.commenter}</div>
+            <div className=" font-extrabold">
+              {users?.find((x) => x.id === comment.commenterId)?.name || ""}
+            </div>
             <div className="mt-1.5 flex gap-5 text-base">
-              <div>{comment.date}</div>
-              <div>{comment.time}</div>
+              <div>{comment.createdAt.toLocaleDateString("et")}</div>
+              <div>{comment.createdAt.toLocaleTimeString("et", { second: undefined })}</div>
             </div>
             <div className="flextext-base mt-4 font-bold">{comment.body}</div>
           </div>
@@ -57,9 +49,10 @@ export const Comments = ({ taskId }: { taskId: string }) => {
           type="text"
         />
         {error && <div>{error.message}</div>}
-        <button>
+        {/* requires file uploading to be developed}
+          <button>
           <Paperclip className="my-auto w-10" />
-        </button>
+          </button>*/}
         <button
           type="submit"
           className="border-primary2 bg-primary2 justify-center rounded-2xl px-6 py-2.5 text-center text-base text-white max-md:px-5"

@@ -7,15 +7,26 @@ import { useStore } from "@nanostores/react";
 import { I18nLocale } from "@wolf-project/i18n";
 import { TaskInfoPopUp } from "../TaskPopUp";
 import { Button } from "../Buttons";
+import _ from "lodash";
+const { pick } = _;
 
 export const Tasks = ({
-  canEdit,
   t,
   lang,
+  newProject,
+  exProject,
+  canEdit,
 }: {
-  canEdit: boolean;
-  t: { form: I18nLocale["form"]; type: I18nLocale["type"]; status: I18nLocale["status"] };
+  t: {
+    form: I18nLocale["form"];
+    type: I18nLocale["type"];
+    status: I18nLocale["status"];
+    comment: I18nLocale["comment"];
+  };
   lang: string;
+  newProject?: boolean;
+  exProject?: boolean;
+  canEdit: boolean;
 }) => {
   const input = useStore($projectInput);
   const tasks = input.tasks;
@@ -61,7 +72,11 @@ export const Tasks = ({
                   <ChevronUpCircle className="h-9 w-9 " />
                 </button>
               )}
-              <TaskInfo startIndex={startIndex!} canEdit={canEdit} t={t.form} />
+              <TaskInfo
+                startIndex={startIndex!}
+                canEdit={canEdit}
+                t={t.form}
+              />
               {tasks.length > 3 && (
                 <button
                   onClick={increaseStartIndex}
@@ -72,14 +87,21 @@ export const Tasks = ({
               )}
             </div>
             <div className="flex justify-between gap-12 self-center text-base font-semibold">
-              <Button dark={true} onClick={() => $tab.set("clients")} label={t.form.backward} />
+              <Button
+                dark={true}
+                onClick={() => {
+                  if (newProject) $tab.set("clients");
+                  if (exProject) window.location.href = "/";
+                }}
+                label={t.form.backward}
+              />
               {canEdit && (
                 <Button
                   onClick={() => $taskEditPopUp.set({ type: "new" })}
                   label={t.form.addTask}
                 />
               )}
-              <Button onClick={() => $tab.set("confirm")} label={t.form.forward} />
+              {newProject && <Button onClick={() => $tab.set("confirm")} label={t.form.forward} />}
             </div>
           </div>
         </div>
@@ -88,15 +110,19 @@ export const Tasks = ({
             popupOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {popupOpen && <TaskEditPopUp t={t} lang={lang} />}
+          {popupOpen && <TaskEditPopUp t={t} exProject={exProject} lang={lang} />}
         </div>
-        <div
-          className={`fixed right-0 top-0 z-10 flex h-full w-full transform shadow-lg transition-transform ${
-            taskInfoPopup ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          {taskInfoPopup && <TaskInfoPopUp t={t.form} />}
-        </div>
+        {exProject && (
+          <div
+            className={`fixed right-0 top-0 z-10 flex h-full w-full transform shadow-lg transition-transform ${
+              taskInfoPopup ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            {taskInfoPopup && (
+              <TaskInfoPopUp canEdit={canEdit} t={pick(t, ["form", "status", "comment"])} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

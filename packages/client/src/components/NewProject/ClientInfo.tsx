@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CircleUserRound, Trash } from "lucide-react";
-import { $projectInput, $tab } from "./state";
+import { $projectInput } from "./state";
 import { SingleSelect } from "../SingleSelect";
 import { CreateProjectInput } from "@wolf-project/backend/src/routes/projects";
 import { useStore } from "@nanostores/react";

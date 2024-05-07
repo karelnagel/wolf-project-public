@@ -71,6 +71,8 @@ export const et: I18nLocale = {
     delete: "Kustuta",
     cancel: "Katkesta",
     change: "Muuda",
+    disabled: "Keelatud",
+    loading: "Laadimas",
     view: "Vaata",
     readyMessage: "Valmis?\nGenereeri uus projekt ja teavita klienti.",
     generate: "Kinnita ja genereeri",
@@ -87,6 +89,9 @@ export const et: I18nLocale = {
     pending: "Ootel",
     inprogress: "Töös",
     completed: "Tehtud",
+  },
+  comment: {
+    title: "Kommentaarid"
   },
   userForm: {
     name: "Nimi",

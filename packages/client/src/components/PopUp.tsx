@@ -1,42 +1,81 @@
 import React from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { ArrowLeft, Paperclip } from "lucide-react";
+import { ArrowLeft, Loader2, Paperclip } from "lucide-react";
 import { SingleSelect } from "./SingleSelect";
 import { I18nLocale } from "@wolf-project/i18n";
 import { TaskStatus, TaskType } from "@wolf-project/db/schema";
-import { $taskEditPopUp, $projectInput, $selectedTask, setTasks } from "./NewProject/state";
+import {
+  $taskEditPopUp,
+  $projectInput,
+  $selectedTask,
+  setTasks,
+  $projectId,
+  sortTasks,
+} from "./NewProject/state";
 import { useStore } from "@nanostores/react";
 import { OUR_COMPANY_NAME } from "@wolf-project/shared/consts";
 import { Button } from "./Buttons";
-
+import { client, useAPI } from "@wolf-project/backend/src/client";
 export const TaskEditPopUp = ({
   t,
   lang,
+  exProject,
 }: {
   t: { form: I18nLocale["form"]; type: I18nLocale["type"]; status: I18nLocale["status"] };
   lang: string;
+  exProject?: boolean;
 }) => {
   const input = useStore($projectInput);
   const task = useStore($selectedTask);
   const popup = useStore($taskEditPopUp);
+  const projectId = useStore($projectId);
+  console.log("ProjectId:", projectId);
 
-  const handleSave = () => {
-    if (popup?.type === "edit") setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
-    else setTasks([...input.tasks, task]);
+  const addTask = useAPI(client.tasks.create.mutate);
+  const updateTask = useAPI(client.tasks.update.mutate);
+  const deleteTask = useAPI(client.tasks.delete.mutate);
+
+  const handleSave = async () => {
+    if (!exProject) {
+      if (popup?.type === "edit") setTasks(input.tasks.map((x) => (x.id === popup.id ? task : x)));
+      else setTasks([...input.tasks, task]);
+    } else if (exProject) {
+      if (popup?.type === "edit") {
+        console.log("task:", task);
+        await updateTask.mutate({ ...task, projectId: projectId! });
+        setTasks($projectInput.get().tasks.map((x) => (x.id === popup.id ? task : x)));
+      } else {
+        await addTask.mutate({ ...task, projectId: projectId! });
+        setTasks([...$projectInput.get().tasks, task]);
+      }
+    }
 
     $taskEditPopUp.set(null);
   };
 
-  const handleDelete = () => {
-    if (popup?.type !== "edit") return;
-    setTasks(input.tasks.filter((task) => task.id !== popup.id));
+  const handleDelete = async () => {
+    if (!exProject) {
+      if (popup?.type === "edit") setTasks(input.tasks.filter((task) => task.id !== popup.id));
+    } else if (exProject) {
+      if (popup?.type === "edit") {
+        await deleteTask.mutate({ ...task, projectId: projectId! });
+        $projectInput.setKey(
+          "tasks",
+          sortTasks($projectInput.get().tasks.filter((x) => x.id !== task.id)),
+        );
+      }
+    }
+
     $taskEditPopUp.set(null);
   };
 
   return (
     <div className="flex w-full">
-      <div className="h-screen w-full" onClick={() => $taskEditPopUp.set(null)}></div>
+      <div
+        className="h-screen w-full bg-black opacity-50"
+        onClick={() => $taskEditPopUp.set(null)}
+      ></div>
       <div
         className="bg-primary items-right flex w-3/5 flex-col justify-center rounded-2xl px-12 py-10 max-md:px-5"
         style={{ overflowY: "auto", maxHeight: "100vh" }}
@@ -142,10 +181,27 @@ export const TaskEditPopUp = ({
         </div>
         <div className="mt-16 flex gap-5 self-center text-base font-extrabold max-md:mt-10">
           <Button
-            label={popup?.type === "edit" ? t.form.delete : t.form.cancel}
+            label={
+              deleteTask.isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : popup?.type === "edit" ? (
+                t.form.delete
+              ) : (
+                t.form.cancel
+              )
+            }
             onClick={handleDelete}
           />
-          <Button label={t.form.save} onClick={handleSave} />
+          <Button
+            label={
+              addTask.isLoading || updateTask.isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                t.form.save
+              )
+            }
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>

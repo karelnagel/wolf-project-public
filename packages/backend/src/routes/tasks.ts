@@ -35,4 +35,18 @@ export const tasks = root.router({
         ),
       );
     }),
+  delete: privateProcedure
+    .input(Task)
+    .mutation(async ({ input }) => {
+      await db.delete(tasksTable).where(
+        eq(tasksTable.id, input.id)
+      )
+    }),
+  update: privateProcedure
+    .input(Task)
+    .output(Task)
+    .mutation(async ({ input }) => {
+      const updatedTask = await db.update(tasksTable).set(input).where(eq(tasksTable.id, input.id)).returning();
+      return updatedTask[0]!;
+    })
 });

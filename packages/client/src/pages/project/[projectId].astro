@@ -2,6 +2,7 @@
 import Layout from "../../components/Layout.astro";
 import { db } from "@wolf-project/db";
 import { ProjectPage } from "../../components/ProjectPage";
+import { Comment, usersTable } from "@wolf-project/db/schema";
 
 const { projectId } = Astro.params;
 if (!projectId) throw new Error("id is required");
@@ -11,11 +12,26 @@ const project = await db.query.projectsTable.findFirst({
   with: { tasks: true, users: { with: { user: true } } },
 });
 if (!project) throw new Error("project not found");
-// Todo check if can edit
-const canEdit = true;
 
-const { form, status, type } = Astro.locals.t;
-const t = { form, status, type };
+const user = Astro.locals.user;
+const dbUser = project.users.find((u) => u.userId === user!.id);
+let canEdit = false;
+if ((user!.role = "admin" || dbUser?.priviledgeLevel !== "client")) {
+  canEdit = true;
+}
+
+const comments: Comment[] = [];
+for (const task of project.tasks) {
+  const taskComments = await db.query.commentsTable.findMany({
+    where: (x, { eq }) => eq(x.taskId, task.id),
+  });
+  comments.push(...taskComments);
+}
+
+const users = await db.select().from(usersTable);
+
+const { form, status, type, comment } = Astro.locals.t;
+const t = { form, status, type, comment };
 const lang = Astro.locals.lang || "en";
 ---
 
@@ -26,12 +42,13 @@ const lang = Astro.locals.lang || "en";
     project={{
       ...project,
       clients: project.users.filter((u) => u.priviledgeLevel === "client").map((u) => u.user),
-      employees: project.users
-        .filter((u) => u.priviledgeLevel !== "employee")
-        .map((u) => u.userId),
-      projectManager: project.users.find(u=>u.priviledgeLevel === "manager")?.userId,
+      employees: project.users.filter((u) => u.priviledgeLevel !== "employee").map((u) => u.userId),
+      projectManager: project.users.find((u) => u.priviledgeLevel === "manager")?.userId,
     }}
     lang={lang}
+    comments={comments}
+    users={users}
+    projectId={projectId}
     client:load
   />
 </Layout>

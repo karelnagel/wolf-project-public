@@ -69,6 +69,8 @@ export const en = {
     delete: "Delete",
     cancel: "Cancel",
     change: "Change",
+    disabled: "Disabled",
+    loading: "Loading",
     view: "View",
     readyMessage: "Ready?\nGenerate new project and notify client.",
     generate: "Confirm and generate",
@@ -85,6 +87,9 @@ export const en = {
     pending: "Pending",
     inprogress: "In Progress",
     completed: "Completed",
+  },
+  comment: {
+    title:"Comments"
   },
     /*Used for UserPopUp*/
   userForm: {

@@ -18,23 +18,27 @@ export const Button = ({
   type,
   disabled,
   href,
+  stretch,
 }: {
   type?: "button" | "submit" | "reset";
-  onClick?: () => void;
+  onClick?: (() => void) | ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
   label: ReactNode;
   dark?: boolean;
   disabled?: boolean;
   href?: string;
+  stretch?: boolean;
 }) => {
   return (
     <>
       <button
         type={type}
         onClick={onClick}
-        className={`button bg-primary2 hover:bg-primary border-primary2 flex w-[104px] items-center justify-center text-wrap rounded-2xl border py-2.5 max-md:px-5 ${dark ? "dark:bg-inherit" : ""}`}
+        className={`button border-primary2 flex items-center justify-center self-stretch text-wrap rounded-2xl border py-2.5 max-md:px-5 ${dark ? "dark:bg-inherit" : ""} ${stretch ? "" : "w-[104px]"} ${disabled ? "bg-black" : "bg-primary2 hover:bg-primary"}`}
         disabled={disabled}
       >
-        <a href={href}>{label}</a>
+        <a className="flex h-full w-full items-center justify-center" href={href}>
+          {label}
+        </a>
       </button>
     </>
   );

@@ -86,15 +86,17 @@ export const TaskInfo = ({
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (canEdit) $taskEditPopUp.set({ type: "edit", id: task.id });
-                  }}
-                  className="bg-primary2 border-primary2 hover:bg-primary my-auto justify-center self-stretch rounded-2xl border px-5 py-2.5 text-center text-xl font-semibold"
-                >
-                  {canEdit ? t.change : t.view}
-                </button>
+                {canEdit && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (canEdit) $taskEditPopUp.set({ type: "edit", id: task.id });
+                    }}
+                    className="bg-primary2 border-primary2 hover:bg-primary my-auto justify-center self-stretch rounded-2xl border px-5 py-2.5 text-center text-xl font-semibold"
+                  >
+                    {t.change}
+                  </button>
+                )}
               </div>
               <Line Completed={task.completed} />
             </React.Fragment>
