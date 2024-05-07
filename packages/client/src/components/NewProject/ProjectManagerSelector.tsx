@@ -3,8 +3,6 @@ import { Plus } from "lucide-react";
 import React from "react";
 import { Employee } from "./NewProject";
 import clsx from "clsx";
-import { useStore } from "@nanostores/react";
-import { $projectInput } from "./state";
 
 const DropdownIndicator = (props: DropdownIndicatorProps<Employee, false>) => {
   return (
@@ -27,11 +25,14 @@ const optionsStyle = {
 export const ProjectManagerSelector = ({
   employees,
   placeholder,
+  manager,
+  setManager
 }: {
   employees: Employee[];
   placeholder: string;
+  manager?: string;
+  setManager: (m:string) =>void;
 }) => {
-  const input = useStore($projectInput);
   return (
     <Select
       unstyled
@@ -58,10 +59,10 @@ export const ProjectManagerSelector = ({
         option: ({ isFocused }) => clsx(isFocused && optionsStyle.focus, optionsStyle.base),
       }}
       placeholder={placeholder}
-      value={employees.find((x) => x.value === input.projectManager)}
+      value={employees.find((x) => x.value === manager)}
       options={employees}
       onChange={(x) => {
-        if (x) $projectInput.setKey("projectManager", x.value);
+        if (x) setManager(x.value);
       }}
       closeMenuOnSelect
       components={{ DropdownIndicator }}
