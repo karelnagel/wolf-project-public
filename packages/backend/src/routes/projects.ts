@@ -10,7 +10,7 @@ import {
 import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
-import {eq} from 'drizzle-orm'
+import { eq, and, ne } from "drizzle-orm";
 
 const CreateProjectInput = z.object({
   name: z.string(),
@@ -19,7 +19,7 @@ const CreateProjectInput = z.object({
   clients: Client.array().min(1),
   tasks: Task.omit({ projectId: true }).array().min(1),
   employees: z.string().array(),
-  projectManager: z.string(),
+  projectManager: z.string().optional(),
 });
 export type CreateProjectInput = z.infer<typeof CreateProjectInput>;
 export type CreateProjectTask = CreateProjectInput["tasks"][number];
@@ -57,9 +57,10 @@ export const projects = root.router({
               .insert(projectUsersTable)
               .values({ projectId: pId, userId: cInsert[0]!.id, priviledgeLevel: "client" });
           }
-          await db
-            .insert(projectUsersTable)
-            .values({ projectId: pId, userId: projectManager, priviledgeLevel: "manager" });
+          if (projectManager)
+            await db
+              .insert(projectUsersTable)
+              .values({ projectId: pId, userId: projectManager, priviledgeLevel: "manager" });
           await db
             .insert(projectUsersTable)
             .values(
@@ -87,8 +88,44 @@ export const projects = root.router({
         });
       },
     ),
-    edit: privateProcedure.input(z.object({id: z.string(), name: z.string(), description: z.string()})).mutation(async({input})=>{
-        await db.update(projectsTable).set(input).where(eq(projectsTable.id, input.id))
-        return input
-    })
+  edit: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        manager: z.string().optional(),
+        employees: z.string().array(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.update(projectsTable).set(input).where(eq(projectsTable.id, input.id));
+
+      await db
+        .delete(projectUsersTable)
+        .where(
+          and(
+            eq(projectUsersTable.projectId, input.id),
+            ne(projectUsersTable.priviledgeLevel, "client"),
+          ),
+        );
+
+      if (input.manager)
+        await db
+          .insert(projectUsersTable)
+          .values({ projectId: input.id, userId: input.manager, priviledgeLevel: "manager" })
+          .onConflictDoNothing();
+      if (input.employees.length)
+        await db
+          .insert(projectUsersTable)
+          .values(
+            input.employees.map((e) => ({
+              projectId: input.id,
+              userId: e,
+              priviledgeLevel: "employee" as const,
+            })),
+          )
+          .onConflictDoNothing();
+      return input;
+    }),
 });

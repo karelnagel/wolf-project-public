@@ -5,6 +5,9 @@ import { $projectInput, $tab } from "./state";
 import { I18nLocale } from "@wolf-project/i18n";
 import { Button } from "../Buttons";
 import { client } from "@wolf-project/backend/src/client";
+import { ProjectManagerSelector } from "./ProjectManagerSelector";
+import { useIsClientSide } from "../ProjectPage";
+import { EmployeeSelector } from "./EmployeeSelector";
 
 type Translations = {
   form: I18nLocale["form"];
@@ -12,7 +15,7 @@ type Translations = {
 };
 export const ProjectInfoEdit = ({
   t,
-  employees,
+  allEmployees,
   id,
   ...props
 }: {
@@ -20,22 +23,35 @@ export const ProjectInfoEdit = ({
   name: string;
   t: Translations;
   description: string;
-  employees: Employee[];
+  allEmployees: Employee[];
+  employees: string[];
+  manager?:string,
 }) => {
+  const isClient = useIsClientSide()
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
+  const [manager, setManager] = useState(props.manager);
+  const [employees, setEmployees] = useState(props.employees)
+if (!isClient){
+  return null
+}
 
   return (
     <ProjectInfo
     t={t}
-    employees={employees}
+    allEmployees={allEmployees}
     name={name}
     setName={setName}
     description={description}
     setDescription={setDescription}
     save={async ()=>{
-      await client.projects.edit.mutate({id, name, description})
+      await client.projects.edit.mutate({id, name, description, employees, manager})
+      window.location.href=`/project/${id}`
     }}
+    manager={manager}
+    setManager={setManager}
+    employees={employees}
+    setEmployees={setEmployees}
   ></ProjectInfo>
   );
 };
@@ -47,28 +63,36 @@ export const ProjectInfoCreate = ({ t, employees }: { t: Translations; employees
   return (
     <ProjectInfo
       t={t}
-      employees={employees}
+      allEmployees={employees}
       name={input.name}
       setName={name => $projectInput.setKey("name", name)}
       description={input.description}
       setDescription={description => $projectInput.setKey("description", description)}
       save={() => $tab.set("clients")}
-    ></ProjectInfo>
+      manager={input.projectManager}
+      setManager={manager => $projectInput.setKey("projectManager", manager)}
+      employees={input.employees}
+      setEmployees={e => $projectInput.setKey("employees", e)}
+      ></ProjectInfo>
   );
 };
 
 const ProjectInfo = ({
-  employees,
+  allEmployees,
   t,
   ...props
 }: {
-  employees: Employee[];
+  allEmployees: Employee[];
   t: { form: I18nLocale["form"]; placeholder: I18nLocale["placeholder"] };
   name: string;
   description: string
   setName:(n:string)=> void
   setDescription:(n:string)=> void
   save: () => void
+  manager?:string;
+  setManager: (m: string) =>void,
+  employees: string[],
+  setEmployees: (e:string[])=>void
 }) => {
 
   return (
@@ -93,18 +117,22 @@ const ProjectInfo = ({
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
           <div className="font-semibold">
             {t.form.projectManager}
-            {/* <ProjectManagerSelector
-              employees={employees}
+            <ProjectManagerSelector
+            manager={props.manager}
+            setManager={props.setManager}
+              employees={allEmployees}
               placeholder={t.placeholder.projectManager}
-            /> */}
+            />
           </div>
           <div className="flex w-full flex-col text-base">
             <div className="font-semibold">{t.form.employees}</div>
-            {/* <EmployeeSelector
-              employees={employees}
+            <EmployeeSelector
+            employees={props.employees}
+            setEmployees={props.setEmployees}
+              allEmployees={allEmployees}
               placeholder={t.placeholder.employees}
               placeholderNone={t.placeholder.none}
-            /> */}
+            />
           </div>
         </div>
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">

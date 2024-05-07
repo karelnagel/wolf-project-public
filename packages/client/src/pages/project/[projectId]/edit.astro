@@ -8,6 +8,7 @@ import { or, eq } from "drizzle-orm";
 const projectId = Astro.params.projectId!;
 const project = await db.query.projectsTable.findFirst({
   where: (x, { eq }) => eq(x.id, projectId),
+  with: {users:true}
 });
 if (!project) {
   return Astro.redirect("/404");
@@ -21,11 +22,13 @@ const employees = await db.query.usersTable.findMany({
 <Layout title={undefined} description={undefined}>
   <ProjectInfoEdit
     id={project.id}
-    employees={employees.map(e=>({value: e.id, label: e.name}))}
+    allEmployees={employees.map(e=>({value: e.id, label: e.name}))}
+    manager={project.users.find(u=>u.priviledgeLevel === "manager")?.userId}
     t={{
       form: Astro.locals.t.form,
       placeholder: Astro.locals.t.placeholder,
     }}
+    employees={project.users.filter(u=>u.priviledgeLevel === "employee").map(u=>u.userId)}
     name={project.name}
     description={project.description}
     client:load
