@@ -43,7 +43,7 @@ const lang = Astro.locals.lang || "en";
       ...project,
       clients: project.users.filter((u) => u.priviledgeLevel === "client").map((u) => u.user),
       employees: project.users.filter((u) => u.priviledgeLevel !== "employee").map((u) => u.userId),
-      projectManager: project.users.find((u) => u.priviledgeLevel === "manager")?.userId,
+      projectManager: project.users.find((u) => u.priviledgeLevel === "manager")!.userId,
     }}
     lang={lang}
     comments={comments}
