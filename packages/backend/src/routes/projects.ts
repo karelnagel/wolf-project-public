@@ -11,6 +11,7 @@ import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import { Client } from "./users";
 import { eq, and, ne } from "drizzle-orm";
+import { newProjctEmail } from "../lib/email";
 
 const CreateProjectInput = z.object({
   name: z.string(),
@@ -19,7 +20,7 @@ const CreateProjectInput = z.object({
   clients: Client.array().min(1),
   tasks: Task.omit({ projectId: true }).array().min(1),
   employees: z.string().array(),
-  projectManager: z.string().optional(),
+  projectManager: z.string(),
 });
 export type CreateProjectInput = z.infer<typeof CreateProjectInput>;
 export type CreateProjectTask = CreateProjectInput["tasks"][number];
@@ -47,6 +48,7 @@ export const projects = root.router({
                 email: client.email,
                 language: client.language,
                 role: "client",
+                phone: client.phone
               })
               .onConflictDoUpdate({
                 target: [usersTable.email],
@@ -84,6 +86,29 @@ export const projects = root.router({
               clientTask: t.clientTask,
             })),
           );
+
+          // Expecting to find manager, since we do not allow to create a project without one.
+          const query = await db.select().from(usersTable).where(eq(usersTable.id, projectManager))
+          const managerInfo = query[0]
+
+          try {
+            for (const client of clients) {
+              await newProjctEmail({
+                to: [client.email!],
+                locale: client.language,
+                companyName: companyName,
+                name: client.name,
+                ofStage: (tasks.length + 1).toString(),
+                projectMEmail: managerInfo!.email,
+                projectMName: managerInfo!.name,
+                projectMPhone: managerInfo!.phone,
+                projectId: pId,
+              })
+              
+            }
+          } catch (error) {
+            console.error(error);
+          }
           return { id: pId };
         });
       },
@@ -94,7 +119,7 @@ export const projects = root.router({
         id: z.string(),
         name: z.string(),
         description: z.string(),
-        manager: z.string().optional(),
+        manager: z.string(),
         employees: z.string().array(),
       }),
     )

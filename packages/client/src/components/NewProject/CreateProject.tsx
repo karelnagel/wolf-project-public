@@ -25,39 +25,39 @@ export const ProjectInfoEdit = ({
   description: string;
   allEmployees: Employee[];
   employees: string[];
-  manager?:string,
+  manager: string;
 }) => {
-  const isClient = useIsClientSide()
+  const isClient = useIsClientSide();
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
   const [manager, setManager] = useState(props.manager);
-  const [employees, setEmployees] = useState(props.employees)
-if (!isClient){
-  return null
-}
+  const [employees, setEmployees] = useState(props.employees);
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <ProjectInfo
-    t={t}
-    allEmployees={allEmployees}
-    name={name}
-    setName={setName}
-    description={description}
-    setDescription={setDescription}
-    save={async ()=>{
-      await client.projects.edit.mutate({id, name, description, employees, manager})
-      window.location.href=`/project/${id}`
-    }}
-    manager={manager}
-    setManager={setManager}
-    employees={employees}
-    setEmployees={setEmployees}
-  ></ProjectInfo>
+      t={t}
+      allEmployees={allEmployees}
+      name={name}
+      setName={setName}
+      description={description}
+      setDescription={setDescription}
+      save={async () => {
+        await client.projects.edit.mutate({ id, name, description, employees, manager });
+        window.location.href = `/project/${id}`;
+      }}
+      manager={manager}
+      setManager={setManager}
+      employees={employees}
+      setEmployees={setEmployees}
+      label={t.form.save}
+    ></ProjectInfo>
   );
 };
 
 export const ProjectInfoCreate = ({ t, employees }: { t: Translations; employees: Employee[] }) => {
-
   const input = useStore($projectInput);
 
   return (
@@ -65,15 +65,16 @@ export const ProjectInfoCreate = ({ t, employees }: { t: Translations; employees
       t={t}
       allEmployees={employees}
       name={input.name}
-      setName={name => $projectInput.setKey("name", name)}
+      setName={(name) => $projectInput.setKey("name", name)}
       description={input.description}
-      setDescription={description => $projectInput.setKey("description", description)}
+      setDescription={(description) => $projectInput.setKey("description", description)}
       save={() => $tab.set("clients")}
       manager={input.projectManager}
-      setManager={manager => $projectInput.setKey("projectManager", manager)}
+      setManager={(manager) => $projectInput.setKey("projectManager", manager)}
       employees={input.employees}
-      setEmployees={e => $projectInput.setKey("employees", e)}
-      ></ProjectInfo>
+      label={t.form.forward}
+      setEmployees={(e) => $projectInput.setKey("employees", e)}
+    ></ProjectInfo>
   );
 };
 
@@ -85,16 +86,16 @@ const ProjectInfo = ({
   allEmployees: Employee[];
   t: { form: I18nLocale["form"]; placeholder: I18nLocale["placeholder"] };
   name: string;
-  description: string
-  setName:(n:string)=> void
-  setDescription:(n:string)=> void
-  save: () => void
-  manager?:string;
-  setManager: (m: string) =>void,
-  employees: string[],
-  setEmployees: (e:string[])=>void
+  description: string;
+  setName: (n: string) => void;
+  setDescription: (n: string) => void;
+  save: () => void;
+  manager?: string;
+  setManager: (m: string) => void;
+  employees: string[];
+  setEmployees: (e: string[]) => void;
+  label: string;
 }) => {
-
   return (
     <div className="flex flex-col items-center rounded-2xl max-md:px-5 ">
       <div className="gap-  border-primary2 mt-28 flex w-[643px] max-w-full flex-col  justify-center rounded-2xl border px-8 py-10 max-md:mt-10 max-md:px-5">
@@ -110,16 +111,15 @@ const ProjectInfo = ({
         <div className="mt-8 font-semibold max-md:max-w-full">{t.form.projectDesc}</div>
         <textarea
           value={props.description}
-          onChange={(e) => props.setDescription( e.currentTarget.value)}
-        
+          onChange={(e) => props.setDescription(e.currentTarget.value)}
           className="bg-primary mt-4 h-[145px] rounded-2xl max-md:max-w-full"
         />
         <div className="mt-8 flex justify-center gap-8 max-md:flex-wrap">
           <div className="font-semibold">
             {t.form.projectManager}
             <ProjectManagerSelector
-            manager={props.manager}
-            setManager={props.setManager}
+              manager={props.manager}
+              setManager={props.setManager}
               employees={allEmployees}
               placeholder={t.placeholder.projectManager}
             />
@@ -127,8 +127,8 @@ const ProjectInfo = ({
           <div className="flex w-full flex-col text-base">
             <div className="font-semibold">{t.form.employees}</div>
             <EmployeeSelector
-            employees={props.employees}
-            setEmployees={props.setEmployees}
+              employees={props.employees}
+              setEmployees={props.setEmployees}
               allEmployees={allEmployees}
               placeholder={t.placeholder.employees}
               placeholderNone={t.placeholder.none}
@@ -144,8 +144,7 @@ const ProjectInfo = ({
             /*needs development*/}
         </div>
         <div className="flex justify-center font-semibold">
-          <Button label={t.form.save} onClick={props.save} />
-
+          <Button label={props.label} onClick={props.save} />
         </div>
       </div>
     </div>

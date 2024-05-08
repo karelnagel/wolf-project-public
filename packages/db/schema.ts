@@ -12,6 +12,7 @@ export const User = z.object({
   email: z.string().email(),
   role: UserRole,
   language: Locale,
+  phone: z.string()
 });
 export type User = z.infer<typeof User>;
 
@@ -21,6 +22,7 @@ export const usersTable = sqliteTable("users", {
   email: text("email").notNull().unique(),
   role: text("role").$type<UserRole>().notNull(),
   language: text("language").$type<Locale>().notNull(),
+  phone: text("phone").unique().notNull(),
 });
 export const userRelations = relations(usersTable, ({ many }) => ({
   projects: many(projectUsersTable),

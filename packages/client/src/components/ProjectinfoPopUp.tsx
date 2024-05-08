@@ -14,7 +14,7 @@ export default function ProjectInfoPopUp({
 }) {
   return (
     <div className="flex h-screen w-full">
-      <div className="w-1/2"></div>
+      <div className="w-1/2 bg-black opacity-50" onClick={onClose}></div>
       <div className="flex w-1/2  rounded-2xl ">
         <div className=" w-full max-w-4xl">
           <div

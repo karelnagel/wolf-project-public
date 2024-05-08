@@ -29,6 +29,7 @@ export const NewProject = ({
     language: I18nLocale["language"];
     type: I18nLocale["type"];
     status: I18nLocale["status"];
+    comment: I18nLocale["comment"];
   };
   lang: string;
 }) => {
@@ -49,6 +50,7 @@ const Tabs = ({
     language: I18nLocale["language"];
     type: I18nLocale["type"];
     status: I18nLocale["status"];
+    comment: I18nLocale["comment"];
   };
   lang: string;
 }) => {
@@ -59,7 +61,7 @@ const Tabs = ({
         <ProjectInfoCreate employees={employees} t={omit(t, ["language", "type", "status"])} />
       )}
       {tab === "clients" && <ClientInfoCreate t={t} />}
-      {tab === "tasks" && <Tasks canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}
+      {tab === "tasks" && <Tasks newProject canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}
       {tab === "confirm" && <Confirm t={t.form} />}
     </>
   );

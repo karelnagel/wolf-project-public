@@ -2,7 +2,14 @@ import { SES } from "@aws-sdk/client-ses";
 import { useTranslations } from "@wolf-project/i18n";
 import * as React from "react";
 import { render } from "@react-email/components";
-import { MagiclinkEmail, MagiclinkEmailProps } from "./email-template";
+import {
+  MagiclinkEmail,
+  MagiclinkEmailProps,
+  NewProject,
+  NewProjectEmailProps,
+  UpdateStageProps,
+  UpdateStage,
+} from "./email-template";
 import { DOMAIN } from "@wolf-project/shared/consts";
 
 export const EMAIL = process.env.EMAIL || `noreply@${DOMAIN}`;
@@ -14,9 +21,9 @@ const credentials = {
 };
 const ses = new SES({ credentials, region: "eu-central-1" });
 
-export const sendEmail = async (props: { to: string[] } & MagiclinkEmailProps) => {
+export const loginEmail = async (props: { to: string[] } & MagiclinkEmailProps) => {
   const t = useTranslations(props.locale || undefined);
-  const payload = render(<MagiclinkEmail token={props.token} locale={props.locale} />);
+  const payload = render(<MagiclinkEmail {...props} />);
   await ses.sendEmail({
     Source: EMAIL_SOURCE,
     Destination: { ToAddresses: props.to },
@@ -25,6 +32,65 @@ export const sendEmail = async (props: { to: string[] } & MagiclinkEmailProps) =
         Html: { Charset: "UTF-8", Data: payload },
       },
       Subject: { Charset: "UTF-8", Data: t.login.title },
+    },
+  });
+};
+
+export const newProjctEmail = async (
+  props: { to: string[]; companyName: string } & NewProjectEmailProps,
+) => {
+  const t = useTranslations(props.locale || undefined);
+  const payload = render(
+    <NewProject
+      locale={props.locale}
+      name={props.name}
+      ofStage={props.ofStage}
+      projectMEmail={props.projectMEmail}
+      projectMName={props.projectMName}
+      projectMPhone={props.projectMPhone}
+      projectId={props.projectId}
+    />,
+  );
+
+  await ses.sendEmail({
+    Source: EMAIL_SOURCE,
+    Destination: { ToAddresses: props.to },
+    Message: {
+      Body: {
+        Html: { Charset: "UTF-8", Data: payload },
+      },
+      Subject: { Charset: "UTF-8", Data: t.email.newProjectSubject(props.companyName) },
+    },
+  });
+};
+
+export const UpdateStageEmail = async (
+  props: { to: string[]; companyName: string } & UpdateStageProps,
+) => {
+  const t = useTranslations(props.locale || undefined);
+  const payload = render(
+    <UpdateStage
+      locale={props.locale}
+      name={props.name}
+      projectId={props.projectId}
+      projectMName={props.projectMName}
+      responsible={props.responsible}
+      stageName={props.stageName}
+      stageNumber={props.stageNumber}
+    />,
+  );
+
+  await ses.sendEmail({
+    Source: EMAIL_SOURCE,
+    Destination: { ToAddresses: props.to },
+    Message: {
+      Body: {
+        Html: { Charset: "UTF-8", Data: payload },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: t.email.stageUpdateSubject(props.stageNumber, props.companyName),
+      },
     },
   });
 };

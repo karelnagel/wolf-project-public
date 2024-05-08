@@ -11,6 +11,7 @@ const addUser = async (email: string, name: string) => {
       name,
       language: "et",
       role: "admin",
+      phone: "12345678"
     })
     .returning()
     .onConflictDoNothing();

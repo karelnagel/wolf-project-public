@@ -23,7 +23,7 @@ const employees = await db.query.usersTable.findMany({
   <ProjectInfoEdit
     id={project.id}
     allEmployees={employees.map(e=>({value: e.id, label: e.name}))}
-    manager={project.users.find(u=>u.priviledgeLevel === "manager")?.userId}
+    manager={project.users.find(u=>u.priviledgeLevel === "manager")!.userId}
     t={{
       form: Astro.locals.t.form,
       placeholder: Astro.locals.t.placeholder,

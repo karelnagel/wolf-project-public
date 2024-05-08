@@ -10,7 +10,7 @@ import { User } from "@wolf-project/db/schema";
 import { client } from "@wolf-project/backend/src/client";
 
 type Client = CreateProjectInput["clients"][0];
-const defaultClient: Client = { name: "", email: "", language: "et" };
+const defaultClient: Client = { name: "", email: "", language: "et", phone: "" };
 type Translations = {
   form: I18nLocale["form"];
   placeholder: I18nLocale["placeholder"];
@@ -34,12 +34,17 @@ export const ClientInfoEdit = ({
       companyName={companyName}
       setCompanyName={setCompanyName}
       clients={clients}
-      addClient={(c) => client.clients.add.mutate({client: c, projectId: props.projectId}).then(c => setClients([...clients, c]))}
+      addClient={(c) =>
+        client.clients.add
+          .mutate({ client: c, projectId: props.projectId })
+          .then((c) => setClients([...clients, c]))
+      }
       deleteClient={(index) =>
         client.clients.delete
           .mutate({ id: clients[index]!.id, projectId: props.projectId })
-          .then(({id}) => setClients(clients.filter(c => c.id !== id)))
+          .then(({ id }) => setClients(clients.filter((c) => c.id !== id)))
       }
+      onBackClick={() => window.history.back()}
     ></ClientInfo>
   );
 };
@@ -53,6 +58,8 @@ export const ClientInfoCreate = ({ t }: { t: Translations }) => {
       setCompanyName={(n) => $projectInput.setKey("companyName", n)}
       clients={input.clients}
       addClient={(c) => $projectInput.setKey("clients", [...input.clients, c])}
+      onBackClick={() => $tab.set("project")}
+      onforwardClick={() => $tab.set("tasks")}
       deleteClient={(index) =>
         $projectInput.setKey(
           "clients",
@@ -72,6 +79,8 @@ export const ClientInfo = ({
   clients: Client[];
   addClient: (c: Client) => void;
   deleteClient: (i: number) => void;
+  onBackClick: () => void;
+  onforwardClick?: () => void;
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [client, setClient] = useState(defaultClient);
@@ -113,7 +122,7 @@ export const ClientInfo = ({
               onSubmit={(e) => {
                 e.preventDefault();
                 props.addClient(client);
-                setClient(defaultClient)
+                setClient(defaultClient);
               }}
               className="flex flex-col items-center justify-center text-center"
             >
@@ -131,6 +140,13 @@ export const ClientInfo = ({
                 required
                 onChange={(e) => setClient({ ...client, email: e.target.value })}
               />
+              <textarea
+                placeholder={t.placeholder.phone}
+                className="bg-primary mt-4 h-12 w-full resize-none justify-center  whitespace-nowrap rounded-2xl px-2.5 py-3 text-base text-opacity-50"
+                value={client.phone}
+                required
+                onChange={(e) => setClient({ ...client, phone: e.target.value })}
+              />
               <div className="mb-4 mt-4 flex w-full gap-3 text-base text-opacity-50">
                 <div className="bg-primary w-1/3 items-start justify-center rounded-2xl p-2.5 font-normal max-md:pr-5">
                   {t.form.chooseLang}
@@ -142,16 +158,18 @@ export const ClientInfo = ({
                   }))}
                   selectedOption={client.language}
                   onChange={(x) => setClient({ ...client, language: x as Locale })}
-                  dark={true}
+                  dark
                 />
               </div>
-              <Button dark={true} label={t.form.add} type={"submit"} />
+              <Button dark label={t.form.add} type={"submit"} />
             </form>
           )}
         </div>
         <div className="mt-8 flex max-w-md flex-wrap justify-center gap-5 whitespace-nowrap text-base font-extrabold">
-          <Button onClick={() => window.history.back()} dark={true} label={t.form.backward} />
-
+          <Button onClick={props.onBackClick} dark label={t.form.backward} />
+          {props.onforwardClick !== null && (
+            <Button onClick={props.onforwardClick} label={t.form.forward} />
+          )}
         </div>
       </div>
     </div>

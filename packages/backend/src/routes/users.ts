@@ -5,11 +5,11 @@ import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
 import jwt from "jsonwebtoken";
 import { env } from "@wolf-project/shared/env";
-import { sendEmail } from "../lib/email";
 import { like, eq, and } from "drizzle-orm";
+import { loginEmail } from "../lib/email";
 
 
-export const Client = User.omit({ id: true, role: true });
+export const Client = User.omit({ id: true, role: true, });
 export const Employee = User.omit({ id: true });
 
 export type Client = z.infer<typeof Client>;
@@ -48,7 +48,7 @@ export const employee = root.router({
     .mutation(async ({ input }) => {
       const result = await db.select()
         .from(usersTable)
-        .where(and(eq(usersTable.name, input.name), eq(usersTable.language, input.language), eq(usersTable.email, input.email), eq(usersTable.role, input.role)));
+        .where(and(eq(usersTable.name, input.name), eq(usersTable.language, input.language), eq(usersTable.email, input.email), eq(usersTable.role, input.role), eq(usersTable.phone, input.phone)));
       return result[0]!;
     })
 });
@@ -57,10 +57,10 @@ export const client = root.router({
   create: privateProcedure
     .input(Client)
     .output(User)
-    .mutation(async ({ input: { name, email, language } }) => {
+    .mutation(async ({ input: { name, email, language, phone } }) => {
       const result = await db
         .insert(usersTable)
-        .values({ id: getRandomId(), name, email, role: "client", language })
+        .values({ id: getRandomId(), name, email, phone, role: "client", language })
         .returning();
       return result[0]!;
     }),
@@ -72,20 +72,20 @@ export const authenticate = root.router({
     const user = await db.query.usersTable.findFirst({
       where: (x, { like }) => like(x.email, input.email),
     });
-    // if (!user) return {};
-    if (!user)
+    if (!user) return {};
+    /* if (!user)
       throw new Error("User not found! We can remove this in production, but good for development");
-
+    */
     try {
       token = jwt.sign({ userId: user.id }, env.JWT_SECRET, {
         expiresIn: "5m",
       });
-      console.log("exists", user.language);
-      await sendEmail({
+      await loginEmail({
         to: [input.email!],
         token: token,
         locale: user.language,
       });
+      
     } catch (e) {
       console.error(e);
     }
