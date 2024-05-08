@@ -61,7 +61,7 @@ export const NewProject: React.FC<NewProjectEmailProps> = ({
   );
 };
 
-export interface updateStageProps {
+export interface UpdateStageProps {
   locale: Locale;
   name: string;
   stageNumber: string;
@@ -70,7 +70,7 @@ export interface updateStageProps {
   projectMName: string;
   projectId: string;
 }
-export const updateStage: React.FC<updateStageProps> = ({
+export const UpdateStage: React.FC<UpdateStageProps> = ({
   locale,
   name,
   stageNumber,

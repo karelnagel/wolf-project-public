@@ -7,6 +7,8 @@ import {
   MagiclinkEmailProps,
   NewProject,
   NewProjectEmailProps,
+  UpdateStageProps,
+  UpdateStage,
 } from "./email-template";
 import { DOMAIN } from "@wolf-project/shared/consts";
 
@@ -58,6 +60,37 @@ export const newProjctEmail = async (
         Html: { Charset: "UTF-8", Data: payload },
       },
       Subject: { Charset: "UTF-8", Data: t.email.newProjectSubject(props.companyName) },
+    },
+  });
+};
+
+export const UpdateStageEmail = async (
+  props: { to: string[]; companyName: string } & UpdateStageProps,
+) => {
+  const t = useTranslations(props.locale || undefined);
+  const payload = render(
+    <UpdateStage
+      locale={props.locale}
+      name={props.name}
+      projectId={props.projectId}
+      projectMName={props.projectMName}
+      responsible={props.responsible}
+      stageName={props.stageName}
+      stageNumber={props.stageNumber}
+    />,
+  );
+
+  await ses.sendEmail({
+    Source: EMAIL_SOURCE,
+    Destination: { ToAddresses: props.to },
+    Message: {
+      Body: {
+        Html: { Charset: "UTF-8", Data: payload },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: t.email.stageUpdateSubject(props.stageNumber, props.companyName),
+      },
     },
   });
 };

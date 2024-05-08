@@ -64,7 +64,7 @@ export const TaskInfoPopUp = ({
             </div>
 
             <div>{task.deadline.toLocaleDateString("et")}</div>
-            <div>{task.clientTask ? "Veebihunt" : project.companyName}</div>
+            <div>{task.clientTask ? "Wolf Agency" : project.companyName}</div>
           </div>
         </div>
         <div className="border-primary2 flex flex-col rounded-2xl border border-solid py-8 pl-8 font-extrabold text-white  max-md:mt-10 max-md:max-w-full max-md:pl-5">

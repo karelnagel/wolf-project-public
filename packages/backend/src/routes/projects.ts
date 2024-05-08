@@ -93,7 +93,6 @@ export const projects = root.router({
 
           try {
             for (const client of clients) {
-              console.log(client)
               await newProjctEmail({
                 to: [client.email!],
                 locale: client.language,
