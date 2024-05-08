@@ -10,10 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-ses": "^3.556.0",
-    "@react-email/components": "0.0.16",
-    "@react-email/tailwind": "^0.0.16-canary.1",
+    "@react-email/components": "^0.0.15",
+    "@react-email/tailwind": "^0.0.14",
     "@wolf-project/i18n": "*",
     "@wolf-project/shared": "*",
-    "react-email": "2.1.1"
+    "react-email": "^2.1.0"
   }
 }

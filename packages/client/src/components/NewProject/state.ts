@@ -33,7 +33,8 @@ const defaultEmployee = (): Employee => ({
   name: "",
   email: "",
   language: "et",
-  role: "limited"
+  role: "limited",
+  phone: ""
 })
 
 export const $selectedEmployee = map<Employee>(defaultEmployee());

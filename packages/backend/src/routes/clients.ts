@@ -13,7 +13,7 @@ export const clients = root.router({
       const clients = await db
         .insert(usersTable)
         .values({ ...input.client, id: getRandomId(), role: "client" })
-        .onConflictDoUpdate({ set: input.client, target: [usersTable.email] })
+        .onConflictDoUpdate({ set: input.client, target: [usersTable.email, usersTable.phone] })
         .returning();
       const client = clients[0]!;
       await db

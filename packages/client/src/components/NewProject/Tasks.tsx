@@ -57,6 +57,10 @@ export const Tasks = ({
     if (startIndex! > 0) setStartIndex(startIndex! - 1);
   };
 
+
+
+
+
   return (
     <div className="flex justify-center px-16 py-20 max-md:px-5">
       <div className="flex w-full flex-col max-md:max-w-full">

@@ -40,6 +40,8 @@ export const UserFormPopup = ({
     if (popup?.type === "edit") {
       try {
         await modifyUser(popup.id, userInfo);
+        const result = await getUser(userInfo);
+        $employees.set($employees.get()!.map((x) => (x.id === result.id ? result : x)));
       } catch (modifyError) {
         console.error((modifyError as Error).message);
         setErrorMessage(t.error.dbIssue);
@@ -48,13 +50,14 @@ export const UserFormPopup = ({
     } else {
       try {
         await addUser(userInfo);
+        const result = await getUser(userInfo);
+        $employees.set([...(employees || []), result]);
       } catch (addError) {
         console.error((addError as Error).message);
         setErrorMessage(t.error.dbIssue);
         return;
       }
-      const result = await getUser(userInfo);
-      $employees.set([...(employees || []), result]);
+
       $userEditPopUp.set(null);
     }
   };
@@ -85,7 +88,9 @@ export const UserFormPopup = ({
             {popup?.type === "edit" ? t.userForm.editUser : t.userForm.newUser}
           </div>
         </div>
-        {errorMessage && <div className="flex justify-center items-center text-2xl font-bold">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="flex items-center justify-center text-2xl font-bold">{errorMessage}</div>
+        )}
         <div className="mx-[62px] flex flex-col max-md:max-w-full">
           <div className="text-start text-base font-bold">{t.userForm.name}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
@@ -95,13 +100,19 @@ export const UserFormPopup = ({
               className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>
-        </div>
-        <div className="mx-[62px] flex flex-col max-md:max-w-full">
           <div className="text-start text-base font-bold">{t.userForm.email}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
             <textarea
               value={userInfo.email}
               onChange={(e) => $selectedEmployee.setKey("email", e.currentTarget.value)}
+              className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
+            />
+          </div>
+          <div className="text-start text-base font-bold">{t.userForm.phone}</div>
+          <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
+            <textarea
+              value={userInfo.phone}
+              onChange={(e) => $selectedEmployee.setKey("phone", e.currentTarget.value)}
               className="h-12 rounded-2xl bg-white text-black max-md:max-w-full"
             />
           </div>

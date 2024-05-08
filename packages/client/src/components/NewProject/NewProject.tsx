@@ -61,7 +61,7 @@ const Tabs = ({
         <ProjectInfoCreate employees={employees} t={omit(t, ["language", "type", "status"])} />
       )}
       {tab === "clients" && <ClientInfoCreate t={t} />}
-      {tab === "tasks" && <Tasks canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}
+      {tab === "tasks" && <Tasks newProject canEdit t={omit(t, ["placeholder", "language"])} lang={lang} />}
       {tab === "confirm" && <Confirm t={t.form} />}
     </>
   );
