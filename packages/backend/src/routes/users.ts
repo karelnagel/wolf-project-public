@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { privateProcedure, publicProcedure, root } from "../root";
+import { adminProcedure, privateProcedure, publicProcedure, root } from "../root";
 import { usersTable, User } from "@wolf-project/db/schema";
 import { db } from "@wolf-project/db";
 import { getRandomId } from "@wolf-project/shared/helpers";
@@ -16,7 +16,7 @@ export type Client = z.infer<typeof Client>;
 export type Employee = z.infer<typeof Employee>;
 
 export const employee = root.router({
-  create: privateProcedure
+  create: adminProcedure
     .input(Employee)
     .output(User)
     .mutation(async ({ input }) => {
@@ -26,7 +26,7 @@ export const employee = root.router({
         .returning();
       return result[0]!;
     }),
-  modify: privateProcedure
+  modify: adminProcedure
     .input(User)
     .output(User)
     .mutation(async ({ input: { id, ...user } }) => {
@@ -37,12 +37,12 @@ export const employee = root.router({
         .returning();
       return result[0]!;
     }),
-  delete: privateProcedure
+  delete: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
       await db.delete(usersTable).where(eq(usersTable.id, input.id))
     }),
-  get: privateProcedure
+  get: adminProcedure
     .input(Employee)
     .output(User)
     .mutation(async ({ input }) => {
