@@ -92,7 +92,7 @@ export const UserFormPopup = ({
         {errorMessage && (
           <div className="flex items-center justify-center text-2xl font-bold">{errorMessage}</div>
         )}
-        <div className="mx-[62px] flex flex-col max-md:max-w-full">
+        <div className="mx-[62px] gap-2 flex flex-col max-md:max-w-full">
           <div className="text-start text-base font-bold">{t.userForm.name}</div>
           <div className="relative mt-4 flex flex-col justify-center text-base max-md:max-w-full">
             <textarea
