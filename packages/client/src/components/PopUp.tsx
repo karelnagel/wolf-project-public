@@ -136,7 +136,7 @@ export const TaskEditPopUp = ({
                   { value: "us", label: OUR_COMPANY_NAME },
                   { value: "them", label: input.companyName },
                 ]}
-                selectedOption={task.clientTask ? "us" : "them"}
+                selectedOption={task.clientTask ? "them" : "us"}
                 onChange={(x) => $selectedTask.setKey("clientTask", x === "them")}
                 dark={false}
               />

@@ -85,7 +85,7 @@ export const authenticate = root.router({
         token: token,
         locale: user.language,
       });
-      
+      console.log("Sent an Email")
     } catch (e) {
       console.error(e);
     }

@@ -33,7 +33,7 @@ export const Button = ({
       <button
         type={type}
         onClick={onClick}
-        className={`button border-primary2 flex items-center justify-center self-stretch text-wrap rounded-2xl border py-2.5 max-md:px-5 ${dark ? "dark:bg-inherit" : ""} ${stretch ? "" : "w-[104px]"} ${disabled ? "bg-black" : "bg-primary2 hover:bg-primary"}`}
+        className={`button border-primary2 flex items-center justify-center text-wrap rounded-2xl border py-2.5 max-md:px-5 ${dark ? "dark:bg-inherit" : ""} ${stretch ? "" : "w-[104px]"} ${disabled ? "bg-black" : "bg-primary2 hover:bg-primary"}`}
         disabled={disabled}
       >
         <a className="flex h-full w-full items-center justify-center" href={href}>

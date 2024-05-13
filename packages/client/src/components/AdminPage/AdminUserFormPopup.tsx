@@ -33,8 +33,9 @@ export const UserFormPopup = ({
       setErrorMessage(t.error.missingInputs);
       return;
     }
-    if (!userInfo.email.includes("@veebihunt.ee")) {
+    if (!userInfo.email.includes("@wolfagency.ee") && !userInfo.email.includes("@veebihunt.ee")) {
       setErrorMessage(t.error.wrongWorkEmail);
+      console.log(userInfo.email)
       return;
     }
     if (popup?.type === "edit") {
