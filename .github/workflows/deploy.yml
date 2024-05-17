@@ -27,7 +27,9 @@ jobs:
       - uses: jaid/action-npm-install@v1.2.1
       - run: npm i @libsql/linux-x64-gnu --force
       - run: npm run migrate
-      - run: npm run add-user "nagelkarel@gmail.com" "Karel Nagel"
+      - run: npm run add-user "karel@wolfagency.ee" "Karel Nagel"
+      - run: npm run add-user "brand@wolfagency.ee" "Brandon Undrus"
+      - run: npm run add-user "maru@wolfagency.ee" "Maru Arukask"
 
       - name: Typecheck
         run: npm run check
