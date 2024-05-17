@@ -28,7 +28,7 @@ jobs:
       - run: npm i @libsql/linux-x64-gnu --force
       - run: npm run migrate
       - run: npm run add-user "karel@wolfagency.ee" "Karel Nagel"
-      - run: npm run add-user "brand@wolfagency.ee" "Brandon Undrus"
+      - run: npm run add-user "brandon@wolfagency.ee" "Brandon Undrus"
       - run: npm run add-user "maru@wolfagency.ee" "Maru Arukask"
 
       - name: Typecheck
