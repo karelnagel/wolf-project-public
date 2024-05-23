@@ -20,7 +20,7 @@ It is using drizzle + libsql and in development it saves the the data to `/tmp/w
 8. Select the `CLI` option, click next, and then `Create access key`.
 9. Copy the `Access key ID` and `Secret access key` values into the .env file under `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, respectively.
 
-## Setting up [AWS] SES(https://console.aws.amazon.com)
+## Setting up [AWS](https://console.aws.amazon.com) SES
 
 1. Search for `SES` and select the option with the description `Email Sending and Receiving Service`.
 2. On the right side of the navigation bar, ensure that it has selected Frankfurt (eu-central-1) region, if not then select it.
