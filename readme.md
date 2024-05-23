@@ -30,7 +30,7 @@ It is using drizzle + libsql and in development it saves the the data to `/tmp/w
 # Running the Project
 
 1. Copy the .env.example file and rename it to .env.
-2. Fill in the .env file with the correct values. AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from the AWS configuration steps above, EMAIL as the choosen email that was verified following setting up AWS SES step, PUBLIC_API_URL should be set for "https://localhost:4321" for dev enviorment.
+2. Fill in the .env file with the correct values. AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from the AWS configuration steps above, EMAIL as the choosen email that was verified following setting up AWS SES step, PUBLIC_API_URL should be set for "https://localhost:4321" for dev enviorment, JWT_SECRET can be set to be any randomized string.
 3. Run `npm i` to install dependencies.
 4. Start the backend with `npm run dev` in the root directory. You will be prompted for your STAGE_NAME. Deployment of your stack will take some time.
 5. To start the frontend, open another terminal run `npm run dev-fe`.
